@@ -85,7 +85,7 @@ filetype plugin indent on     " required!
 """ Custom Configs include.
 " All custom config settings are stored in the .vim/config folder to
 " differentiate them from 3rd-party libraries.
-runtime! config/**/*
+runtime! config/**/*.vim
 
 "
 " Brief help
