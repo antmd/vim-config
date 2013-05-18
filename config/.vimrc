@@ -179,7 +179,7 @@ let g:SuperTabContextDefaultCompletionType = "<c-p>"
 " Clang Complete Settings
 " g:clang_user_options set at vimprj section 
 let g:clang_use_library=1 
-let g:clang_library_path = "/proj/fotech/pkgs/sunos-5.10-i86pc/llvm-3.2/lib"
+let g:clang_library_path = "/usr/lib"
 let g:clang_complete_copen=1
 let g:clang_complete_macros=1
 let g:clang_complete_patterns=0
