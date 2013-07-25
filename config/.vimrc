@@ -133,8 +133,13 @@ let g:syntastic_mode_map = { 'mode': 'passive',
 "-----------------------------------------------------------------------------------
 " CTRL N opens tree
 map <C-n> :NERDTreeToggle<CR>
+function! ShowNERDTree()
+    NERDTree
+    wincmd l
+endfunction
+
 "Open tree if no files specified when opening vim
-autocmd vimenter * if !argc() | NERDTree | endif
+autocmd vimenter * if !argc() | :call ShowNERDTree() | endif
 let g:NERDTreeQuitOnOpen=1
 let g:NERDTreeDirArrows=0
 
@@ -209,7 +214,7 @@ let g:clang_snippets_engine='clang_complete'
 " let g:SuperTabContextDefaultCompletionType='<c-x><c-u><c-p>'
 
 " Reparse the current translation unit in background
-command Parse
+command! Parse
 \ if &ft == 'c' || &ft == 'cpp'   |
 \   call g:ClangBackgroundParse() |
 \ else                            |
@@ -217,7 +222,7 @@ command Parse
 \ endif
 
 " Reparse the current translation unit and check for errors
-command ClangCheck
+command! ClangCheck
 \ if &ft == 'c' || &ft == 'cpp'   |
 \   call g:ClangUpdateQuickFix()  |
 \ else                            |
