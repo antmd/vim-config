@@ -45,7 +45,8 @@ Bundle 'http://www.github.com/Lokaltog/vim-easymotion'
 " :ConqueTermSplit mysql -h localhost -u joe -p sock_collection
 " :ConqueTermTab Powershell.exe
 " :ConqueTermVSplit C:\Python27\python.exe
-Bundle 'https://github.com/dhazel/conque-term.git'
+Bundle 'https://www.github.com/dhazel/conque-term.git'
+Bundle 'http://www.github.com/vim-scripts/bash-support.vim'
 
 Bundle 'http://www.github.com/scrooloose/nerdcommenter'
 Bundle 'http://www.github.com/scrooloose/nerdtree'
@@ -65,6 +66,7 @@ Bundle 'http://www.github.com/vim-scripts/genutils'
 " Provide 'OpenSession' 'SaveSession' with tab completion. Saves sessions in
 " ~/.vim/session
 Bundle 'https://github.com/xolox/vim-session.git'
+Bundle 'https://github.com/xolox/vim-misc.git'
 
 " BUFFER EXPLORER PLUGIN
 " <leader>be to show all buffers, and allow navigation
@@ -74,10 +76,20 @@ Bundle 'http://www.github.com/vim-scripts/a.vim'
 
 " Python mode (indentation, doc, refactor, lints, code checking, motion and
 " operators, highlighting, run and ipdb breakpoints)
-Bundle 'klen/python-mode'
+Bundle 'http://www.github.com/klen/python-mode'
 Bundle 'https://www.github.com/fs111/pydoc.vim'
 
+" Gist support
+" :Gist <blah>
+Bundle 'http://github.com/mattn/webapi-vim'
+Bundle 'http://github.com/mattn/gist-vim'
 
+" YouCompleteMe -- auto-completion
+Bundle 'https://github.com/Valloric/YouCompleteMe'
+
+" Markdown support
+Bundle 'https://github.com/suan/vim-instant-markdown.git'
+Bundle 'https://github.com/tpope/vim-markdown.git'
 " ...
 
 filetype plugin indent on     " required! 
@@ -116,6 +128,11 @@ set pumheight=20
  
 
 "-----------------------------------------------------------------------------------
+" YouCompleteMe
+"-----------------------------------------------------------------------------------
+let g:ycm_register_as_syntastic_checker = 0
+
+"-----------------------------------------------------------------------------------
 " a.vim
 "-----------------------------------------------------------------------------------
 let g:alternateExtensions_C = "h,H,HPP,hpp"
@@ -133,15 +150,19 @@ let g:syntastic_mode_map = { 'mode': 'passive',
 "-----------------------------------------------------------------------------------
 " CTRL N opens tree
 map <C-n> :NERDTreeToggle<CR>
-function! ShowNERDTree()
-    NERDTree
-    wincmd l
-endfunction
-
 "Open tree if no files specified when opening vim
-autocmd vimenter * if !argc() | :call ShowNERDTree() | endif
+"autocmd vimenter * if !argc() | NERDTree | endif
 let g:NERDTreeQuitOnOpen=1
 let g:NERDTreeDirArrows=0
+" Close vim if it's the NERDTree is the only window left
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+"--------------------------------------------------
+" Gist
+"--------------------------------------------------
+let g:gist_post_private = 1
+let g:gist_detect_filetype = 1
+let g:gist_show_privates = 1
 
 
 "  ___                   _____     _    
@@ -214,7 +235,7 @@ let g:clang_snippets_engine='clang_complete'
 " let g:SuperTabContextDefaultCompletionType='<c-x><c-u><c-p>'
 
 " Reparse the current translation unit in background
-command! Parse
+command Parse
 \ if &ft == 'c' || &ft == 'cpp'   |
 \   call g:ClangBackgroundParse() |
 \ else                            |
@@ -222,7 +243,7 @@ command! Parse
 \ endif
 
 " Reparse the current translation unit and check for errors
-command! ClangCheck
+command ClangCheck
 \ if &ft == 'c' || &ft == 'cpp'   |
 \   call g:ClangUpdateQuickFix()  |
 \ else                            |
