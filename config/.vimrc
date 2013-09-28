@@ -153,13 +153,20 @@ set pumheight=20
 " See
 " http://diffingdiffs.blogspot.co.uk/2012/09/jumping-to-template-files-in-vim.html
 "--------------------------------------------------
-g:localvimrc_whitelist='/path/to/my/project/myproject'
+let g:localvimrc_whitelist='/path/to/my/project/myproject'
 
 "-----------------------------------------------------------------------------------
 " TSkeleton
 "-----------------------------------------------------------------------------------
-autocmd BufNewFile *.cpp   TSkeletonSetup basic.cpp
-autocmd BufNewFile */test/*.cpp   TSkeletonSetup test.cpp
+let g:tskelUserName = 'Anthony Dervish'
+let g:tskelUserEmail = 'ant@dervishsoftware.com'
+let g:tskelUserCompany = 'Dervish Software'
+let g:tskelUserWWW = 'http://www.dervishsoftware.com'
+
+" I couldn't get TSkeleton to automatically find it's skeletons, so I use
+" $HOME to specify the full path to the skeleton
+autocmd BufNewFile *.cpp   :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/basic.cpp"
+autocmd BufNewFile *main*.cpp   :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/basic.cpp"
 
 
 "-----------------------------------------------------------------------------------
