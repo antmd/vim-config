@@ -6,7 +6,6 @@
 // 
 
 
-#include <<+FILE NAME ROOT+>.h>
 #include <iostream>
 
 

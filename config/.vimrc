@@ -165,8 +165,8 @@ let g:tskelUserWWW = 'http://www.dervishsoftware.com'
 
 " I couldn't get TSkeleton to automatically find it's skeletons, so I use
 " $HOME to specify the full path to the skeleton
-autocmd BufNewFile *.cpp   :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/basic.cpp"
-autocmd BufNewFile *main*.cpp   :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/basic.cpp"
+autocmd BufNewFile *main*.cpp   :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/main.cpp"
+autocmd BufNewFile *.cpp        :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/basic.cpp"
 
 
 "-----------------------------------------------------------------------------------
