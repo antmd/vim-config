@@ -90,6 +90,28 @@ Bundle 'https://github.com/Valloric/YouCompleteMe'
 " Markdown support
 Bundle 'https://github.com/suan/vim-instant-markdown.git'
 Bundle 'https://github.com/tpope/vim-markdown.git'
+
+
+" Local vimrc files (.lvimrc)
+" Add each project to the whitelist, below
+Bundle 'https://github.com/embear/vim-localvimrc.git'
+
+" Enum to case statement
+" To use :EnumToCase
+Bundle 'https://github.com/vim-scripts/EnumToCase.git'
+
+" Alignment in tabular format
+" To use :Tabularize /<pattern>/ 
+Bundle 'https://github.com/godlygeek/tabular.git'
+
+" File templates and snippets
+Bundle 'https://github.com/tomtom/tlib_vim.git'
+Bundle 'https://github.com/tomtom/tskeleton_vim.git'
+" MRU Files - Depends on tlib
+" To use :TRecentlyUsedFiles, etc.
+Bundle 'https://github.com/tomtom/tmru_vim.git'
+
+
 " ...
 
 filetype plugin indent on     " required! 
@@ -126,6 +148,19 @@ let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"] " automatically open and
  " Limit popup menu height
 set pumheight=20
  
+"--------------------------------------------------
+" Local vimrc
+" See
+" http://diffingdiffs.blogspot.co.uk/2012/09/jumping-to-template-files-in-vim.html
+"--------------------------------------------------
+g:localvimrc_whitelist='/path/to/my/project/myproject'
+
+"-----------------------------------------------------------------------------------
+" TSkeleton
+"-----------------------------------------------------------------------------------
+autocmd BufNewFile *.cpp   TSkeletonSetup basic.cpp
+autocmd BufNewFile */test/*.cpp   TSkeletonSetup test.cpp
+
 
 "-----------------------------------------------------------------------------------
 " YouCompleteMe
