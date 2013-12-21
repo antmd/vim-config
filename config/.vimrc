@@ -16,7 +16,7 @@ filetype off                   " required!
 
 " Note, need to create .vim on Windows, as well.
 " See https://github.com/gmarik/vundle/wiki/Vundle-for-Windows for setup on windows
-set rtp+=~/.vim/bundle/vundle/
+set rtp+=~/.vim/bundle/vundle/,~/.vim
 call vundle#rc()
 
 
@@ -57,7 +57,8 @@ Bundle 'http://www.github.com/altercation/vim-colors-solarized'
 " Bundle 'Rip-Rip/clang_complete'
 " Tmux integration
 Bundle 'http://www.github.com/xaviershay/tslime.vim'
-Bundle 'http://www.github.com/abudden/TagHighlight'
+" Git mirror of abudden's TagHighlight -- seems to be updated regularly
+Bundle 'https://github.com/qiulin/TagHighlight.git'
 Bundle 'https://www.github.com/scrooloose/syntastic'
 Bundle 'http://www.github.com/vim-scripts/vcscommand.vim'
 Bundle 'http://www.github.com/vim-scripts/genutils'
@@ -90,6 +91,7 @@ Bundle 'https://github.com/Valloric/YouCompleteMe'
 " Markdown support
 Bundle 'https://github.com/suan/vim-instant-markdown.git'
 Bundle 'https://github.com/tpope/vim-markdown.git'
+Bundle 'https://github.com/nelstrom/vim-markdown-folding.git'
 
 
 " Local vimrc files (.lvimrc)
@@ -111,6 +113,19 @@ Bundle 'https://github.com/tomtom/tskeleton_vim.git'
 " To use :TRecentlyUsedFiles, etc.
 Bundle 'https://github.com/tomtom/tmru_vim.git'
 
+" Haskell
+Bundle 'https://github.com/vim-scripts/Superior-Haskell-Interaction-Mode-SHIM.git'
+
+" SingleCompile
+Bundle 'https://github.com/xuhdev/SingleCompile.git'
+
+" Add on actions
+" Requires tlib
+Bundle 'https://github.com/MarcWeber/vim-addon-mw-utils.git'
+Bundle 'https://github.com/MarcWeber/vim-addon-actions.git'
+
+" Surround
+Bundle 'https://github.com/tpope/vim-surround.git'
 
 " ...
 
@@ -172,7 +187,9 @@ autocmd BufNewFile *.cpp        :execute "TSkeletonSetup ".$HOME."/.vim/skeleton
 "-----------------------------------------------------------------------------------
 " YouCompleteMe
 "-----------------------------------------------------------------------------------
-let g:ycm_register_as_syntastic_checker = 0
+let g:ycm_register_as_syntastic_checker = 1
+let g:ycm_confirm_extra_conf = 0
+let g:ycm_global_ycm_extra_conf = '/Users/ant/.ycm_extra_conf.py'
 
 "-----------------------------------------------------------------------------------
 " a.vim
@@ -183,7 +200,7 @@ let g:alternateExtensions_h = "C,cpp,c++,c"
 "-----------------------------------------------------------------------------------
 " SYNTASTIC
 "-----------------------------------------------------------------------------------
-let g:syntastic_mode_map = { 'mode': 'passive',
+let g:syntastic_mode_map = { 'mode': 'active',
                            \ 'active_filetypes': ['ruby', 'php', 'python'],
                            \ 'passive_filetypes': ['puppet'] }
 
@@ -206,6 +223,10 @@ let g:gist_post_private = 1
 let g:gist_detect_filetype = 1
 let g:gist_show_privates = 1
 
+"--------------------------------------------------
+" TMRU most recently used files
+"--------------------------------------------------
+noremap <leader>ru :TMRU<CR>
 
 "  ___                   _____     _    
 " / __|_  _ _ __  ___ _ |_   _|_ _| |__ 
@@ -767,3 +788,4 @@ endif
 set background=dark
 syntax enable
 
+runtime 'config/ObjectiveC.vim'
