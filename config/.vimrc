@@ -1,10 +1,4 @@
 " Ant's vimrc file.
-
-" When started as "evim", evim.vim will already have done these settings.
-"if v:progname =~? "evim"
-"  finish
-"endif
-"
 "
 let g:alternateSearchPath = 'sfr:./src,sfr:./include,wdr:./src,wdr:./include,sfr:../source,sfr:../src,sfr:../include,sfr:../inc' 
 
@@ -50,11 +44,9 @@ Bundle 'http://www.github.com/vim-scripts/bash-support.vim'
 
 Bundle 'http://www.github.com/scrooloose/nerdcommenter'
 Bundle 'http://www.github.com/scrooloose/nerdtree'
-Bundle 'http://www.github.com/ervandew/supertab'
 Bundle 'https://www.github.com/kien/ctrlp.vim.git'
 Bundle 'http://www.github.com/majutsushi/tagbar'
 Bundle 'http://www.github.com/altercation/vim-colors-solarized'
-" Bundle 'Rip-Rip/clang_complete'
 " Tmux integration
 Bundle 'http://www.github.com/xaviershay/tslime.vim'
 " Git mirror of abudden's TagHighlight -- seems to be updated regularly
@@ -127,6 +119,15 @@ Bundle 'https://github.com/MarcWeber/vim-addon-actions.git'
 " Surround
 Bundle 'https://github.com/tpope/vim-surround.git'
 
+" Airline enhanced status line
+Bundle 'https://github.com/bling/vim-airline.git'
+" If powerline-fonts is installed, auto-detect them with this setting...
+" Powerline-fonts: git clone https://github.com/Lokaltog/powerline-fonts.git
+let g:airline_powerline_fonts = 1
+
+" Ultisnips
+Bundle 'https://github.com/SirVer/ultisnips.git'
+
 " ...
 
 filetype plugin indent on     " required! 
@@ -191,6 +192,57 @@ let g:ycm_register_as_syntastic_checker = 1
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_global_ycm_extra_conf = '/Users/ant/.ycm_extra_conf.py'
 
+" Compatibility with UltiSnips
+let g:ycm_use_ultisnips_completer = 1
+
+"-----------------------------------------------------------------------------------
+" UltiSnips
+"-----------------------------------------------------------------------------------
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsListSnippets="<c-e>"
+
+" Add our local snippets to the UltiSnips search path (which is runtimepath)
+set rtp+=~/.vim/snippets
+
+" YCM <-> UltiSnips Compatibility Routines
+" Because YCM and UltiSnips both use TAB and Return, we need to be context-sensitive
+" and do different things depending if:
+" a) An UltiSnip suggestion is selected in the Pop-Up Menu, and we hit 'Return'
+" b) We are in an UltiSnip completion with placeholders, and we hit 'Tab'
+function! g:UltiSnips_Complete()
+    if pumvisible()
+        call UltiSnips_ExpandSnippet()
+        if g:ulti_expand_res == 1
+            return ""
+        else
+            return ""
+        endif
+    endif
+    return ""
+endfunction
+
+" Install our custom RETURN handler
+inoremap <silent> <Return> <C-R>=g:UltiSnips_Complete()<CR>
+
+function! g:UltiSnips_Tab()
+    " First try UltiSnips jump forwards
+    call UltiSnips_JumpForwards()
+    if g:ulti_jump_forwards_res == 0
+        " Not in an UltiSnips completion context
+        if pumvisible()
+            return "\<C-n>" " YCM completion using first completion
+        else
+            return "\<TAB>"
+        endif
+    endif
+    " UltiSnips has jumped to next placeholder
+    return ""
+endfunction
+
+" Install our custom TAB handler
+au BufEnter * exec "inoremap <silent> " . g:UltiSnipsJumpForwardTrigger . " <C-R>=g:UltiSnips_Tab()<cr>"
+
+
 "-----------------------------------------------------------------------------------
 " a.vim
 "-----------------------------------------------------------------------------------
@@ -228,95 +280,11 @@ let g:gist_show_privates = 1
 "--------------------------------------------------
 noremap <leader>ru :TMRU<CR>
 
-"  ___                   _____     _    
-" / __|_  _ _ __  ___ _ |_   _|_ _| |__ 
-" \__ \ || | '_ \/ -_) '_|| |/ _` | '_ \ 
-" |___/\_,_| .__/\___|_|  |_|\__,_|_.__/
-"          |_|                          
-let g:SuperTabDefaultCompletionType = "<c-p>"
-let g:SuperTabContextDefaultCompletionType = "<c-p>"
-
-
-"  ___ _      ___ _         ___ _                
-" | _ (_)_ __| _ (_)_ __   / __| |__ _ _ _  __ _ 
-" |   / | '_ \   / | '_ \ | (__| / _` | ' \/ _` |
-" |_|_\_| .__/_|_\_| .__/  \___|_\__,_|_||_\__, |
-"       |_|        |_|                     |___/ 
-" SuperTab option for context aware completion let g:SuperTabDefaultCompletionType = "context"
-
-" Tips for clang_complete
-" -----------------------
-
-" a) You must use headers from gcc 4.4 onwards: if you don't have gcc 4.4+, you can download the headers only
-"    and point clang at them
-" b) To debug gnomic issues with clang (you just get the error 'Completion not found'), you can add debug
-"    code to the file plugin/libclang.py, function:
-
-" def updateCurrentDiagnostics():
-" ...
-"   args = userOptionsGlobal + userOptionsLocal + parametersLocal
-"   if debug:
-"     print "LibClang args = {}".format(args)
-" ...
-
-" Then 
-" 1) load a file, 
-" 2) enter :let g:clang_debug=1, 
-" 3) run ClangCheck in vim, 
-" 4) use the ex command :messages to view the arguments passed to libclang
-
-" Clang Complete Settings
-" g:clang_user_options set at vimprj section 
-let g:clang_use_library=1 
-let g:clang_library_path = "/usr/lib"
-let g:clang_complete_copen=1
-let g:clang_complete_macros=1
-let g:clang_complete_patterns=0
-" Configure what 'auto configuration' of the clang options clang_complete does.
-" This is a comma-separated list of values 'path', 'gcc', 'clang', '.clang_complete', '<user>'
-" 'gcc' and 'clang' are actually two <user> functions supplied as a convenience, and fill out
-" the system includes for gcc or clang, automatically.
-" '.clang_complete' means search upwards for a .clang_complete file, and if found use that for the options
-let g:clang_auto_user_options='.clang_complete'
-let g:clang_memory_percent=70
-" You can either put your system header paths in 'clang_user_options', or in each .clang_complete you generate
-let g:clang_user_options = '' 
 
 if has('conceal')
     set conceallevel=2
     set concealcursor=vin
 endif
-
-let g:clang_snippets=1
-let g:clang_conceal_snippets=1
-" The single one that works with clang_complete
-let g:clang_snippets_engine='clang_complete'
-
-
-" SuperTab completion fall-back for context aware completion
-" (incompatible with g:clang_auto_select=0, using the above)
-" let g:SuperTabContextDefaultCompletionType='<c-x><c-u><c-p>'
-
-" Reparse the current translation unit in background
-command Parse
-\ if &ft == 'c' || &ft == 'cpp'   |
-\   call g:ClangBackgroundParse() |
-\ else                            |
-\   echom 'Parse What?'           |
-\ endif
-
-" Reparse the current translation unit and check for errors
-command ClangCheck
-\ if &ft == 'c' || &ft == 'cpp'   |
-\   call g:ClangUpdateQuickFix()  |
-\ else                            |
-\   echom 'Check What?'           |
-\ endif
-
-
-
-nmap <leader> b g:ClangUpdateQuickFix()
-
 
 compiler gcc
 
@@ -769,7 +737,7 @@ if has("gui_running")
     colorscheme solarized
     let g:solarized_diffmode="normal"    "default value is normal
     if has("gui_mac") || has("gui_macvim")
-        set gfn=Source\ Code\ Pro:h13
+        set gfn=Sauce\ Code\ Powerline:h13
         set lines=105 columns=340
     else
         " Settings for crappy 15" monitors at work
