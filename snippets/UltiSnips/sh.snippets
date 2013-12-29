@@ -1,0 +1,92 @@
+
+
+snippet head "Header"
+#!/bin/bash - 
+#===============================================================================
+#
+#          FILE: `!p snip.rv=fn`
+# 
+#   DESCRIPTION: ${1:Description}
+# 
+#       CREATED: `date +%d\ %b\ %Y`.
+#
+#        AUTHOR: Anthony Dervish
+#
+#===============================================================================
+
+set -o nounset                              # Treat unset variables as an error
+
+endsnippet
+
+snippet secstart "Section Start" b
+#===============================================================================
+# ${1:SectionName}
+#===============================================================================
+
+${0}
+
+endsnippet
+
+snippet subsect "Sub-section" b
+#-${1/./-/g}
+# ${1:SectionName}
+#-${1/./-/g}
+endsnippet
+
+snippet fun "Function" b
+
+#===  FUNCTION  ================================================================
+#         NAME:  ${1:Name}
+#  DESCRIPTION:  ${2:Description}
+#===============================================================================
+
+function ${1} ()
+{
+	$0
+}
+
+endsnippet
+
+snippet args "Parse command-line arguments"
+ScriptVersion="1.0"
+
+#===  FUNCTION  ================================================================
+#         NAME:  usage
+#  DESCRIPTION:  Display usage information.
+#===============================================================================
+function usage ()
+{
+	cat <<- EOT
+  Make a new project directory structure for vim-based work with YouCompleteMe
+
+  Usage :  \$\{0##/*/} [options] [--] <ProjectName>
+
+  Options: 
+  -h|help       Display this message
+  -v|version    Display script version
+
+	EOT
+}    # ----------  end of function usage  ----------
+
+#-----------------------------------------------------------------------
+#  Handle command line arguments
+#-----------------------------------------------------------------------
+
+while getopts ":hv" opt
+do
+  case $opt in
+
+    h|help     )  usage; exit 0   ;;
+
+    v|version  )  echo "$0 -- Version $ScriptVersion"; exit 0   ;;
+
+    \? )  echo -e "\n  Option does not exist : $OPTARG\n"
+          usage; exit 1   ;;
+
+  esac    # --- end of case ---
+done
+shift $(($OPTIND-1))
+endsnippet
+
+
+# vim:ft=snippets:

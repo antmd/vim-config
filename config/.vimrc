@@ -43,7 +43,11 @@ Bundle 'https://www.github.com/dhazel/conque-term.git'
 Bundle 'http://www.github.com/vim-scripts/bash-support.vim'
 
 Bundle 'http://www.github.com/scrooloose/nerdcommenter'
+" NERDTree
 Bundle 'http://www.github.com/scrooloose/nerdtree'
+" NERDTree tabs
+Bundle 'https://github.com/jistr/vim-nerdtree-tabs.git'
+
 Bundle 'https://www.github.com/kien/ctrlp.vim.git'
 Bundle 'http://www.github.com/majutsushi/tagbar'
 Bundle 'http://www.github.com/altercation/vim-colors-solarized'
@@ -125,10 +129,55 @@ Bundle 'https://github.com/bling/vim-airline.git'
 " Powerline-fonts: git clone https://github.com/Lokaltog/powerline-fonts.git
 let g:airline_powerline_fonts = 1
 
+" Seek plugin, remaps 's' to do a 2-character version of 'f'
+Bundle 'https://github.com/goldfeld/vim-seek.git'
+
 " Ultisnips
 Bundle 'https://github.com/SirVer/ultisnips.git'
 
+" VimShell
+Bundle 'http://github.com/Shougo/vimproc'
+Bundle 'https://github.com/Shougo/vimshell.vim.git'
+
+" Fugitive -- git plugin
+" Adds 'Git...' commands
+Bundle 'https://github.com/tpope/vim-fugitive.git'
+
+" Undo Tree
+Bundle 'https://github.com/mbbill/undotree.git'
+" <leader>ut to toggle
+nnoremap <leader>ut :UndotreeToggle<cr>
+if has("persistent_undo")
+    set undodir='~/.undodir/'
+    set undofile
+endif
+
+" Unimpaired
+" ]q is :cnext. [q is :cprevious. ]a is :next. [b is :bprevious, etc.
+" Linewise mappings [e and ]e exchange the current line with the one above or below it.
+" Toggling options. [os, ]os, and cos perform :set spell, :set nospell, and :set invspell, respectively.
+" [x and ]x encode and decode XML (and HTML). [u and ]u encode and decode URLs. [y and ]y do C String style escaping.
+" yp or Yp enter append, or insert modes with 'set paste'. 
+" lots more, see 'help unimpaired' 
+Bundle 'https://github.com/tpope/vim-unimpaired.git'
+
+" vim-expand-region
+" + to expand region, - to shrink 
+Bundle 'https://github.com/terryma/vim-expand-region.git'
+"map + <Plug>(expand_region_expand)
+map - <Plug>(expand_region_shrink)
 " ...
+
+" vim-multiple-cursors
+" In normal mode, Ctrl-n highlights further occurrences of the word under the
+" cursor, Ctrl-p unhighlights the last instance. Then use a,s,I, etc. to make
+" a change. Ctrl-n in visual mode puts a cursor on every line of the visual
+" selection, and live updates the text
+Bundle 'https://github.com/terryma/vim-multiple-cursors.git'
+
+" vim-startify
+" Better start screen
+Bundle 'https://github.com/mhinz/vim-startify.git'
 
 filetype plugin indent on     " required! 
 
@@ -148,21 +197,11 @@ runtime! config/**/*.vim
 
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-"   ___             _  ___                _     _       
-"  / _ \ _ __  _ _ (_)/ __|___ _ __  _ __| |___| |_ ___ 
-" | (_) | '  \| ' \| | (__/ _ \ '  \| '_ \ / -_)  _/ -_) 
-"  \___/|_|_|_|_||_|_|\___\___/_|_|_| .__/_\___|\__\___|
-"                                   |_|                 
-let OmniCpp_NamespaceSearch = 1
-let OmniCpp_GlobalScopeSearch = 1
-let OmniCpp_ShowAccess = 1
-let OmniCpp_ShowPrototypeInAbbr = 1 " show function parameters let OmniCpp_MayCompleteDot = 1 " autocomplete after .
-let OmniCpp_MayCompleteArrow = 1 " autocomplete after -> let OmniCpp_MayCompleteScope = 1 " autocomplete after ::
-let OmniCpp_DefaultNamespaces = ["std", "_GLIBCXX_STD"] " automatically open and close the popup menu / preview window au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
-
 " Complete options (disable preview scratch window, longest removed to aways " show menu) set completeopt=menuone,menu,longest,preview
  " Limit popup menu height
 set pumheight=20
+" Warning 'preview' on MacVim causes crashes
+set completeopt=menu,longest
  
 "--------------------------------------------------
 " Local vimrc
@@ -178,6 +217,7 @@ let g:tskelUserName = 'Anthony Dervish'
 let g:tskelUserEmail = 'ant@dervishsoftware.com'
 let g:tskelUserCompany = 'Dervish Software'
 let g:tskelUserWWW = 'http://www.dervishsoftware.com'
+let g:tskelMapHyperComplete = '<C-1>' " No hyper-complete shortcut (C-1 cannot be mapped) -- we want YCM to use <C-Space>
 
 " I couldn't get TSkeleton to automatically find it's skeletons, so I use
 " $HOME to specify the full path to the skeleton
@@ -189,11 +229,16 @@ autocmd BufNewFile *.cpp        :execute "TSkeletonSetup ".$HOME."/.vim/skeleton
 " YouCompleteMe
 "-----------------------------------------------------------------------------------
 let g:ycm_register_as_syntastic_checker = 1
-let g:ycm_confirm_extra_conf = 0
+let g:ycm_confirm_extra_conf = 0 " Silently source the ycm_extra_conf.py
 let g:ycm_global_ycm_extra_conf = '/Users/ant/.ycm_extra_conf.py'
-
 " Compatibility with UltiSnips
 let g:ycm_use_ultisnips_completer = 1
+let g:ycm_key_invoke_completion = '<C-Space>'
+
+" DEBUG
+" let g:ycm_server_log_level='debug'
+" let g:ycm_server_use_vim_stdout = 1
+
 
 "-----------------------------------------------------------------------------------
 " UltiSnips
@@ -215,7 +260,7 @@ function! g:UltiSnips_Complete()
         if g:ulti_expand_res == 1
             return ""
         else
-            return ""
+            return ""
         endif
     endif
     return ""
@@ -259,14 +304,16 @@ let g:syntastic_mode_map = { 'mode': 'active',
 "-----------------------------------------------------------------------------------
 " NERDTree
 "-----------------------------------------------------------------------------------
-" CTRL N opens tree
-map <C-n> :NERDTreeToggle<CR>
+" CTRL 1 opens tree
+map <F1> :NERDTreeTabsToggle<CR>
+let g:nerdtree_tabs_smart_startup_focus = 2 " Focus on file after opening
 "Open tree if no files specified when opening vim
 "autocmd vimenter * if !argc() | NERDTree | endif
 let g:NERDTreeQuitOnOpen=1
 let g:NERDTreeDirArrows=0
 " Close vim if it's the NERDTree is the only window left
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
 
 "--------------------------------------------------
 " Gist
@@ -279,6 +326,7 @@ let g:gist_show_privates = 1
 " TMRU most recently used files
 "--------------------------------------------------
 noremap <leader>ru :TMRU<CR>
+map <F2> :TMRU<CR>
 
 
 if has('conceal')
@@ -446,9 +494,7 @@ set nowrap
 iabbrev //--- //------------------------------------------------------------------------------------
 iabbrev //=== //====================================================================================
 
-" Use F2 to toggle search result highlighting
-map <F2> :let &hlsearch=!&hlsearch<CR>
-map <F3> :set syntax=cvs_cnfl<CR>
+" Use F2 to toggle recent files
 
 " move within long lines
 noremap j gj
@@ -607,8 +653,16 @@ map Q gq
 
 map mf :!tkdiff -conflict <cfile><CR>
 
-" Nice menu font
-
+" Command mode emacs-like bindings
+cnoremap <C-a> <Home>
+cnoremap <C-e> <End>
+cnoremap <C-p> <Up>
+cnoremap <C-n> <Down>
+cnoremap <C-b> <Left>
+cnoremap <C-f> <Right>
+cnoremap <M-b> <S-Left>
+cnoremap <M-f> <S-Right>
+command CD cd %:p:h
 
 
 " Project Plugin
@@ -739,6 +793,11 @@ if has("gui_running")
     if has("gui_mac") || has("gui_macvim")
         set gfn=Sauce\ Code\ Powerline:h13
         set lines=105 columns=340
+        " Turn off bindings to the arrow-keys
+        let macvim_skip_cmd_opt_movement = 1
+        " Bind trackpad swipes to prev/next in jump list
+        nmap <SwipeLeft> <C-o>
+        nmap <SwipeRight> <C-i>
     else
         " Settings for crappy 15" monitors at work
         set gfn=Source_Code_Pro:h10:cANSI

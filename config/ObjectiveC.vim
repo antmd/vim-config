@@ -28,8 +28,16 @@ autocmd Filetype objc nmap <buffer> <F9> :SingleCompile <CR>
 " Otherwise .m is used for 'MatLab'
 au BufEnter *.m set filetype=objc
 
-function SetObjcCompiler(objctype)
-    if a:objctype ==? 'app'
+function BufferIsApp()
+    let l:isApp = 0
+    if match( expand('%:p:h:t'), '.*App$' ) >=0 || match( expand('%:p:h:t'), '.*Gui$' ) >=0 
+        let l:isApp = 1
+    endif
+    return l:isApp
+endfunction
+
+function SetObjcCompilerForBuffer()
+    if BufferIsApp()
         call SingleCompile#SetPriority('objc', 'ObjcApplication',1 )
         call SingleCompile#SetPriority('objc', 'ObjcCommandLineTool',2 )
         call SingleCompile#ChooseCompiler('objc', 'ObjcApplication')
@@ -38,19 +46,31 @@ function SetObjcCompiler(objctype)
         call SingleCompile#SetPriority('objc', 'ObjcApplication',2 )
         call SingleCompile#ChooseCompiler('objc', 'ObjcCommandLineTool')
     endif
+    " Add the 'Headers' directory to 'path'
+    let l:headersPath = expand('%:p:h').'/Headers'
+    if isdirectory(l:headersPath)
+        :execute "set path-=".l:headersPath
+        :execute "set path^=".l:headersPath
+    endif
+endfunction
+
+
+function SourceSkeletonForNewBuffer()
+    if BufferIsApp()
+        :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/cocoa.m"
+    else
+        :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/foundation.m"
+    endif
 endfunction
 
 "-----------------------------------------------------------------------------------
 " TSkeleton
 "-----------------------------------------------------------------------------------
 "
-" WARNING: These rules should appear in order of 'specific-ness'
-autocmd BufNewFile *.m   :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/foundation.m"
-autocmd BufNewFile *.mm   :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/foundation.m"
-autocmd BufEnter *.m   call SetObjcCompiler('cli')
-
-autocmd BufNewFile *[Gg]ui.m   :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/cocoa.m"
-autocmd BufEnter *[Gg]ui.m   call SetObjcCompiler('app')
+" WARNING: These rules should appear in decreasing order of 'specific-ness'
+autocmd BufNewFile *.mm  call SourceSkeletonForNewBuffer()
+autocmd BufNewFile *.m   call SourceSkeletonForNewBuffer()
+autocmd FileType objc    call SetObjcCompilerForBuffer()
 
 endif
 

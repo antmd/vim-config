@@ -11,3 +11,50 @@ for (${1:id} element in ${2})
 	$0
 }
 endsnippet
+
+snippet init "Init class"
+- (id)init
+{
+	self = [super init];
+	if (self != nil) {
+		$0
+	}
+	return self;
+}
+@end
+endsnippet
+
+snippet m "Method"
+-(${1:type}) ${2:name}
+{
+	$0
+	return $1
+}
+
+snippet logd "Debug Logging"
+PDEBUG(@"${1:message}",$0);
+endsnippet
+
+snippet logd "Info Logging"
+PINFO(@"${1:message}",$0);
+endsnippet
+
+snippet secstart "Section start" b
+
+/*
+ *
+ *
+ *================================================================================================*/
+#pragma mark - ${1:section}
+/*==================================================================================================
+ */
+
+$0
+
+
+endsnippet
+
+
+snippet secend "Section end" b
+// ///////////////////////// End of $1 ///////////////////////////////
+endsnippet
