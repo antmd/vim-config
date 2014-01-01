@@ -1,0 +1,33 @@
+snippet pyobjc "Python ObjC Template" b
+from PyObjCTools import AppHelper
+from objc import getClassList, objc_object
+from Foundation import *
+
+
+"""
+App Delegate 
+
+"""
+class `!p snip.rv=snip.basename`AppDelegate (NSObject):
+    # Define IBOutlets here...
+    window = objc.IBOutlet()
+
+    def applicationDidFinishLaunching_(self, notification):
+		${0}
+
+    def awakeFromNib(self):
+		pass
+
+    # An IBAction...
+    @objc.IBAction
+    def quit_(self, sender):
+		NSApplication.sharedApplication().terminate_(self)
+
+
+"""
+MAIN
+
+"""
+if __name__ == "__main__":
+    `!p snip.rv=snip.basename`AppHelper.runEventLoop()
+endsnippet

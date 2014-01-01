@@ -22,9 +22,6 @@ call SingleCompile#SetCompilerTemplate('objc',
 call SingleCompile#SetOutfile('objc', 'ObjcApplication', g:SingleCompile_common_out_file)
 
 
-autocmd Filetype objc nmap <buffer> <F9> :SingleCompile <CR>
-
-
 " Otherwise .m is used for 'MatLab'
 au BufEnter *.m set filetype=objc
 
@@ -71,6 +68,48 @@ endfunction
 autocmd BufNewFile *.mm  call SourceSkeletonForNewBuffer()
 autocmd BufNewFile *.m   call SourceSkeletonForNewBuffer()
 autocmd FileType objc    call SetObjcCompilerForBuffer()
+
+
+
+"-----------------------------------------------------------------------------------
+" Tagbar Config for Objective-C
+"-----------------------------------------------------------------------------------
+"
+"" BEGIN copied from http://www.daskrachen.com/2011/12/how-to-make-tagbar-work-with-objective.html
+" add a definition for Objective-C to tagbar
+let g:tagbar_type_objc = {
+    \ 'ctagstype' : 'ObjectiveC',
+    \ 'kinds'     : [
+        \ 'i:interface',
+        \ 'I:implementation',
+        \ 'p:Protocol',
+        \ 'm:Object_method',
+        \ 'c:Class_method',
+        \ 'v:Global_variable',
+        \ 'F:Object field',
+        \ 'f:function',
+        \ 'p:property',
+        \ 't:type_alias',
+        \ 's:type_structure',
+        \ 'e:enumeration',
+        \ 'M:preprocessor_macro',
+    \ ],
+    \ 'sro'        : ' ',
+    \ 'kind2scope' : {
+        \ 'i' : 'interface',
+        \ 'I' : 'implementation',
+        \ 'p' : 'Protocol',
+        \ 's' : 'type_structure',
+        \ 'e' : 'enumeration'
+    \ },
+    \ 'scope2kind' : {
+        \ 'interface'      : 'i',
+        \ 'implementation' : 'I',
+        \ 'Protocol'       : 'p',
+        \ 'type_structure' : 's',
+        \ 'enumeration'    : 'e'
+    \ }
+\ }
 
 endif
 

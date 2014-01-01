@@ -1,8 +1,16 @@
-#!/bin/bash
-# <+FILE NAME+> -- created <+DATE+>, <+AUTHOR+>
-# @Last Change: 24-Dez-2004.
-# @Revision:    0.0
+#!/bin/bash - 
+#===============================================================================
+#
+#          FILE: <+FILE NAME+>
+# 
+#   DESCRIPTION:  <+CURSOR+>
+# 
+#       CREATED: <+DATE+>
+#
+#        AUTHOR: <+AUTHOR+>
+#
+#===============================================================================
 
-<+CURSOR+>
+set -o nounset                              # Treat unset variables as an error
 
-# vi: 
+

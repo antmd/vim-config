@@ -25,22 +25,17 @@ Bundle 'gmarik/vundle'
 " original repos on github
 Bundle 'http://www.github.com/sukima/xmledit'
 
+" Add user-defined operators
+Bundle 'https://github.com/kana/vim-operator-user.git'
+" Adds ':Grex', ':Gred' and ':Grey' for delete, delete-line and yank based on
+" the last successful search
+Bundle 'https://github.com/kana/vim-grex.git'
 
 " EASYMOTION PLUGIN
 " Provides <leader><leader>w to highlight the start of all words,
 " or <leader><leader>f<letter> to highglight all occurrences of <letter>
 " then press the letter 'shortcut' to jump to the place you want.
 Bundle 'http://www.github.com/Lokaltog/vim-easymotion'
-
-" CONQUE-TERM PLUGIN
-" Terminal emulator in a vim split -- run top, etc.
-"
-" :ConqueTerm bash
-" :ConqueTermSplit mysql -h localhost -u joe -p sock_collection
-" :ConqueTermTab Powershell.exe
-" :ConqueTermVSplit C:\Python27\python.exe
-Bundle 'https://www.github.com/dhazel/conque-term.git'
-Bundle 'http://www.github.com/vim-scripts/bash-support.vim'
 
 Bundle 'http://www.github.com/scrooloose/nerdcommenter'
 " NERDTree
@@ -85,9 +80,9 @@ Bundle 'http://github.com/mattn/gist-vim'
 Bundle 'https://github.com/Valloric/YouCompleteMe'
 
 " Markdown support
-Bundle 'https://github.com/suan/vim-instant-markdown.git'
-Bundle 'https://github.com/tpope/vim-markdown.git'
-Bundle 'https://github.com/nelstrom/vim-markdown-folding.git'
+"Bundle 'https://github.com/suan/vim-instant-markdown.git'
+"Bundle 'https://github.com/tpope/vim-markdown.git'
+"Bundle 'https://github.com/nelstrom/vim-markdown-folding.git'
 
 
 " Local vimrc files (.lvimrc)
@@ -179,6 +174,10 @@ Bundle 'https://github.com/terryma/vim-multiple-cursors.git'
 " Better start screen
 Bundle 'https://github.com/mhinz/vim-startify.git'
 
+" Call clang-format from vim
+Bundle 'https://github.com/rhysd/vim-clang-format.git'
+
+
 filetype plugin indent on     " required! 
 
 """ Custom Configs include.
@@ -221,8 +220,9 @@ let g:tskelMapHyperComplete = '<C-1>' " No hyper-complete shortcut (C-1 cannot b
 
 " I couldn't get TSkeleton to automatically find it's skeletons, so I use
 " $HOME to specify the full path to the skeleton
-autocmd BufNewFile *main*.cpp   :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/main.cpp"
-autocmd BufNewFile *.cpp        :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/basic.cpp"
+autocmd BufNewFile *main*.cpp :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/main.cpp"
+autocmd BufNewFile *.cpp      :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/basic.cpp"
+autocmd BufNewFile *.sh       :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/shell.sh"
 
 
 "-----------------------------------------------------------------------------------
@@ -287,12 +287,32 @@ endfunction
 " Install our custom TAB handler
 au BufEnter * exec "inoremap <silent> " . g:UltiSnipsJumpForwardTrigger . " <C-R>=g:UltiSnips_Tab()<cr>"
 
+"-----------------------------------------------------------------------------------
+" SingleCompile
+"-----------------------------------------------------------------------------------
+noremap <unique> <F8> :SingleCompile<cr>
+noremap <unique> <F9> :SingleCompileRun<cr>
+call SingleCompile#SetCompilerTemplate('c', 'clang', 'Clang C Compiler',
+            \'clang', '-g -Wno-deprecated-declarations -o $(FILE_TITLE)$', g:SingleCompile_common_run_command)
+call SingleCompile#SetCompilerTemplateByDict('c', 'gcc', {
+            \ 'pre-do'  : function('SingleCompile#PredoGcc'),
+            \ 'priority' : 10,
+            \ 'out-file': g:SingleCompile_common_out_file
+            \})
+
+
+"-----------------------------------------------------------------------------------
+" Clang format
+"-----------------------------------------------------------------------------------
+let g:clang_format#style_option = {'BasedOnStyle': 'llvm', 'IndentWidth': 4, 'ColumnLimit': 100, 'MaxEmptyLinesToKeep': 3, 'BreakBeforeBraces': 'Stroustrup', 'ContinuationIndentWidth': 8 }
 
 "-----------------------------------------------------------------------------------
 " a.vim
 "-----------------------------------------------------------------------------------
 let g:alternateExtensions_C = "h,H,HPP,hpp"
-let g:alternateExtensions_h = "C,cpp,c++,c"
+let g:alternateExtensions_h = "m,C,cpp,c++,c"
+let g:alternateExtensions_m = "h,hpp"
+noremap <silent> <C-S-a> :A<CR>
 
 "-----------------------------------------------------------------------------------
 " SYNTASTIC
@@ -334,34 +354,12 @@ if has('conceal')
     set concealcursor=vin
 endif
 
-compiler gcc
+compiler clang
 
 " Load a file into a clojure repl
 nmap silent <Leader>c :call Send_to_Tmux("\n\n\n(load-file \"./myfile.clj\")\n")<CR>
 
-
 "--------------------------------------------------------------------------------
-" Neocomplete config
-"--------------------------------------------------------------------------------
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-"
-
-" Enable omni completion.
-autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-
-" Enable heavy omni completion.
-if !exists('g:neocomplcache_omni_patterns')
-  let g:neocomplcache_omni_patterns = {}
-endif
-let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-"autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
-let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-"let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
-"let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 
 " Map \ff to 'Find File' -- when cursor is over a filename (e.g. include,
 " print which file it matches in the search path
@@ -619,13 +617,13 @@ imap <A-PageDown> <ESC>:tabnext<cr>i
  
  
 " F7 - CP 
-nnoremap <F7> :cprev<CR>
+nnoremap ,p :cprev<CR>
 " F8 - CN 
-nnorema <F9> :cnext<CR>
+nnorema ,n :cnext<CR>
 " F10 - Open quickfix window
-noremap <F10> :bo cw<CR>
+noremap ,qo :bo cw<CR>
 " F11 - Close quickfix window
-noremap <F11> :ccl<CR>
+noremap ,qc :ccl<CR>
  
 " scroll down half a page w/ space, up with -
 noremap <Space> <C-D>
