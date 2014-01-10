@@ -12,8 +12,20 @@ for (${1:id} element in ${2})
 }
 endsnippet
 
+snippet @int "Interface"
+@interface ${1:ClassName} : NSObject
+${0}
+@end
+endsnippet
+
+snippet @imp "Implementation"
+@interface ${1:ClassName} : NSObject
+${0}
+@end
+endsnippet
+
 snippet init "Init class"
-- (id)init
+-(id) init
 {
 	self = [super init];
 	if (self != nil) {
@@ -22,6 +34,14 @@ snippet init "Init class"
 	return self;
 }
 @end
+endsnippet
+
+
+snippet dealloc "Dealloc instance" b
+-(void) dealloc
+{
+	$0
+}
 endsnippet
 
 snippet m "Method"

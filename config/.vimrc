@@ -20,10 +20,48 @@ call vundle#rc()
 " required! 
 Bundle 'gmarik/vundle'
 
-" My Bundles here:
-"
+" Text manipulation
+Bundle 'https://github.com/vim-scripts/textmanip.vim.git'
+" mj - move line down
+nmap mj <S-v>mj
+xmap mj <Plug>(textmanip-move-down)<ESC>
+" mk - move line up
+nmap mk <S-v>mk
+xmap mk <Plug>(textmanip-move-up)<ESC>
+xmap mh <Plug>(textmanip-move-left)
+xmap ml <Plug>(textmanip-move-right)
+" Mj - dup line down
+nmap Mj <S-v>Mj
+xmap Mj <Plug>(textmanip-duplicate-down)<ESC>
+" Mk - dup line up
+nmap Mk <S-v>Mk
+xmap Mk <Plug>(textmanip-duplicate-up)<ESC>
+
+
+" toggle insert/replace with <F10>
+nmap <F10> <Plug>(textmanip-toggle-mode)
+xmap <F10> <Plug>(textmanip-toggle-mode)
+
+
+" Yank Ring
+Bundle 'https://github.com/vim-scripts/YankRing.vim.git'
+nnoremap <silent> <F11> :YRShow<CR>
+
+" 'Function' text object ('f')
+Bundle 'https://github.com/kana/vim-textobj-function.git'
+
+" 'argument' text object ('a')
+Bundle 'https://github.com/vim-scripts/argtextobj.vim.git'
+
+" Voom outliner
+" Use ':Voom markdown' for markdown
+Bundle 'https://github.com/vim-scripts/VOoM.git'
+
 " original repos on github
 Bundle 'http://www.github.com/sukima/xmledit'
+
+" Add user-defined text objects
+Bundle 'https://github.com/kana/vim-textobj-user.git'
 
 " Add user-defined operators
 Bundle 'https://github.com/kana/vim-operator-user.git'
@@ -176,6 +214,11 @@ Bundle 'https://github.com/mhinz/vim-startify.git'
 
 " Call clang-format from vim
 Bundle 'https://github.com/rhysd/vim-clang-format.git'
+
+
+" ZenRoom distraction-less Writing
+Bundle 'https://github.com/junegunn/goyo.vim.git'
+Bundle 'https://github.com/amix/vim-zenroom2.git'
 
 
 filetype plugin indent on     " required! 
@@ -807,6 +850,7 @@ else
     hi statement ctermbg=NONE ctermfg=3
     hi todo ctermbg=NONE
     hi comment ctermfg=green ctermbg=black cterm=none
+    hi LineNr ctermbg=black ctermfg=black
 endif
 
 

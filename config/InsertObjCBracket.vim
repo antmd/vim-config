@@ -1,0 +1,45 @@
+call textobj#user#plugin('objcexpr', {
+            \   '-': {
+            \     'select-a-function': 'SelectObjcExprA',
+            \     'select-a': 'aO',
+            \     'select-i-function': 'SelectObjcExprI',
+            \     'select-i': 'iO',
+            \   },
+            \ })
+
+" Function to define an 'Objective-C Expression', which is
+
+function! SelectObjcExprA()
+    " End of last word, then forwards one char
+
+    if getline('.')[col('.')-1] == ' ' 
+        normal! gE
+    endif
+    let end_of_last_word = getpos('.')
+    let first_square_close_bracket_pos = getpos('.')
+    if getline('.')[col('.')] != ']' 
+        normal! F]
+    endif
+    if getpos('.') == first_square_close_bracket_pos
+        " No ']' found on same line, look for first opening bracket
+        normal! F[
+    else
+        " Found a preceding ']' on same line, go to matching '[' bracket
+        let first_square_close_bracket_pos = getpos('.')
+        normal! %
+    endif
+    let matching_square_open_bracket_pos = getpos('.')
+    if first_square_close_bracket_pos == matching_square_open_bracket_pos
+        return 0
+    endif
+    return ['v', matching_square_open_bracket_pos, end_of_last_word]
+endfunction
+
+function! SelectObjcExprI()
+    return SelectObjcExprA()
+endfunction
+
+" Map Ctrl-] in insert mode to call surround plugin, with 'aO' as the text
+" object, and adding the square brackets
+imap <C-]> <esc>ysaO]%a
+
