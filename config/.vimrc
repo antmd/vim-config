@@ -106,7 +106,6 @@ Bundle 'http://www.github.com/vim-scripts/a.vim'
 
 " Python mode (indentation, doc, refactor, lints, code checking, motion and
 " operators, highlighting, run and ipdb breakpoints)
-Bundle 'http://www.github.com/klen/python-mode'
 Bundle 'https://www.github.com/fs111/pydoc.vim'
 
 " Gist support

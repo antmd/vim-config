@@ -18,7 +18,7 @@ call SingleCompile#SetCompilerTemplate('objc',
             \'Clang (Application Bundle)',
             \'compileobjcapp', 
             \'$(FILE_NAME)$',
-            \'open -a $(FILE_TITLE)$.app')
+            \'runobjcapp')
 call SingleCompile#SetOutfile('objc', 'ObjcApplication', g:SingleCompile_common_out_file)
 
 
