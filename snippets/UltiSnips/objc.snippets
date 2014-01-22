@@ -78,3 +78,15 @@ endsnippet
 snippet secend "Section end" b
 // ///////////////////////// End of $1 ///////////////////////////////
 endsnippet
+
+
+
+snippet readinputmm "Read loop for stdin. Obj-C++"
+#define MAX_LINE_LEN 1024
+std::array<char,MAX_LINE_LEN> lineBuf;
+while ( cin.getline(lineBuf.data(),lineBuf.size()) ) {
+	$0
+}
+endsnippet
+
+

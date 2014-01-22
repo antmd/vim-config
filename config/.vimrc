@@ -44,8 +44,8 @@ xmap <F10> <Plug>(textmanip-toggle-mode)
 
 
 " Yank Ring
-Bundle 'https://github.com/vim-scripts/YankRing.vim.git'
-nnoremap <silent> <F11> :YRShow<CR>
+" Bundle 'https://github.com/vim-scripts/YankRing.vim.git'
+" nnoremap <silent> <F11> :YRShow<CR>
 
 " 'Function' text object ('f')
 Bundle 'https://github.com/kana/vim-textobj-function.git'
@@ -146,6 +146,21 @@ Bundle 'https://github.com/vim-scripts/Superior-Haskell-Interaction-Mode-SHIM.gi
 
 " SingleCompile
 Bundle 'https://github.com/xuhdev/SingleCompile.git'
+
+
+" Cmd-b/r for SingleCompile/Run
+noremap <unique> <D-r> :SingleCompileRun<cr>
+noremap <unique> <D-b> :SingleCompile<cr>
+call SingleCompile#SetCompilerTemplate('c', 'clang', 'Clang C Compiler',
+            \'clang', '-g -Wno-deprecated-declarations -o $(FILE_TITLE)$', g:SingleCompile_common_run_command)
+call SingleCompile#SetCompilerTemplateByDict('c', 'gcc', {
+            \ 'pre-do'  : function('SingleCompile#PredoGcc'),
+            \ 'priority' : 10,
+            \ 'out-file': g:SingleCompile_common_out_file
+            \})
+let g:SingleCompile_showquickfixiferror = 1
+let g:SingleCompile_silentcompileifshowquickfix = 1
+
 
 " Add on actions
 " Requires tlib
@@ -328,20 +343,6 @@ endfunction
 
 " Install our custom TAB handler
 au BufEnter * exec "inoremap <silent> " . g:UltiSnipsJumpForwardTrigger . " <C-R>=g:UltiSnips_Tab()<cr>"
-
-"-----------------------------------------------------------------------------------
-" SingleCompile
-"-----------------------------------------------------------------------------------
-noremap <unique> <F8> :SingleCompile<cr>
-noremap <unique> <F9> :SingleCompileRun<cr>
-call SingleCompile#SetCompilerTemplate('c', 'clang', 'Clang C Compiler',
-            \'clang', '-g -Wno-deprecated-declarations -o $(FILE_TITLE)$', g:SingleCompile_common_run_command)
-call SingleCompile#SetCompilerTemplateByDict('c', 'gcc', {
-            \ 'pre-do'  : function('SingleCompile#PredoGcc'),
-            \ 'priority' : 10,
-            \ 'out-file': g:SingleCompile_common_out_file
-            \})
-
 
 "-----------------------------------------------------------------------------------
 " Clang format

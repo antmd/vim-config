@@ -10,7 +10,7 @@ call SingleCompile#SetCompilerTemplate('objc',
             \'Clang (Command Line Tool)',
             \'compileobjc', 
             \'$(FILE_NAME)$',
-            \g:SingleCompile_common_run_command)
+            \'runobjc')
 call SingleCompile#SetOutfile('objc', 'ObjcCommandLineTool', g:SingleCompile_common_out_file)
 
 call SingleCompile#SetCompilerTemplate('objc', 
@@ -24,6 +24,7 @@ call SingleCompile#SetOutfile('objc', 'ObjcApplication', g:SingleCompile_common_
 
 " Otherwise .m is used for 'MatLab'
 au BufEnter *.m set filetype=objc
+au BufEnter *.mm set filetype=objc
 
 function BufferIsApp()
     let l:isApp = 0
@@ -52,11 +53,11 @@ function SetObjcCompilerForBuffer()
 endfunction
 
 
-function SourceSkeletonForNewBuffer()
+function SourceSkeletonForMainFile(extension)
     if BufferIsApp()
-        :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/cocoa.m"
+        :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/appkit-main.".a:extension
     else
-        :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/foundation.m"
+        :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/foundation-main.".a:extension
     endif
 endfunction
 
@@ -65,8 +66,8 @@ endfunction
 "-----------------------------------------------------------------------------------
 "
 " WARNING: These rules should appear in decreasing order of 'specific-ness'
-autocmd BufNewFile *.mm  call SourceSkeletonForNewBuffer()
-autocmd BufNewFile *.m   call SourceSkeletonForNewBuffer()
+autocmd BufNewFile main.mm  call SourceSkeletonForMainFile('mm')
+autocmd BufNewFile main.m   call SourceSkeletonForMainFile('m')
 autocmd FileType objc    call SetObjcCompilerForBuffer()
 
 
