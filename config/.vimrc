@@ -158,6 +158,13 @@ call SingleCompile#SetCompilerTemplateByDict('c', 'gcc', {
             \ 'priority' : 10,
             \ 'out-file': g:SingleCompile_common_out_file
             \})
+call SingleCompile#SetCompilerTemplate('cpp', 'clang++', 'Clang C++ Compiler',
+            \'clang++', '-g -std=c++11 -stdlib=libc++ -Wno-deprecated-declarations -o $(FILE_TITLE)$', g:SingleCompile_common_run_command)
+call SingleCompile#SetCompilerTemplateByDict('c', 'gcc', {
+            \ 'pre-do'  : function('SingleCompile#PredoGcc'),
+            \ 'priority' : 10,
+            \ 'out-file': g:SingleCompile_common_out_file
+            \})
 let g:SingleCompile_showquickfixiferror = 1
 let g:SingleCompile_silentcompileifshowquickfix = 1
 
