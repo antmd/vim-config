@@ -7,9 +7,9 @@
 // 
 
 
+
 #import <Foundation/Foundation.h>
 #import <Cocoa/Cocoa.h>
-#define DSK_SPLIT_INTO_APPKIT_AND_FOUNDATION 1
 #import <DervishSoftwareAppKit/DervishSoftwareAppKit.h>
 
 
@@ -36,29 +36,19 @@
     self.window = [ NSWindow dsk_standardWindowOfSize:NSMakeSize(500,300) ];
     [ self.window makeKeyAndOrderFront:self ];
 
-#pragma mark -- User Code
+    // Set up application
     <+CURSOR+>
 }
 
--(BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication*)app
+
+-(BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication*)app/*{{{*/
 {
     return YES;
-}
-
-
+}/*}}}*/
 @end
 
 
-
-/*
- *
- *
- *================================================================================================*/
-#pragma mark - DO NOT CHANGE
-/*==================================================================================================
- */
-
-@interface TestApplication : NSApplication
+@interface TestApplication : NSApplication/*{{{*/
 @end
 static AppDelegate* sApplicationDelegate = nil; // strong reference needed -- NSApplication's delegate is weak
 @implementation TestApplication
@@ -72,5 +62,6 @@ static AppDelegate* sApplicationDelegate = nil; // strong reference needed -- NS
 int main(int argc, char *argv[]) {
     sApplicationDelegate = [ AppDelegate new ];
     return NSApplicationMain(argc, (const char **)argv);
-}
+}/*}}}*/
 
+// vim:foldmethod=marker:foldlevel=0

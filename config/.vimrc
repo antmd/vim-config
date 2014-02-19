@@ -107,6 +107,10 @@ Bundle 'http://www.github.com/vim-scripts/a.vim'
 " Python mode (indentation, doc, refactor, lints, code checking, motion and
 " operators, highlighting, run and ipdb breakpoints)
 Bundle 'https://www.github.com/fs111/pydoc.vim'
+Bundle 'https://github.com/hynek/vim-python-pep8-indent.git'
+Bundle 'https://github.com/suprsvn/vim-PythonTidy.git'
+au FileType python set formatprg=~/script/pythontidy
+noremap <F11> gggqG
 
 " Gist support
 " :Gist <blah>
@@ -147,10 +151,15 @@ Bundle 'https://github.com/vim-scripts/Superior-Haskell-Interaction-Mode-SHIM.gi
 " SingleCompile
 Bundle 'https://github.com/xuhdev/SingleCompile.git'
 
+" DirDiff
+" Bundle 'https://github.com/zhaocai/DirDiff.vim.git'
+let g:DirDiffExcludes = "CVS,*.class,*.exe,.*.swp,*.git,.DS_Store"
 
 " Cmd-b/r for SingleCompile/Run
 noremap <unique> <D-r> :SingleCompileRun<cr>
+inoremap <unique> <D-r> <esc>:SingleCompileRun<cr>
 noremap <unique> <D-b> :SingleCompile<cr>
+inoremap <unique> <D-b> <esc>:SingleCompile<cr>
 call SingleCompile#SetCompilerTemplate('c', 'clang', 'Clang C Compiler',
             \'clang', '-g -Wno-deprecated-declarations -o $(FILE_TITLE)$', g:SingleCompile_common_run_command)
 call SingleCompile#SetCompilerTemplateByDict('c', 'gcc', {
@@ -241,6 +250,10 @@ Bundle 'https://github.com/rhysd/vim-clang-format.git'
 Bundle 'https://github.com/junegunn/goyo.vim.git'
 Bundle 'https://github.com/amix/vim-zenroom2.git'
 
+" Tube plugin for mac
+if has("gui_macvim")
+    Bundle 'https://github.com/gcmt/tube.vim'
+endif
 
 filetype plugin indent on     " required! 
 
@@ -292,7 +305,6 @@ autocmd BufNewFile *.sh       :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/
 "-----------------------------------------------------------------------------------
 " YouCompleteMe
 "-----------------------------------------------------------------------------------
-let g:ycm_register_as_syntastic_checker = 1
 let g:ycm_confirm_extra_conf = 0 " Silently source the ycm_extra_conf.py
 let g:ycm_global_ycm_extra_conf = '/Users/ant/.ycm_extra_conf.py'
 " Compatibility with UltiSnips
@@ -300,8 +312,10 @@ let g:ycm_use_ultisnips_completer = 1
 let g:ycm_key_invoke_completion = '<C-Space>'
 
 " DEBUG
-" let g:ycm_server_log_level='debug'
-" let g:ycm_server_use_vim_stdout = 1
+let g:ycm_server_log_level='debug'
+"if has("gui_running")
+"    let g:ycm_server_use_vim_stdout = 1
+"endif
 
 
 "-----------------------------------------------------------------------------------
@@ -367,7 +381,7 @@ noremap <silent> <C-S-a> :A<CR>
 "-----------------------------------------------------------------------------------
 " SYNTASTIC
 "-----------------------------------------------------------------------------------
-let g:syntastic_mode_map = { 'mode': 'active',
+let g:syntastic_mode_map = { 'mode': 'passive',
                            \ 'active_filetypes': ['ruby', 'php', 'python'],
                            \ 'passive_filetypes': ['puppet'] }
 
@@ -491,7 +505,7 @@ set backupdir=
 set shiftwidth=4   " Number of spaces to use for the (auto)indent step
 set tabstop=4       " Number of spaces per tab
 set expandtab      " Use 'shiftwidth' for tab
-set nonumber " line numbers on
+set nonumber " line numbers off
 set noswapfile
 
 
@@ -499,6 +513,23 @@ set foldmethod=syntax
 set foldnestmax=5
 set foldlevel=99 " Unfold everything
 
+" LINE NUMBERING
+" --------------
+" Relative line numbering for normal mode, otherwise absolute line numbering
+function! NumberToggle()
+  if(&relativenumber == 1)
+    set nonumber
+  else
+    set relativenumber
+  endif
+endfunc
+
+nnoremap <leader><n> :call NumberToggle()<cr>
+
+au InsertEnter * :set norelativenumber
+au InsertLeave * :set relativenumber
+"au FocusLost * :set norelativenumber
+"au FocusGained * :set relativenumber
 
 set laststatus=2   " Always a status line
 " Enable modelines
@@ -536,6 +567,44 @@ set vb        " Visual Bell rather than annoying beep
 set textwidth=0   " Limit width of text to 80
 set wrapmargin=0 " No wrapping
 set nowrap 
+
+" Use space on a fold to fold/unfold
+nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
+vnoremap <Space> zf
+
+" Auto load/save 'view' -- the set of folds in a current buffer
+let g:skipview_files = [
+            \ '[EXAMPLE PLUGIN BUFFER]'
+            \ ]
+function! MakeViewCheck()
+    if has('quickfix') && &buftype =~ 'nofile'
+        " Buffer is marked as not a file
+        return 0
+    endif
+    if empty(glob(expand('%:p')))
+        " File does not exist on disk
+        return 0
+    endif
+    if len($TEMP) && expand('%:p:h') == $TEMP
+        " We're in a temp dir
+        return 0
+    endif
+    if len($TMP) && expand('%:p:h') == $TMP
+        " Also in temp dir
+        return 0
+    endif
+    if index(g:skipview_files, expand('%')) >= 0
+        " File is in skip list
+        return 0
+    endif
+    return 1
+endfunction
+augroup vimrcAutoView
+    autocmd!
+    " Autosave & Load Views.
+    autocmd BufWritePost,BufLeave,WinLeave ?* if MakeViewCheck() | mkview | endif
+    autocmd BufWinEnter ?* if MakeViewCheck() | silent loadview | endif
+augroup end
 
 " Abbreviations
 

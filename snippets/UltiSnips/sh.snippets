@@ -2,6 +2,7 @@
 
 snippet head "Header"
 #!/bin/bash - 
+# vim: set filetype=sh:
 #===============================================================================
 #
 #          FILE: `!p snip.rv=fn`
@@ -61,7 +62,6 @@ function ${1} ()
 endsnippet
 
 snippet args "Parse command-line arguments"
-ScriptVersion="1.0"
 
 #===  FUNCTION  ================================================================
 #         NAME:  usage
@@ -70,15 +70,15 @@ ScriptVersion="1.0"
 function usage ()
 {
 	cat <<- EOT
-  Make a new project directory structure for vim-based work with YouCompleteMe
 
-  Usage :  \$\{0##/*/} [options] [--] <ProjectName>
+	${1:Description}
+
+  Usage :  \$\{0##/*/} [options] [--] 
 
   Options: 
-  -h|help       Display this message
-  -v|version    Display script version
+	  -h	Display this message
 
-	EOT
+EOT
 }
 
 #-----------------------------------------------------------------------
@@ -89,9 +89,7 @@ while getopts ":hv" opt
 do
   case $opt in
 
-    h|help     )  usage; exit 0   ;;
-
-    v|version  )  echo "$0 -- Version $ScriptVersion"; exit 0   ;;
+    h )  usage; exit 0   ;;
 
     \? )  echo -e "\n  Option does not exist : $OPTARG\n"
           usage; exit 1   ;;
