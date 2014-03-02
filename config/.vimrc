@@ -255,6 +255,9 @@ if has("gui_macvim")
     Bundle 'https://github.com/gcmt/tube.vim'
 endif
 
+" Smart auto-complete braces
+Bundle 'https://github.com/jiangmiao/auto-pairs.git'
+
 filetype plugin indent on     " required! 
 
 """ Custom Configs include.
@@ -334,7 +337,7 @@ set rtp+=~/.vim/snippets
 " b) We are in an UltiSnip completion with placeholders, and we hit 'Tab'
 function! g:UltiSnips_Complete()
     if pumvisible()
-        call UltiSnips_ExpandSnippet()
+        call UltiSnips#ExpandSnippet()
         if g:ulti_expand_res == 1
             return ""
         else
@@ -349,7 +352,7 @@ inoremap <silent> <Return> <C-R>=g:UltiSnips_Complete()<CR>
 
 function! g:UltiSnips_Tab()
     " First try UltiSnips jump forwards
-    call UltiSnips_JumpForwards()
+    call UltiSnips#JumpForwards()
     if g:ulti_jump_forwards_res == 0
         " Not in an UltiSnips completion context
         if pumvisible()
