@@ -14,8 +14,6 @@ set rtp+=~/.vim/bundle/vundle/,~/.vim
 call vundle#rc()
 
 
-
-
 " let Vundle manage Vundle
 " required! 
 Bundle 'gmarik/vundle'
@@ -155,11 +153,6 @@ Bundle 'https://github.com/xuhdev/SingleCompile.git'
 " Bundle 'https://github.com/zhaocai/DirDiff.vim.git'
 let g:DirDiffExcludes = "CVS,*.class,*.exe,.*.swp,*.git,.DS_Store"
 
-" Cmd-b/r for SingleCompile/Run
-noremap <unique> <D-r> :SingleCompileRun<cr>
-inoremap <unique> <D-r> <esc>:SingleCompileRun<cr>
-noremap <unique> <D-b> :SingleCompile<cr>
-inoremap <unique> <D-b> <esc>:SingleCompile<cr>
 call SingleCompile#SetCompilerTemplate('c', 'clang', 'Clang C Compiler',
             \'clang', '-g -Wno-deprecated-declarations -o $(FILE_TITLE)$', g:SingleCompile_common_run_command)
 call SingleCompile#SetCompilerTemplateByDict('c', 'gcc', {
@@ -315,7 +308,7 @@ let g:ycm_use_ultisnips_completer = 1
 let g:ycm_key_invoke_completion = '<C-Space>'
 
 " DEBUG
-let g:ycm_server_log_level='debug'
+"let g:ycm_server_log_level='debug'
 "if has("gui_running")
 "    let g:ycm_server_use_vim_stdout = 1
 "endif
@@ -456,8 +449,6 @@ compiler gcc
 " Open NERDTree if no other file is open
 "autocmd vimenter * if !argc() | NERDTree | endif
 nmap <silent> <Leader>fe :NERDTreeToggle<CR>
-
-" Otherwise FuzzyFinder sets this too low for easytags
 
 "~~~~~~~~~~~~~~~~~~~
 " Configure Tagbar
@@ -611,8 +602,8 @@ augroup end
 
 " Abbreviations
 
-iabbrev //--- //------------------------------------------------------------------------------------
-iabbrev //=== //====================================================================================
+iabbrev //--- // ------------------------------------------------------------------------------------
+iabbrev //=== // ====================================================================================
 
 " Use F2 to toggle recent files
 
@@ -634,18 +625,6 @@ nnoremap <C-K> <C-W>k
 " note: requires XON/XOFF disabled! (`stty -ixon`)
 :nmap <C-q>        :tabclose<cr>
  
-" source $MYVIMRC reloads the saved $MYVIMRC
-" <Leader> defaults to back-slash
-":nmap <Leader>f :FufFile<cr>
-":nmap <Leader>r :FufMruFile<cr>
-":nmap <Leader>d :FufDir<cr>
-":nmap <Leader>b :FufBuffer<cr>
-":nmap <Leader>t :FufTag<cr>
-":nmap <Leader>q :FufQuickfix<cr>
-let g:fuf_modesDisable = [ 'mrucmd', ]
-
-
-
 "---------------------------
 " Command-line mappings
 "---------------------------
@@ -725,19 +704,6 @@ imap <A-PageUp>   <ESC>:tabprevious<cr>i
 imap <A-PageDown> <ESC>:tabnext<cr>i
 
 
-""-------------------------------------------------------------------------------
-"" autocomplete parenthesis, brackets and braces
-""-------------------------------------------------------------------------------
-"inoremap ( ()<Left>
-"inoremap [ []<Left>
-"inoremap { {}<Left>
-""
-"vnoremap ( s()<Esc>P<Right>%
-"vnoremap [ s[]<Esc>P<Right>%
-"vnoremap { s{}<Esc>P<Right>%
-""
- 
- 
 " F7 - CP 
 nnoremap ,p :cprev<CR>
 " F8 - CN 
@@ -756,18 +722,6 @@ nnoremap - <C-U>
 nnoremap Q gqap
 vnoremap Q gq
  
-" Move around in the windows and make them maximum size
-" nnoremap <Left> <C-W>h<C-W>_:vertical resize 100001<CR>
-
-" nnoremap <Right> <C-W>l<C-W>_:vertical resize 100000<CR>
-" nnoremap <Down> <C-W>j<C-W>_
-" nnoremap <Up> <C-W>k<C-W>_
-" Move around in the windows
-" nnoremap <Left> <C-W>h
-" nnoremap <Right> <C-W>l
-" nnoremap <Down> <C-W>j
-" nnoremap <Up> <C-W>k
-
 " Don't use Ex mode, use Q for formatting
 map Q gq
 
@@ -910,15 +864,8 @@ hi PmenuThumb    ctermfg=0 ctermbg=7
 if has("gui_running")
     colorscheme solarized
     let g:solarized_diffmode="normal"    "default value is normal
-    if has("gui_mac") || has("gui_macvim")
-        set gfn=Sauce\ Code\ Powerline:h13
-        set lines=105 columns=340
-        " Turn off bindings to the arrow-keys
-        let macvim_skip_cmd_opt_movement = 1
-        " Bind trackpad swipes to prev/next in jump list
-        nmap <SwipeLeft> <C-o>
-        nmap <SwipeRight> <C-i>
-    else
+
+    if !has("mac")
         " Settings for crappy 15" monitors at work
         set gfn=Source_Code_Pro:h10:cANSI
         set lines=50 columns=200
@@ -936,4 +883,6 @@ endif
 set background=dark
 syntax enable
 
-runtime 'config/ObjectiveC.vim'
+if has('mac')
+    runtime 'config/Mac.vim'
+endif

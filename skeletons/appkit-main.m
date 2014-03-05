@@ -46,22 +46,11 @@
     return YES;
 }/*}}}*/
 @end
-
-
-@interface TestApplication : NSApplication/*{{{*/
-@end
-static AppDelegate* sApplicationDelegate = nil; // strong reference needed -- NSApplication's delegate is weak
-@implementation TestApplication
--(void)run {
-    self.delegate = sApplicationDelegate;
-    NSLog(@"Application delegate = %@", self.delegate);
-    [ super run ];
-}
-@end
-
-int main(int argc, char *argv[]) {
-    sApplicationDelegate = [ AppDelegate new ];
-    return NSApplicationMain(argc, (const char **)argv);
+/*{{{*/
+int main(int argc, const char * argv[])
+{
+        return NSApplicationMain(argc, argv);
 }/*}}}*/
 
 // vim:foldmethod=marker:foldlevel=0
+
