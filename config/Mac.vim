@@ -17,7 +17,7 @@ if !exists('g:HasInitialisedMac')
     inoremap <unique> <D-b> <esc>:SingleCompile<cr>
 
     set gfn=Sauce\ Code\ Powerline:h13
-    set lines=105 columns=340
+
     " Turn off bindings to the arrow-keys
     let macvim_skip_cmd_opt_movement = 1
     " Bind trackpad swipes to prev/next in jump list

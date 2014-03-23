@@ -251,6 +251,16 @@ endif
 " Smart auto-complete braces
 Bundle 'https://github.com/jiangmiao/auto-pairs.git'
 
+" Window identification
+Bundle 'https://github.com/t9md/vim-choosewin.git'
+" Use tab in normal mode to highlight window labels
+nmap <Tab> <Plug>(choosewin)
+let g:choosewin_overlay_enable=1 " Cool large-letter overlays
+
+" ================================================================================
+" END OF PLUGINS
+" ================================================================================
+
 filetype plugin indent on     " required! 
 
 """ Custom Configs include.
@@ -869,6 +879,8 @@ if has("gui_running")
         " Settings for crappy 15" monitors at work
         set gfn=Source_Code_Pro:h10:cANSI
         set lines=50 columns=200
+    else
+        set lines=105 columns=340
     endif
 else
 " Do not interfere with the terminal colors -- they should already be set to Solarized
