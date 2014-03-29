@@ -8,24 +8,34 @@ call textobj#user#plugin('objcexpr', {
             \ })
 
 " Function to define an 'Objective-C Expression', which is
+function! GetC()
+    return getline('.')[col('.')-1]
+endfunction
 
 function! SelectObjcExprA()
     " End of last word, then forwards one char
 
     " FIND END OF OBJECTIVE-C EXPRESSION
     if getline('.')[col('.')-1] == ' ' 
+        " Jumps backwards to first non-whitespace character
         normal! gE
     endif
     let end_of_last_word = getpos('.')
 
+    let first_square_close_bracket_pos = 0
+    let first_square_open_bracket_pos = 0
+
     " Look backwards for the first closing ']'
-    let first_square_close_bracket_pos = getpos('.')
     if getline('.')[col('.')] != ']' 
+        " Searches backwards for first closing square-bracket
         normal! F]
+    endif
+    if getline('.')[col('.')] == ']'
+        let first_square_close_bracket_pos = getpos('.')
     endif
 
     " FIND START OF OBJECTIVE-C EXPRESSION
-    if getpos('.') == first_square_close_bracket_pos
+    if ! first_square_close_bracket_pos
         " No ']' found on same line, look for first opening bracket
         normal! F[
         if getpos('.') == first_square_close_bracket_pos
