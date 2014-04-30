@@ -45,6 +45,9 @@ xmap <F10> <Plug>(textmanip-toggle-mode)
 " Bundle 'https://github.com/vim-scripts/YankRing.vim.git'
 " nnoremap <silent> <F11> :YRShow<CR>
 
+" Restart vim with :Restart
+Bundle 'https://github.com/tyru/restart.vim.git'
+
 " 'Function' text object ('f')
 Bundle 'https://github.com/kana/vim-textobj-function.git'
 
@@ -242,6 +245,8 @@ Bundle 'https://github.com/rhysd/vim-clang-format.git'
 " ZenRoom distraction-less Writing
 Bundle 'https://github.com/junegunn/goyo.vim.git'
 Bundle 'https://github.com/amix/vim-zenroom2.git'
+" <Leader>z enters 'zen' mode
+noremap <Leader>z :Goyo 120<CR>
 
 " Tube plugin for mac
 if has("gui_macvim")

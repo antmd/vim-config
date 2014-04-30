@@ -23,6 +23,14 @@ call SingleCompile#SetCompilerTemplate('objc',
             \'runobjcapp')
 call SingleCompile#SetOutfile('objc', 'ObjcApplication', g:SingleCompile_common_out_file)
 
+call SingleCompile#SetCompilerTemplate('cpp', 
+            \'CppExperiment',
+            \'Clang (C++)',
+            \'compileobjc', 
+            \'$(FILE_NAME)$',
+            \'runobjcapp')
+call SingleCompile#SetOutfile('cpp', 'CppExperiment', g:SingleCompile_common_out_file)
+
 
 " Otherwise .m is used for 'MatLab'
 au BufEnter *.m set filetype=objc
@@ -36,11 +44,22 @@ function BufferIsApp()
     return l:isApp
 endfunction
 
+function BufferIsCpp()
+    let l:isCpp = 0
+    if match( expand('%:p:h:t'), '.*Cpp$' ) >=0 || match( expand('%:p:h:t'), '.*C++$' ) >=0 
+        let l:isCpp = 1
+    endif
+    return l:isCpp
+endfunction
+
 function SetObjcCompilerForBuffer()
     if BufferIsApp()
         call SingleCompile#SetPriority('objc', 'ObjcApplication',1 )
         call SingleCompile#SetPriority('objc', 'ObjcCommandLineTool',2 )
         call SingleCompile#ChooseCompiler('objc', 'ObjcApplication')
+    elseif BufferIsCpp()
+        call SingleCompile#SetPriority('cpp', 'CppExperiment',1 )
+        call SingleCompile#ChooseCompiler('cpp', 'CppExperiment')
     else
         call SingleCompile#SetPriority('objc', 'ObjcCommandLineTool',1 )
         call SingleCompile#SetPriority('objc', 'ObjcApplication',2 )
@@ -71,6 +90,7 @@ endfunction
 autocmd BufNewFile main.mm  call SourceSkeletonForMainFile('mm')
 autocmd BufNewFile main.m   call SourceSkeletonForMainFile('m')
 autocmd FileType objc    call SetObjcCompilerForBuffer()
+autocmd FileType cpp    call SetObjcCompilerForBuffer()
 
 
 
