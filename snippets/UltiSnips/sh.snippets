@@ -41,6 +41,16 @@ ${0}
 
 endsnippet
 
+snippet tmpfile "New tmpfile"
+${1:TmpFile}=`mktemp /tmp/$(basename $0).$$.XXXXXX` || exit 1
+endsnippet
+
+
+snippet tmpdir "New tempdir"
+${1:TempDir}=`mktemp -d /tmp/$(basename $0).$$.XXXXXX` || exit 1
+endsnippet
+
+
 snippet subsect "Sub-section" b
 #-${1/./-/g}
 # ${1:SectionName}
