@@ -97,6 +97,7 @@ Bundle 'http://www.github.com/vim-scripts/genutils'
 " Provide 'OpenSession' 'SaveSession' with tab completion. Saves sessions in
 " ~/.vim/session
 Bundle 'https://github.com/xolox/vim-session.git'
+let g:session_autoload = 'no'
 Bundle 'https://github.com/xolox/vim-misc.git'
 
 " BUFFER EXPLORER PLUGIN

@@ -2,6 +2,24 @@
 #                            Local Snippets                               #
 ###########################################################################
 
+snippet testcase "DSK Test Case"
+#import <Foundation/Foundation.h>
+#import <DervishSoftwareFoundation/DervishSoftwareFoundation.h>
+#import <DervishSoftwareFoundation/DSKTest.h>
+
+@interface ${1:TestCaseName}  : NSObject <DSKTest>
+@end
+
+@implementation ${1}
+
+-(void)run
+{
+	@autoreleasepool {
+
+	}
+}
+@end
+endsnippet
 
 snippet forin "Fast enumeration"
 unsigned int	${1:object}Count = [${2:array} count];

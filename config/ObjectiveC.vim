@@ -66,10 +66,10 @@ function SetObjcCompilerForBuffer()
         call SingleCompile#ChooseCompiler('objc', 'ObjcCommandLineTool')
     endif
     " Add the 'Headers' directory to 'path'
-    let l:headersPath = expand('%:p:h').'/Headers'
+    let l:headersPath = shellescape(expand('%:p:h').'/Headers')
     if isdirectory(l:headersPath)
-        :execute "set path-=".l:headersPath
-        :execute "set path^=".l:headersPath
+        :execute "set path-='".l:headersPath."'"
+        :execute "set path^='".l:headersPath."'"
     endif
 endfunction
 
