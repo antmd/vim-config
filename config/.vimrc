@@ -45,6 +45,12 @@ xmap <F10> <Plug>(textmanip-toggle-mode)
 " Bundle 'https://github.com/vim-scripts/YankRing.vim.git'
 " nnoremap <silent> <F11> :YRShow<CR>
 
+" Swift language support
+"Bundle 'https://github.com/toyamarinyon/vim-swift'
+Bundle 'https://github.com/Keithbsmiley/swift.vim'
+
+
+
 " Restart vim with :Restart
 Bundle 'https://github.com/tyru/restart.vim.git'
 
@@ -766,11 +772,6 @@ nmap <silent> <Leader>P <Plug>ToggleProject
 vnoremap p <Esc>:let current_reg = @"<CR>gvs<C-R>=current_reg<CR><Esc>
 
 
-" Enable file type detection.
-" Use the default filetype settings, so that mail gets 'tw' set to 72,
-" 'cindent' is on in C files, etc.
-" load indent files, to automatically do language-dependent indenting.
-filetype plugin indent on
 
 " Filetype specific commands
 

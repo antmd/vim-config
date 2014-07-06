@@ -1,0 +1,12 @@
+snippet script "Swift script header"
+!/bin/bash
+# vim: set filetype=swift:
+/usr/bin/swift -sdk $(xcrun --show-sdk-path --sdk macosx) -assert-config Debug -o - -i - <<'EOF'
+
+// --------------------------------------------------------------------------------\
+// SWIFT                                                                           |>
+// --------------------------------------------------------------------------------/
+
+println("Starting `!p snip.rv=snip.basename`")
+$0
+endsnippet

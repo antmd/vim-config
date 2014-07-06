@@ -7,10 +7,10 @@ snippet testcase "DSK Test Case"
 #import <DervishSoftwareFoundation/DervishSoftwareFoundation.h>
 #import <DervishSoftwareFoundation/DSKTest.h>
 
-@interface ${1:TestCaseName}  : NSObject <DSKTest>
+@interface $1  : NSObject <DSKTest>
 @end
 
-@implementation ${1}
+@implementation $1
 
 -(void)run
 {
@@ -42,6 +42,15 @@ ${0}
 @end
 endsnippet
 
+snippet class "Class"
+@interface ${1:ClassName} : NSObject 
+@end
+
+@implementation ${1}
+@end
+endsnippet
+
+
 snippet init "Init class"
 -(id) init
 {
@@ -51,7 +60,6 @@ snippet init "Init class"
 	}
 	return self;
 }
-@end
 endsnippet
 
 
