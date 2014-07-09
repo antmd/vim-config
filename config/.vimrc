@@ -278,7 +278,7 @@ filetype plugin indent on     " required!
 """ Custom Configs include.
 " All custom config settings are stored in the .vim/config folder to
 " differentiate them from 3rd-party libraries.
-runtime! config/**/*.vim
+"runtime! config/**/*.vim
 
 "
 " Brief help
@@ -436,7 +436,6 @@ if has('conceal')
     set concealcursor=vin
 endif
 
-compiler clang
 
 " Load a file into a clojure repl
 nmap silent <Leader>c :call Send_to_Tmux("\n\n\n(load-file \"./myfile.clj\")\n")<CR>
@@ -462,7 +461,6 @@ let g:ctrlp_custom_ignore = {
     \ }
 
 
-compiler gcc
 
 "--------------------------------------------------------------------------------
 " Configure NERDTree
@@ -493,9 +491,6 @@ set tags=./tags;../../../../../../
 
 
 " Taglist highlights to match the dark Koehler color scheme
-
-" Use man page lookup ':Man [<section>] <title>'
-runtime! ftplugin/man.vim
 
 " Use Vim settings, rather then Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
@@ -898,10 +893,9 @@ else
     hi LineNr ctermbg=black ctermfg=black
 endif
 
-
 set background=dark
 syntax enable
 
-if has('mac')
-    runtime 'config/Mac.vim'
+if has("mac")
+    runtime config/Mac.vim
 endif

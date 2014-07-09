@@ -24,5 +24,5 @@ if !exists('g:HasInitialisedMac')
     nmap <SwipeLeft> <C-o>
     nmap <SwipeRight> <C-i>
 
-    runtime 'config/ObjectiveC.vim'
+    runtime config/ObjectiveC.vim
 endif

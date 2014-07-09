@@ -1,8 +1,8 @@
-if has("unix") && strpart(system("/usr/bin/uname -s"),0,6) == "Darwin" && !exists('g:HasInitialisedObjc')
+"if has("unix") && strpart(system("/usr/bin/uname -s"),0,6) == "Darwin" && !exists('g:HasInitialisedObjc')
+if !exists('g:HasInitialisedObjc')
     let g:HasInitialisedObjc = 1
     " Do Mac stuff here
     "
-Bundle 'https://github.com/gilligan/vim-lldb.git'
 
 "-----------------------------------------------------------------------------------
 " Single Compile
@@ -134,5 +134,6 @@ let g:tagbar_type_objc = {
     \ }
 \ }
 
+runtime config/InsertObjCBracket.vim
 endif
 
