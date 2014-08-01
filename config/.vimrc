@@ -318,6 +318,11 @@ let g:tskelMapHyperComplete = '<C-1>' " No hyper-complete shortcut (C-1 cannot b
 autocmd BufNewFile *main*.cpp :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/main.cpp"
 autocmd BufNewFile *.cpp      :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/basic.cpp"
 autocmd BufNewFile *.sh       :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/shell.sh"
+" Translate Sk<SPACE> into TSkeletonSetup
+cnoreabbrev Sk TSkeletonSetup
+cnoreabbrev Ske TSkeletonSetup
+cnoreabbrev Skel TSkeletonSetup
+cnoreabbrev Skeleton TSkeletonSetup
 
 
 "-----------------------------------------------------------------------------------

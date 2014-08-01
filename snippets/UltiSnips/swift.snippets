@@ -10,3 +10,18 @@ snippet script "Swift script header"
 println("Starting `!p snip.rv=snip.basename`")
 $0
 endsnippet
+
+
+snippet args "Swift arg parsing"
+
+for argument in Process.arguments {
+    switch argument {
+    case "-h":
+        println("HELP!");
+	$0
+    default:
+        println("argument = \(argument)");
+    }
+}
+endsnippet
+
