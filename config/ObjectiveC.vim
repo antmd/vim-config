@@ -32,6 +32,11 @@ call SingleCompile#SetCompilerTemplate('cpp',
 call SingleCompile#SetOutfile('cpp', 'CppExperiment', g:SingleCompile_common_out_file)
 
 
+call SingleCompile#SetCompilerTemplate('swift', 'SwiftScript', 'Swift Script',
+             \'bash', '%', '')
+
+
+
 " Otherwise .m is used for 'MatLab'
 au BufEnter *.m set filetype=objc
 au BufEnter *.mm set filetype=objc
