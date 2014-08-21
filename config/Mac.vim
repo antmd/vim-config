@@ -16,6 +16,7 @@ if !exists('g:HasInitialisedMac')
     noremap <unique> <D-b> :SingleCompile<cr>
     inoremap <unique> <D-b> <esc>:SingleCompile<cr>
 
+
     set gfn=Sauce\ Code\ Powerline:h13
 
     " Turn off bindings to the arrow-keys
@@ -25,4 +26,5 @@ if !exists('g:HasInitialisedMac')
     nmap <SwipeRight> <C-i>
 
     runtime config/ObjectiveC.vim
+    runtime config/Swift.vim
 endif
