@@ -159,6 +159,9 @@ Bundle 'https://github.com/vim-scripts/Superior-Haskell-Interaction-Mode-SHIM.gi
 " SingleCompile
 Bundle 'https://github.com/xuhdev/SingleCompile.git'
 
+" Ag -- ack replacement
+Bundle 'https://github.com/rking/ag.vim.git'
+
 " DirDiff
 " Bundle 'https://github.com/zhaocai/DirDiff.vim.git'
 let g:DirDiffExcludes = "CVS,*.class,*.exe,.*.swp,*.git,.DS_Store"
@@ -416,8 +419,10 @@ map <F1> :NERDTreeTabsToggle<CR>
 let g:nerdtree_tabs_smart_startup_focus = 2 " Focus on file after opening
 "Open tree if no files specified when opening vim
 "autocmd vimenter * if !argc() | NERDTree | endif
+let g:NERDTreeShowHidden=0
 let g:NERDTreeQuitOnOpen=1
-let g:NERDTreeDirArrows=0
+" Diable arrows if there are rendering issues
+"let g:NERDTreeDirArrows=0
 " Close vim if it's the NERDTree is the only window left
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
