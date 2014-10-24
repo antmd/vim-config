@@ -99,6 +99,9 @@ Bundle 'https://www.github.com/scrooloose/syntastic'
 Bundle 'http://www.github.com/vim-scripts/vcscommand.vim'
 Bundle 'http://www.github.com/vim-scripts/genutils'
 
+" Mustache template language
+Bundle 'https://github.com/mustache/vim-mustache-handlebars.git'
+
 " SESSION PLUGIN
 " Provide 'OpenSession' 'SaveSession' with tab completion. Saves sessions in
 " ~/.vim/session
@@ -128,15 +131,10 @@ Bundle 'http://github.com/mattn/gist-vim'
 " YouCompleteMe -- auto-completion
 Bundle 'https://github.com/Valloric/YouCompleteMe'
 
-" Markdown support
-"Bundle 'https://github.com/suan/vim-instant-markdown.git'
-"Bundle 'https://github.com/tpope/vim-markdown.git'
-"Bundle 'https://github.com/nelstrom/vim-markdown-folding.git'
-
-
 " Local vimrc files (.lvimrc)
 " Add each project to the whitelist, below
 Bundle 'https://github.com/embear/vim-localvimrc.git'
+"let g:localvimrc_whitelist='/path/to/my/project/myproject'
 
 " Enum to case statement
 " To use :EnumToCase
@@ -300,12 +298,6 @@ set pumheight=20
 " Warning 'preview' on MacVim causes crashes
 set completeopt=menu,longest
  
-"--------------------------------------------------
-" Local vimrc
-" See
-" http://diffingdiffs.blogspot.co.uk/2012/09/jumping-to-template-files-in-vim.html
-"--------------------------------------------------
-let g:localvimrc_whitelist='/path/to/my/project/myproject'
 
 "-----------------------------------------------------------------------------------
 " TSkeleton
@@ -521,6 +513,8 @@ set autowrite      " Writes file automatically when moving to another file, or u
 set nobackup
 set nowritebackup
 set backupdir=
+set splitright " Open vertical-split to right of current pane
+set splitbelow " Open horiontal-split below current pane
 
 " Set up tabs to use spaces
 set shiftwidth=4   " Number of spaces to use for the (auto)indent step
@@ -820,9 +814,21 @@ autocmd! FileType qf wincmd J
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost l* nested lwindow
 
-set path+=./include
+set path+=./include,./include/ide
 set path+=./generated
 set path+=/usr/include/c++/4.1.2/**,/usr/local/include/**,/usr/lib/gcc/x86_64-redhat-linux/4.1.2/include/**,/usr/include/**,/opt/ats/Ice-3.4.2/include,/opt/ats/boost/boost_1_42_0/include
+
+let s:default_path = escape(&path, '\ ') " store default value of 'path'
+
+" Always add the current file's directory to the path and tags list if not
+" already there. Add it to the beginning to speed up searches.
+autocmd BufRead *
+      \ let s:tempPath=escape(escape(expand("%:p:h"), ' '), '\ ') |
+      \ exec "set path-=".s:tempPath |
+      \ exec "set path-=".s:default_path |
+      \ exec "set path^=".s:tempPath |
+      \ exec "set path^=".s:tempPath |
+      \ exec "set path^=".s:default_path
 
 
 filetype plugin on

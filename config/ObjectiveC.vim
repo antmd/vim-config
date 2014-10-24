@@ -31,6 +31,14 @@ call SingleCompile#SetCompilerTemplate('cpp',
             \'runobjcapp')
 call SingleCompile#SetOutfile('cpp', 'CppExperiment', g:SingleCompile_common_out_file)
 
+call SingleCompile#SetCompilerTemplate('objcpp', 
+            \'ObjCppExperiment',
+            \'Clang (ObjC++)',
+            \'compileobjc', 
+            \'$(FILE_NAME)$',
+            \'runobjcapp')
+call SingleCompile#SetOutfile('objcpp', 'ObjCppExperiment', g:SingleCompile_common_out_file)
+
 
 call SingleCompile#SetCompilerTemplate('swift', 'SwiftScript', 'Swift Script',
              \'bash', '%', '')
@@ -39,7 +47,7 @@ call SingleCompile#SetCompilerTemplate('swift', 'SwiftScript', 'Swift Script',
 
 " Otherwise .m is used for 'MatLab'
 au BufEnter *.m set filetype=objc
-au BufEnter *.mm set filetype=objc
+au BufEnter *.mm set filetype=objcpp
 
 function BufferIsApp()
     let l:isApp = 0
