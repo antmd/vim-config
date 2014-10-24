@@ -246,8 +246,23 @@ Bundle 'https://github.com/terryma/vim-multiple-cursors.git'
 " Better start screen
 Bundle 'https://github.com/mhinz/vim-startify.git'
 
-" Call clang-format from vim
+"-----------------------------------------------------------------------------------
+" Clang format
+"-----------------------------------------------------------------------------------
 Bundle 'https://github.com/rhysd/vim-clang-format.git'
+let g:clang_format#style_options = {
+            \ "BasedOnStyle" : "llvm",
+            \ "ColumnLimit" : 0,
+            \ "IndentWidth" : 8,
+            \ "ContinuationIndentWidth" : 8,
+            \ "MaxEmptyLinesToKeep" : 3,
+            \ "AccessModifierOffset" : -4,
+            \ "AllowShortIfStatementsOnASingleLine" : "true",
+            \ "AlwaysBreakTemplateDeclarations" : "true",
+            \ "Standard" : "C++11",
+            \ "BreakBeforeBraces" : "Stroustrup"}
+" Map '=' to clang-format
+map = <Plug>(operator-clang-format) 
 
 
 " ZenRoom distraction-less Writing
@@ -383,10 +398,6 @@ endfunction
 " Install our custom TAB handler
 au BufEnter * exec "inoremap <silent> " . g:UltiSnipsJumpForwardTrigger . " <C-R>=g:UltiSnips_Tab()<cr>"
 
-"-----------------------------------------------------------------------------------
-" Clang format
-"-----------------------------------------------------------------------------------
-let g:clang_format#style_option = {'BasedOnStyle': 'llvm', 'IndentWidth': 4, 'ColumnLimit': 100, 'MaxEmptyLinesToKeep': 3, 'BreakBeforeBraces': 'Stroustrup', 'ContinuationIndentWidth': 8 }
 
 "-----------------------------------------------------------------------------------
 " a.vim
