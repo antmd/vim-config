@@ -543,8 +543,8 @@ set foldlevel=99 " Unfold everything
 " Relative line numbering for normal mode, otherwise absolute line numbering
 function! RelativeNumbering()
     " Relative line numbering, with the current absolute line number for the cursor line
-    set number
     set relativenumber
+    set number
 endfunc
 
 function! AbsoluteNumbering()
