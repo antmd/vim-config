@@ -281,8 +281,8 @@ Bundle 'https://github.com/jiangmiao/auto-pairs.git'
 
 " Window identification
 Bundle 'https://github.com/t9md/vim-choosewin.git'
-" Use tab in normal mode to highlight window labels
-nmap <Tab> <Plug>(choosewin)
+" Use '-' in normal mode to highlight window labels
+nmap - <Plug>(choosewin)
 let g:choosewin_overlay_enable=1 " Cool large-letter overlays
 
 " ================================================================================
@@ -531,7 +531,6 @@ set splitbelow " Open horiontal-split below current pane
 set shiftwidth=4   " Number of spaces to use for the (auto)indent step
 set tabstop=4       " Number of spaces per tab
 set expandtab      " Use 'shiftwidth' for tab
-set nonumber " line numbers off
 set noswapfile
 
 
@@ -542,20 +541,27 @@ set foldlevel=99 " Unfold everything
 " LINE NUMBERING
 " --------------
 " Relative line numbering for normal mode, otherwise absolute line numbering
+function! RelativeNumbering()
+    " Relative line numbering, with the current absolute line number for the cursor line
+    set number
+    set relativenumber
+endfunc
+
+function! AbsoluteNumbering()
+    set number
+    set norelativenumber
+endfunc
+
 function! NumberToggle()
   if(&relativenumber == 1)
-    set nonumber
+      call AbsoluteNumbering()
   else
-    set relativenumber
+      call RelativeNumbering()
   endif
 endfunc
 
-nnoremap <leader><n> :call NumberToggle()<cr>
-
-au InsertEnter * :set norelativenumber
-au InsertLeave * :set relativenumber
-"au FocusLost * :set norelativenumber
-"au FocusGained * :set relativenumber
+nnoremap <silent> <leader>l :call NumberToggle()<cr>
+call RelativeNumbering()
 
 set laststatus=2   " Always a status line
 " Enable modelines
