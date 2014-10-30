@@ -1,7 +1,6 @@
 " Ant's vimrc file.
-" vim: set foldmarker={{,}} foldlevel=0 foldmethod=marker nospell:
+" vim: set foldmarker={{,}}  foldmethod=marker nospell:
 "
-
 if has('win32') || has('win64')
       set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
 endif
@@ -51,10 +50,7 @@ xmap <F10> <Plug>(textmanip-toggle-mode)
 " nnoremap <silent> <F11> :YRShow<CR>
 
 " Swift language support
-"Bundle 'https://github.com/toyamarinyon/vim-swift'
 Bundle 'https://github.com/Keithbsmiley/swift.vim'
-
-
 
 " Restart vim with :Restart
 Bundle 'https://github.com/tyru/restart.vim.git'
@@ -94,7 +90,7 @@ Bundle 'http://www.github.com/scrooloose/nerdtree'
 " Key: <F1> - toggle
 " {{
 "autocmd vimenter * if !argc() | NERDTree | endif
-nmap <silent> <Leader>fe :NERDTreeToggle<CR>
+nmap <silent> <Leader>nt :NERDTreeToggle<CR>
 " CTRL 1 opens tree
 map <F1> :NERDTreeTabsToggle<CR>
 let g:nerdtree_tabs_smart_startup_focus = 2 " Focus on file after opening
@@ -102,11 +98,15 @@ let g:nerdtree_tabs_smart_startup_focus = 2 " Focus on file after opening
 "autocmd vimenter * if !argc() | NERDTree | endif
 let g:NERDTreeShowHidden=0
 let g:NERDTreeQuitOnOpen=1
+let g:NERDTreeShowLineNumbers=1
+let g:NERDTreeShowLineNumbers=1
+let g:NERDTreeWinSize=30
 " Diable arrows if there are rendering issues
 "let g:NERDTreeDirArrows=0
 " Close vim if it's the NERDTree is the only window left
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 " }}
+
 
 
 " NERDTree tabs
@@ -378,7 +378,6 @@ endfunction
 au BufEnter * exec "inoremap <silent> " . g:UltiSnipsJumpForwardTrigger . " <C-R>=g:UltiSnips_Tab()<cr>"
 " }}
 
-
 " VimShell
 Bundle 'http://github.com/Shougo/vimproc'
 Bundle 'https://github.com/Shougo/vimshell.vim.git'
@@ -470,144 +469,6 @@ nmap - <Plug>(choosewin)
 let g:choosewin_overlay_enable=1 " Cool large-letter overlays
 " }}
 
-" ================================================================================
-" END OF PLUGINS
-" ================================================================================
-
-filetype plugin indent on     " required! 
-
-
-" --------------------------------------------------------------------------------
-" Settings
-" --------------------------------------------------------------------------------
-
-" Complete options (disable preview scratch window, longest removed to aways " show menu) set completeopt=menuone,menu,longest,preview
- " Limit popup menu height
-set pumheight=20
-" Warning 'preview' on MacVim causes crashes
-set completeopt=menu,longest
- 
-if has('conceal')
-    set conceallevel=2
-    set concealcursor=vin
-endif
-
-
-
-" Search for files called 'tags', up to four directory levels above the
-" current directory
-set tags=./tags;../../../../../../
-
-
-" Taglist highlights to match the dark Koehler color scheme
-
-" Use Vim settings, rather then Vi settings (much better!).
-" This must be first, because it changes other options as a side effect.
-set nocompatible
-let do_syntax_sel_menu = 1
-let mysyntaxfile="$HOME/tcl.vim"
-
-" Don't have silly graphical menu
-set go=ageimrLt
-
-" allow backspacing over everything in insert mode
-set backspace=indent,eol,start
-set showmatch
-set autoindent      " always set autoindenting on
-set autoread       " Read file automatically when it has been changed outside vim
-set autowrite      " Writes file automatically when moving to another file, or using 'make'
-"set backupdir=~/vimbackup " Directory list to store backup files
-set nobackup
-set nowritebackup
-set backupdir=
-set undofile " Persistent undo !
-set undolevels=1000 "maximum number of changes that can be undone
-set undoreload=10000 "maximum number lines to save for undo on a buffer reload
-au BufWinLeave * silent! mkview  "make vim save view (state) (folds, cursor, etc)
-au BufWinEnter * silent! loadview "make vim load view (state) (folds, cursor, etc)
-
-set splitright " Open vertical-split to right of current pane
-set splitbelow " Open horiontal-split below current pane
-
-" Set up tabs to use spaces
-set shiftwidth=4   " Number of spaces to use for the (auto)indent step
-set tabstop=4       " Number of spaces per tab
-set expandtab      " Use 'shiftwidth' for tab
-set noswapfile
-
-
-set foldmethod=syntax
-set foldnestmax=5
-set foldlevel=99 " Unfold everything
-
-" LINE NUMBERING
-" --------------
-" Relative line numbering for normal mode, otherwise absolute line numbering
-function! RelativeNumbering()
-    " Relative line numbering, with the current absolute line number for the cursor line
-    set relativenumber
-    set number
-endfunc
-
-function! AbsoluteNumbering()
-    set number
-    set norelativenumber
-endfunc
-
-function! NumberToggle()
-  if(&relativenumber == 1)
-      call AbsoluteNumbering()
-  else
-      call RelativeNumbering()
-  endif
-endfunc
-
-nnoremap <silent> <leader>l :call NumberToggle()<cr>
-call RelativeNumbering()
-
-set laststatus=2   " Always a status line
-" Enable modelines
-set modeline modelines=10
-
-" Nice statusbar
-set laststatus=2
-set statusline=
-set statusline+=%2*%-3.3n%0*\ " buffer number
-set statusline+=%f\ " file name
-set statusline+=%h%1*%m%r%w%0* " flags
-set statusline+=\[%{strlen(&ft)?&ft:'none'}, " filetype
-set statusline+=%{&encoding}, " encoding
-set statusline+=%{&fileformat}] " file format
-set statusline+=%= " right align
-set statusline+=%2*0x%-8B\ " current char
-set statusline+=%-14.(%l,%c%V%)\ %<%P " offset
-set history=50      " keep 50 lines of command line history
-set ruler      " show the cursor position all the time
-set showcmd      " display incomplete commands
-set incsearch      " do incremental searching
-set ts=4      " tab stops = four spaces
-set vb        " Visual Bell rather than annoying beep
-set cursorline " Highlight current line
-
-set textwidth=0   " Limit width of text to 80
-set wrapmargin=0 " No wrapping
-set nowrap 
-
-set path+=./include,./include/ide
-set path+=./generated
-set path+=/usr/include/c++/4.1.2/**,/usr/local/include/**,/usr/lib/gcc/x86_64-redhat-linux/4.1.2/include/**,/usr/include/**,/opt/ats/Ice-3.4.2/include,/opt/ats/boost/boost_1_42_0/include
-
-" Use ack instead of grep
-set grepprg=ack\ --all-types\ --nogroup\ --column\ $*
-set grepformat=%f:%l:%c:%m
-
-" Auto load/save 'view' -- the set of folds in a current buffer
-let g:skipview_files = [
-            \ '[EXAMPLE PLUGIN BUFFER]'
-            \ ]
-" Abbreviations
-iabbrev //--- // ------------------------------------------------------------------------------------
-iabbrev //=== // ====================================================================================
 
 " --------------------------------------------------------------------------------
 " Functions
@@ -638,7 +499,6 @@ function! MakeViewCheck()
     return 1
 endfunction
 " }}
-
 
 " Use F2 to toggle recent files
 function! ToggleHlSearch()
@@ -707,6 +567,142 @@ function! <SID>SynStack()
 endfunc
 " }}
 
+" Relative line numbering, with the current absolute line number for the cursor line
+function! RelativeNumbering()
+    " {{
+    set relativenumber
+    set number
+endfunc
+" }}
+
+" Absolute line numbering
+function! AbsoluteNumbering()
+    " {{
+    set number
+    set norelativenumber
+endfunc
+" }}
+
+" Toggle between absolute and relative line numbering
+function! NumberToggle()
+    " {{
+  if(&relativenumber == 1)
+      call AbsoluteNumbering()
+  else
+      call RelativeNumbering()
+  endif
+endfunc
+" }}
+filetype plugin indent on     " required! 
+
+
+" --------------------------------------------------------------------------------
+" Settings
+" --------------------------------------------------------------------------------
+
+" Complete options (disable preview scratch window, longest removed to aways " show menu) set completeopt=menuone,menu,longest,preview
+ " Limit popup menu height
+set pumheight=20
+" Warning 'preview' on MacVim causes crashes
+set completeopt=menu,longest
+ 
+if has('conceal')
+    set conceallevel=2
+    set concealcursor=vin
+endif
+
+
+
+" Search for files called 'tags', up to four directory levels above the
+" current directory
+set tags=./tags;../../../../../../
+
+
+" Taglist highlights to match the dark Koehler color scheme
+
+" Use Vim settings, rather then Vi settings (much better!).
+" This must be first, because it changes other options as a side effect.
+set nocompatible
+let do_syntax_sel_menu = 1
+let mysyntaxfile="$HOME/tcl.vim"
+
+" Don't have silly graphical menu
+set go=ageimrLt
+
+" allow backspacing over everything in insert mode
+set backspace=indent,eol,start
+set showmatch
+set autoindent      " always set autoindenting on
+set autoread       " Read file automatically when it has been changed outside vim
+set autowrite      " Writes file automatically when moving to another file, or using 'make'
+"set backupdir=~/vimbackup " Directory list to store backup files
+set nobackup
+set nowritebackup
+set backupdir=
+set undofile " Persistent undo !
+set undolevels=1000 "maximum number of changes that can be undone
+set undoreload=10000 "maximum number lines to save for undo on a buffer reload
+set splitright " Open vertical-split to right of current pane
+set splitbelow " Open horiontal-split below current pane
+
+" Set up tabs to use spaces
+set shiftwidth=4   " Number of spaces to use for the (auto)indent step
+set tabstop=4       " Number of spaces per tab
+set expandtab      " Use 'shiftwidth' for tab
+set noswapfile
+
+
+" LINE NUMBERING
+" --------------
+" Relative line numbering for normal mode, otherwise absolute line numbering
+nnoremap <silent> <leader>l :call NumberToggle()<cr>
+call RelativeNumbering()
+
+set laststatus=2   " Always a status line
+" Enable modelines
+set modeline modelines=10
+
+" Nice statusbar
+set laststatus=2
+set statusline=
+set statusline+=%2*%-3.3n%0*\ " buffer number
+set statusline+=%f\ " file name
+set statusline+=%h%1*%m%r%w%0* " flags
+set statusline+=\[%{strlen(&ft)?&ft:'none'}, " filetype
+set statusline+=%{&encoding}, " encoding
+set statusline+=%{&fileformat}] " file format
+set statusline+=%= " right align
+set statusline+=%2*0x%-8B\ " current char
+set statusline+=%-14.(%l,%c%V%)\ %<%P " offset
+set history=50      " keep 50 lines of command line history
+set ruler      " show the cursor position all the time
+set showcmd      " display incomplete commands
+set incsearch      " do incremental searching
+set ts=4      " tab stops = four spaces
+set vb        " Visual Bell rather than annoying beep
+set cursorline " Highlight current line
+
+set textwidth=0   " Limit width of text to 80
+set wrapmargin=0 " No wrapping
+set nowrap 
+
+set path+=./include,./include/ide
+set path+=./generated
+set path+=/usr/include/c++/4.1.2/**,/usr/local/include/**,/usr/lib/gcc/x86_64-redhat-linux/4.1.2/include/**,/usr/include/**,/opt/ats/Ice-3.4.2/include,/opt/ats/boost/boost_1_42_0/include
+
+" Use ack instead of grep
+set grepprg=ack\ --all-types\ --nogroup\ --column\ $*
+set grepformat=%f:%l:%c:%m
+
+" Auto load/save 'view' -- the set of folds in a current buffer
+let g:skipview_files = [
+            \ '[EXAMPLE PLUGIN BUFFER]'
+            \ ]
+" Abbreviations
+iabbrev //--- // ------------------------------------------------------------------------------------
+iabbrev //=== // ====================================================================================
+
+
 "---------------------------
 " Misc
 "---------------------------
@@ -770,8 +766,8 @@ map  <A-PageDown> :tabnext<cr>
 " note: requires XON/XOFF disabled! (`stty -ixon`)
 nmap <C-q>        :tabclose<cr>
  
-" Use space on a fold to fold/unfold
-nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
+" <leader> space on a fold to fold/unfold
+nnoremap <silent> <leader><Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
 vnoremap <Space> zf
 
 " Load a file into a clojure repl
@@ -885,9 +881,9 @@ au Syntax cpp call EnhanceCppSyntax()
 au TabLeave * let tab_lastvisited=tabpagenr()
 autocmd  VimEnter  * :call SourceVimPathsIfExist()
 
+" Autosave & Load Views (folds, cursor position, etc.)
 augroup vimrcAutoView
     autocmd!
-    " Autosave & Load Views.
     autocmd BufWritePost,BufLeave,WinLeave ?* if MakeViewCheck() | mkview | endif
     autocmd BufWinEnter ?* if MakeViewCheck() | silent loadview | endif
 augroup end
@@ -924,8 +920,6 @@ hi Pmenu         ctermfg=0 ctermbg=2
 hi PmenuSel      ctermfg=0 ctermbg=7
 hi PmenuSbar     ctermfg=7 ctermbg=0
 hi PmenuThumb    ctermfg=0 ctermbg=7
-
-
 
 if has("gui_running")
     let g:solarized_diffmode="normal"    "default value is normal
