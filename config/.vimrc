@@ -1,5 +1,11 @@
 " Ant's vimrc file.
+" vim: set foldmarker={{,}} foldlevel=0 foldmethod=marker nospell:
 "
+
+if has('win32') || has('win64')
+      set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
+endif
+
 let g:alternateSearchPath = 'sfr:./src,sfr:./include,wdr:./src,wdr:./include,sfr:../source,sfr:../src,sfr:../include,sfr:../inc' 
 
 "--------------------------------------------------------------------------------
@@ -20,26 +26,25 @@ Bundle 'gmarik/vundle'
 
 " Text manipulation
 Bundle 'https://github.com/vim-scripts/textmanip.vim.git'
-" mj - move line down
+" Key: mj - move line down
+" Key: mk - move line up
+" Key: Mj - dup line down
+" Key: Mk - dup line up
+" toggle insert/replace with <F10>
+" {{
 nmap mj <S-v>mj
 xmap mj <Plug>(textmanip-move-down)<ESC>
-" mk - move line up
 nmap mk <S-v>mk
 xmap mk <Plug>(textmanip-move-up)<ESC>
 xmap mh <Plug>(textmanip-move-left)
 xmap ml <Plug>(textmanip-move-right)
-" Mj - dup line down
 nmap Mj <S-v>Mj
 xmap Mj <Plug>(textmanip-duplicate-down)<ESC>
-" Mk - dup line up
 nmap Mk <S-v>Mk
 xmap Mk <Plug>(textmanip-duplicate-up)<ESC>
-
-
-" toggle insert/replace with <F10>
 nmap <F10> <Plug>(textmanip-toggle-mode)
 xmap <F10> <Plug>(textmanip-toggle-mode)
-
+" }}
 
 " Yank Ring
 " Bundle 'https://github.com/vim-scripts/YankRing.vim.git'
@@ -83,19 +88,70 @@ Bundle 'https://github.com/kana/vim-grex.git'
 Bundle 'http://www.github.com/Lokaltog/vim-easymotion'
 
 Bundle 'http://www.github.com/scrooloose/nerdcommenter'
+
 " NERDTree
 Bundle 'http://www.github.com/scrooloose/nerdtree'
+" Key: <F1> - toggle
+" {{
+"autocmd vimenter * if !argc() | NERDTree | endif
+nmap <silent> <Leader>fe :NERDTreeToggle<CR>
+" CTRL 1 opens tree
+map <F1> :NERDTreeTabsToggle<CR>
+let g:nerdtree_tabs_smart_startup_focus = 2 " Focus on file after opening
+"Open tree if no files specified when opening vim
+"autocmd vimenter * if !argc() | NERDTree | endif
+let g:NERDTreeShowHidden=0
+let g:NERDTreeQuitOnOpen=1
+" Diable arrows if there are rendering issues
+"let g:NERDTreeDirArrows=0
+" Close vim if it's the NERDTree is the only window left
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+" }}
+
+
 " NERDTree tabs
 Bundle 'https://github.com/jistr/vim-nerdtree-tabs.git'
 
 Bundle 'https://www.github.com/kien/ctrlp.vim.git'
+" {{
+let g:ctrlp_extensions = ['tag', 'dir']
+let g:ctrlp_match_window_bottom = 0
+let g:ctrlp_match_window_reversed = 0
+let g:ctrlp_max_height = 30
+let g:ctrlp_dotfiles = 0
+let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\.git$\|\.hg$\|\.svn\|modules\/include$',
+    \ 'file': '\.exe$\|\.so$\|\.dll$|\.os|\.o|\.a',
+    \ 'link': 'some$\|bad$\|symbolic$\|links$',
+    \ }
+" }}
+
 Bundle 'http://www.github.com/majutsushi/tagbar'
+" <leader>t - toggle tagbar {{
+let g:tagbar_width=50
+let g:tagbar_ctags_bin = "/usr/local/bin/ctags"
+let g:tagbar_autofocus = 1
+let g:tagbar_expand =0
+let g:tagbar_singleclick = 0
+let g:tagbar_foldlevel = 2
+let g:tagbar_autoshowtag = 1
+
+nmap <silent> <leader>t :TagbarToggle<CR>
+nmap <silent> _tt :TagbarToggle<CR>
+" }}
+
 Bundle 'http://www.github.com/altercation/vim-colors-solarized'
 " Tmux integration
 Bundle 'http://www.github.com/xaviershay/tslime.vim'
 " Git mirror of abudden's TagHighlight -- seems to be updated regularly
 Bundle 'https://github.com/qiulin/TagHighlight.git'
 Bundle 'https://www.github.com/scrooloose/syntastic'
+" Syntastic config {{
+let g:syntastic_mode_map = { 'mode': 'passive',
+                           \ 'active_filetypes': ['ruby', 'php', 'python'],
+                           \ 'passive_filetypes': ['puppet'] }
+" }}
+
 Bundle 'http://www.github.com/vim-scripts/vcscommand.vim'
 Bundle 'http://www.github.com/vim-scripts/genutils'
 
@@ -106,7 +162,9 @@ Bundle 'https://github.com/mustache/vim-mustache-handlebars.git'
 " Provide 'OpenSession' 'SaveSession' with tab completion. Saves sessions in
 " ~/.vim/session
 Bundle 'https://github.com/xolox/vim-session.git'
+" Session config {{
 let g:session_autoload = 'no'
+" }}
 Bundle 'https://github.com/xolox/vim-misc.git'
 
 " BUFFER EXPLORER PLUGIN
@@ -114,22 +172,53 @@ Bundle 'https://github.com/xolox/vim-misc.git'
 Bundle 'http://www.github.com/vim-scripts/bufexplorer.zip'
 Bundle 'https://www.github.com/mileszs/ack.vim'
 Bundle 'http://www.github.com/vim-scripts/a.vim'
+" * <C-S-a> to :A
+" * Alternatives for '.m' and '.h'
+" Alternate-file config {{
+let g:alternateExtensions_C = "h,H,HPP,hpp"
+let g:alternateExtensions_h = "m,C,cpp,c++,c"
+let g:alternateExtensions_m = "h,hpp"
+noremap <silent> <C-S-a> :A<CR>
+" }}
+
 
 " Python mode (indentation, doc, refactor, lints, code checking, motion and
 " operators, highlighting, run and ipdb breakpoints)
 Bundle 'https://www.github.com/fs111/pydoc.vim'
 Bundle 'https://github.com/hynek/vim-python-pep8-indent.git'
 Bundle 'https://github.com/suprsvn/vim-PythonTidy.git'
+" PythonTidy config {{
 au FileType python set formatprg=~/script/pythontidy
 noremap <F11> gggqG
+" }}
 
 " Gist support
 " :Gist <blah>
 Bundle 'http://github.com/mattn/webapi-vim'
 Bundle 'http://github.com/mattn/gist-vim'
+" Gist config {{
+let g:gist_post_private = 1
+let g:gist_detect_filetype = 1
+let g:gist_show_privates = 1
+" }}
 
 " YouCompleteMe -- auto-completion
 Bundle 'https://github.com/Valloric/YouCompleteMe'
+" <C_Space> = complete 
+" YCM setup {{
+let g:ycm_confirm_extra_conf = 0 " Silently source the ycm_extra_conf.py
+let g:ycm_global_ycm_extra_conf = '/Users/ant/.ycm_extra_conf.py'
+" Compatibility with UltiSnips
+let g:ycm_use_ultisnips_completer = 1
+let g:ycm_key_invoke_completion = '<C-Space>'
+" DEBUG
+"let g:ycm_server_log_level='debug'
+"if has("gui_running")
+"    let g:ycm_server_use_vim_stdout = 1
+"endif
+
+" }}
+
 
 " Local vimrc files (.lvimrc)
 " Add each project to the whitelist, below
@@ -143,180 +232,24 @@ Bundle 'https://github.com/vim-scripts/EnumToCase.git'
 " Alignment in tabular format
 " To use :Tabularize /<pattern>/ 
 Bundle 'https://github.com/godlygeek/tabular.git'
+" <Leader>a ('a'lign) for tabularize shortcuts {{
+nmap <Leader>a= :Tabularize /=<CR>
+vmap <Leader>a= :Tabularize /=<CR>
+nmap <Leader>a: :Tabularize /:<CR>
+vmap <Leader>a: :Tabularize /:<CR>
+nmap <Leader>a:: :Tabularize /:\zs<CR>
+vmap <Leader>a:: :Tabularize /:\zs<CR>
+nmap <Leader>a, :Tabularize /,<CR>
+vmap <Leader>a, :Tabularize /,<CR>
+nmap <Leader>a<Bar> :Tabularize /<Bar><CR>
+vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
+" }}
 
 " File templates and snippets
 Bundle 'https://github.com/tomtom/tlib_vim.git'
 Bundle 'https://github.com/tomtom/tskeleton_vim.git'
-" MRU Files - Depends on tlib
-" To use :TRecentlyUsedFiles, etc.
-Bundle 'https://github.com/tomtom/tmru_vim.git'
-
-" Haskell
-Bundle 'https://github.com/vim-scripts/Superior-Haskell-Interaction-Mode-SHIM.git'
-
-" SingleCompile
-Bundle 'https://github.com/xuhdev/SingleCompile.git'
-
-" Ag -- ack replacement
-Bundle 'https://github.com/rking/ag.vim.git'
-
-" DirDiff
-" Bundle 'https://github.com/zhaocai/DirDiff.vim.git'
-let g:DirDiffExcludes = "CVS,*.class,*.exe,.*.swp,*.git,.DS_Store"
-
-call SingleCompile#SetCompilerTemplate('c', 'clang', 'Clang C Compiler',
-            \'clang', '-g -Wno-deprecated-declarations -o $(FILE_TITLE)$', g:SingleCompile_common_run_command)
-call SingleCompile#SetCompilerTemplateByDict('c', 'gcc', {
-            \ 'pre-do'  : function('SingleCompile#PredoGcc'),
-            \ 'priority' : 10,
-            \ 'out-file': g:SingleCompile_common_out_file
-            \})
-call SingleCompile#SetCompilerTemplate('cpp', 'clang++', 'Clang C++ Compiler',
-            \'clang++', '-g -std=c++11 -stdlib=libc++ -Wno-deprecated-declarations -o $(FILE_TITLE)$', g:SingleCompile_common_run_command)
-call SingleCompile#SetCompilerTemplateByDict('c', 'gcc', {
-            \ 'pre-do'  : function('SingleCompile#PredoGcc'),
-            \ 'priority' : 10,
-            \ 'out-file': g:SingleCompile_common_out_file
-            \})
-let g:SingleCompile_showquickfixiferror = 1
-let g:SingleCompile_silentcompileifshowquickfix = 1
-
-
-" Add on actions
-" Requires tlib
-Bundle 'https://github.com/MarcWeber/vim-addon-mw-utils.git'
-Bundle 'https://github.com/MarcWeber/vim-addon-actions.git'
-
-" Surround
-Bundle 'https://github.com/tpope/vim-surround.git'
-
-" Airline enhanced status line
-Bundle 'https://github.com/bling/vim-airline.git'
-" If powerline-fonts is installed, auto-detect them with this setting...
-" Powerline-fonts: git clone https://github.com/Lokaltog/powerline-fonts.git
-let g:airline_powerline_fonts = 1
-
-" Seek plugin, remaps 's' to do a 2-character version of 'f'
-Bundle 'https://github.com/goldfeld/vim-seek.git'
-
-" Ultisnips
-Bundle 'https://github.com/SirVer/ultisnips.git'
-
-" VimShell
-Bundle 'http://github.com/Shougo/vimproc'
-Bundle 'https://github.com/Shougo/vimshell.vim.git'
-
-" Fugitive -- git plugin
-" Adds 'Git...' commands
-Bundle 'https://github.com/tpope/vim-fugitive.git'
-
-" Undo Tree
-Bundle 'https://github.com/mbbill/undotree.git'
-" <leader>ut to toggle
-nnoremap <leader>ut :UndotreeToggle<cr>
-if has("persistent_undo")
-    set undodir='~/.undodir/'
-    set undofile
-endif
-
-" Unimpaired
-" ]q is :cnext. [q is :cprevious. ]a is :next. [b is :bprevious, etc.
-" Linewise mappings [e and ]e exchange the current line with the one above or below it.
-" Toggling options. [os, ]os, and cos perform :set spell, :set nospell, and :set invspell, respectively.
-" [x and ]x encode and decode XML (and HTML). [u and ]u encode and decode URLs. [y and ]y do C String style escaping.
-" yp or Yp enter append, or insert modes with 'set paste'. 
-" lots more, see 'help unimpaired' 
-Bundle 'https://github.com/tpope/vim-unimpaired.git'
-
-" vim-expand-region
-" + to expand region, - to shrink 
-Bundle 'https://github.com/terryma/vim-expand-region.git'
-"map + <Plug>(expand_region_expand)
-map - <Plug>(expand_region_shrink)
-" ...
-
-" vim-multiple-cursors
-" In normal mode, Ctrl-n highlights further occurrences of the word under the
-" cursor, Ctrl-p unhighlights the last instance. Then use a,s,I, etc. to make
-" a change. Ctrl-n in visual mode puts a cursor on every line of the visual
-" selection, and live updates the text
-Bundle 'https://github.com/terryma/vim-multiple-cursors.git'
-
-" vim-startify
-" Better start screen
-Bundle 'https://github.com/mhinz/vim-startify.git'
-
-"-----------------------------------------------------------------------------------
-" Clang format
-"-----------------------------------------------------------------------------------
-Bundle 'https://github.com/rhysd/vim-clang-format.git'
-let g:clang_format#style_options = {
-            \ "BasedOnStyle" : "llvm",
-            \ "ColumnLimit" : 0,
-            \ "IndentWidth" : 8,
-            \ "ContinuationIndentWidth" : 8,
-            \ "MaxEmptyLinesToKeep" : 3,
-            \ "AccessModifierOffset" : -4,
-            \ "AllowShortIfStatementsOnASingleLine" : "true",
-            \ "AlwaysBreakTemplateDeclarations" : "true",
-            \ "Standard" : "C++11",
-            \ "BreakBeforeBraces" : "Stroustrup"}
-" Map '=' to clang-format
-map = <Plug>(operator-clang-format) 
-
-
-" ZenRoom distraction-less Writing
-Bundle 'https://github.com/junegunn/goyo.vim.git'
-Bundle 'https://github.com/amix/vim-zenroom2.git'
-" <Leader>z enters 'zen' mode
-noremap <Leader>z :Goyo 120<CR>
-
-" Tube plugin for mac
-if has("gui_macvim")
-    Bundle 'https://github.com/gcmt/tube.vim'
-endif
-
-" Smart auto-complete braces
-Bundle 'https://github.com/jiangmiao/auto-pairs.git'
-
-" Window identification
-Bundle 'https://github.com/t9md/vim-choosewin.git'
-" Use '-' in normal mode to highlight window labels
-nmap - <Plug>(choosewin)
-let g:choosewin_overlay_enable=1 " Cool large-letter overlays
-
-" ================================================================================
-" END OF PLUGINS
-" ================================================================================
-
-filetype plugin indent on     " required! 
-
-""" Custom Configs include.
-" All custom config settings are stored in the .vim/config folder to
-" differentiate them from 3rd-party libraries.
-"runtime! config/**/*.vim
-
-"
-" Brief help
-" :BundleList          - list configured bundles
-" :BundleInstall(!)    - install(update) bundles
-" :BundleSearch(!) foo - search(or refresh cache first) for foo
-" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
-"
-" see :h vundle for more details or wiki for FAQ " NOTE: comments after Bundle command are not allowed..
-
-"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-" Complete options (disable preview scratch window, longest removed to aways " show menu) set completeopt=menuone,menu,longest,preview
- " Limit popup menu height
-set pumheight=20
-" Warning 'preview' on MacVim causes crashes
-set completeopt=menu,longest
- 
-
-"-----------------------------------------------------------------------------------
-" TSkeleton
-"-----------------------------------------------------------------------------------
+" Tskeleton variables (e.g. username), auto-source for *.cpp, *.sh
+" Abbreviate TSkeletonSetup to 'Sk', 'Ske', etc. {{
 let g:tskelUserName = 'Anthony Dervish'
 let g:tskelUserEmail = 'ant@dervishsoftware.com'
 let g:tskelUserCompany = 'Dervish Software'
@@ -333,27 +266,73 @@ cnoreabbrev Sk TSkeletonSetup
 cnoreabbrev Ske TSkeletonSetup
 cnoreabbrev Skel TSkeletonSetup
 cnoreabbrev Skeleton TSkeletonSetup
+" }}
 
 
-"-----------------------------------------------------------------------------------
-" YouCompleteMe
-"-----------------------------------------------------------------------------------
-let g:ycm_confirm_extra_conf = 0 " Silently source the ycm_extra_conf.py
-let g:ycm_global_ycm_extra_conf = '/Users/ant/.ycm_extra_conf.py'
-" Compatibility with UltiSnips
-let g:ycm_use_ultisnips_completer = 1
-let g:ycm_key_invoke_completion = '<C-Space>'
+" MRU Files - Depends on tlib
+" To use :TRecentlyUsedFiles, etc.
+Bundle 'https://github.com/tomtom/tmru_vim.git'
+" Key: <leader>ru toggle TMRU
+" Key: *<F2> toggle
+" {{
+noremap <leader>ru :TMRU<CR>
+map <F2> :TMRU<CR>
+" }}
 
-" DEBUG
-"let g:ycm_server_log_level='debug'
-"if has("gui_running")
-"    let g:ycm_server_use_vim_stdout = 1
-"endif
+" Haskell
+Bundle 'https://github.com/vim-scripts/Superior-Haskell-Interaction-Mode-SHIM.git'
 
+" SingleCompile
+Bundle 'https://github.com/xuhdev/SingleCompile.git'
+" Setup clang {{
+call SingleCompile#SetCompilerTemplate('c', 'clang', 'Clang C Compiler',
+            \'clang', '-g -Wno-deprecated-declarations -o $(FILE_TITLE)$', g:SingleCompile_common_run_command)
+call SingleCompile#SetCompilerTemplateByDict('c', 'gcc', {
+            \ 'pre-do'  : function('SingleCompile#PredoGcc'),
+            \ 'priority' : 10,
+            \ 'out-file': g:SingleCompile_common_out_file
+            \})
+call SingleCompile#SetCompilerTemplate('cpp', 'clang++', 'Clang C++ Compiler',
+            \'clang++', '-g -std=c++11 -stdlib=libc++ -Wno-deprecated-declarations -o $(FILE_TITLE)$', g:SingleCompile_common_run_command)
+call SingleCompile#SetCompilerTemplateByDict('c', 'gcc', {
+            \ 'pre-do'  : function('SingleCompile#PredoGcc'),
+            \ 'priority' : 10,
+            \ 'out-file': g:SingleCompile_common_out_file
+            \})
+let g:SingleCompile_showquickfixiferror = 1
+let g:SingleCompile_silentcompileifshowquickfix = 1
+" }}
 
-"-----------------------------------------------------------------------------------
-" UltiSnips
-"-----------------------------------------------------------------------------------
+" Ag -- ack replacement
+Bundle 'https://github.com/rking/ag.vim.git'
+
+" DirDiff
+" Bundle 'https://github.com/zhaocai/DirDiff.vim.git'
+" let g:DirDiffExcludes = "CVS,*.class,*.exe,.*.swp,*.git,.DS_Store"
+
+" Add on actions
+" Requires tlib
+Bundle 'https://github.com/MarcWeber/vim-addon-mw-utils.git'
+Bundle 'https://github.com/MarcWeber/vim-addon-actions.git'
+
+" Surround
+Bundle 'https://github.com/tpope/vim-surround.git'
+
+" Airline enhanced status line
+Bundle 'https://github.com/bling/vim-airline.git'
+" If powerline-fonts is installed, auto-detect them with this setting... {{
+" Powerline-fonts: git clone https://github.com/Lokaltog/powerline-fonts.git
+let g:airline_powerline_fonts = 1
+" }}
+
+" Seek plugin, remaps 's' to do a 2-character version of 'f'
+Bundle 'https://github.com/goldfeld/vim-seek.git'
+
+" Ultisnips
+Bundle 'https://github.com/SirVer/ultisnips.git'
+" * YCM compatibility functions 
+" * Configure <tab> and <c-e>
+" {{
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsListSnippets="<c-e>"
 
@@ -397,106 +376,123 @@ endfunction
 
 " Install our custom TAB handler
 au BufEnter * exec "inoremap <silent> " . g:UltiSnipsJumpForwardTrigger . " <C-R>=g:UltiSnips_Tab()<cr>"
+" }}
 
 
-"-----------------------------------------------------------------------------------
-" a.vim
-"-----------------------------------------------------------------------------------
-let g:alternateExtensions_C = "h,H,HPP,hpp"
-let g:alternateExtensions_h = "m,C,cpp,c++,c"
-let g:alternateExtensions_m = "h,hpp"
-noremap <silent> <C-S-a> :A<CR>
+" VimShell
+Bundle 'http://github.com/Shougo/vimproc'
+Bundle 'https://github.com/Shougo/vimshell.vim.git'
 
-"-----------------------------------------------------------------------------------
-" SYNTASTIC
-"-----------------------------------------------------------------------------------
-let g:syntastic_mode_map = { 'mode': 'passive',
-                           \ 'active_filetypes': ['ruby', 'php', 'python'],
-                           \ 'passive_filetypes': ['puppet'] }
+" Fugitive -- git plugin
+" Adds 'Git...' commands
+Bundle 'https://github.com/tpope/vim-fugitive.git'
 
-"-----------------------------------------------------------------------------------
-" NERDTree
-"-----------------------------------------------------------------------------------
-" CTRL 1 opens tree
-map <F1> :NERDTreeTabsToggle<CR>
-let g:nerdtree_tabs_smart_startup_focus = 2 " Focus on file after opening
-"Open tree if no files specified when opening vim
-"autocmd vimenter * if !argc() | NERDTree | endif
-let g:NERDTreeShowHidden=0
-let g:NERDTreeQuitOnOpen=1
-" Diable arrows if there are rendering issues
-"let g:NERDTreeDirArrows=0
-" Close vim if it's the NERDTree is the only window left
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+" Undo Tree
+Bundle 'https://github.com/mbbill/undotree.git'
+" Key: <leader>ut to toggle
+" Undo Tree config {{
+nnoremap <leader>ut :UndotreeToggle<cr>
+if has("persistent_undo")
+    set undodir='~/.undodir/'
+    set undofile
+endif
+" }}
+
+" Unimpaired
+" ]q is :cnext. [q is :cprevious. ]a is :next. [b is :bprevious, etc.
+" Linewise mappings [e and ]e exchange the current line with the one above or below it.
+" Toggling options. [os, ]os, and cos perform :set spell, :set nospell, and :set invspell, respectively.
+" [x and ]x encode and decode XML (and HTML). [u and ]u encode and decode URLs. [y and ]y do C String style escaping.
+" yp or Yp enter append, or insert modes with 'set paste'. 
+" lots more, see 'help unimpaired' 
+Bundle 'https://github.com/tpope/vim-unimpaired.git'
+
+" vim-expand-region
+" + to expand region, - to shrink 
+Bundle 'https://github.com/terryma/vim-expand-region.git'
+" Key: * + <Plug>(expand_region_expand)
+" {{
+map - <Plug>(expand_region_shrink)
+" }}
+
+" vim-multiple-cursors
+" In normal mode, Ctrl-n highlights further occurrences of the word under the
+" cursor, Ctrl-p unhighlights the last instance. Then use a,s,I, etc. to make
+" a change. Ctrl-n in visual mode puts a cursor on every line of the visual
+" selection, and live updates the text
+Bundle 'https://github.com/terryma/vim-multiple-cursors.git'
+
+" vim-startify
+" Better start screen
+Bundle 'https://github.com/mhinz/vim-startify.git'
+
+Bundle 'https://github.com/rhysd/vim-clang-format.git'
+" Personal clang-format style and mappings {{
+let g:clang_format#style_options = {
+            \ "BasedOnStyle" : "llvm",
+            \ "ColumnLimit" : 0,
+            \ "IndentWidth" : 8,
+            \ "ContinuationIndentWidth" : 8,
+            \ "MaxEmptyLinesToKeep" : 3,
+            \ "AccessModifierOffset" : -4,
+            \ "AllowShortIfStatementsOnASingleLine" : "true",
+            \ "AlwaysBreakTemplateDeclarations" : "true",
+            \ "Standard" : "C++11",
+            \ "BreakBeforeBraces" : "Stroustrup"}
+" Map '=' to clang-format
+au FileType objc* :map = <Plug>(operator-clang-format) 
+au FileType c :map = <Plug>(operator-clang-format) "{{
+au FileType cpp :map = <Plug>(operator-clang-format) "}}
+" }}
 
 
-"--------------------------------------------------
-" Gist
-"--------------------------------------------------
-let g:gist_post_private = 1
-let g:gist_detect_filetype = 1
-let g:gist_show_privates = 1
+" ZenRoom distraction-less Writing
+Bundle 'https://github.com/junegunn/goyo.vim.git'
+Bundle 'https://github.com/amix/vim-zenroom2.git'
+" Key: <Leader>z enters 'zen' mode
+" ZenRoom config {{
+noremap <Leader>z :Goyo 120<CR>
+" }}
 
-"--------------------------------------------------
-" TMRU most recently used files
-"--------------------------------------------------
-noremap <leader>ru :TMRU<CR>
-map <F2> :TMRU<CR>
+" Tube plugin for mac
+if has("gui_macvim")
+    Bundle 'https://github.com/gcmt/tube.vim'
+endif
+
+" Smart auto-complete braces
+Bundle 'https://github.com/jiangmiao/auto-pairs.git'
+
+" Window identification
+Bundle 'https://github.com/t9md/vim-choosewin.git'
+" Key: '-' in normal mode to highlight window labels
+" {{
+nmap - <Plug>(choosewin)
+let g:choosewin_overlay_enable=1 " Cool large-letter overlays
+" }}
+
+" ================================================================================
+" END OF PLUGINS
+" ================================================================================
+
+filetype plugin indent on     " required! 
 
 
+" --------------------------------------------------------------------------------
+" Settings
+" --------------------------------------------------------------------------------
+
+" Complete options (disable preview scratch window, longest removed to aways " show menu) set completeopt=menuone,menu,longest,preview
+ " Limit popup menu height
+set pumheight=20
+" Warning 'preview' on MacVim causes crashes
+set completeopt=menu,longest
+ 
 if has('conceal')
     set conceallevel=2
     set concealcursor=vin
 endif
 
 
-" Load a file into a clojure repl
-nmap silent <Leader>c :call Send_to_Tmux("\n\n\n(load-file \"./myfile.clj\")\n")<CR>
-
-"--------------------------------------------------------------------------------
-
-" Map \ff to 'Find File' -- when cursor is over a filename (e.g. include,
-" print which file it matches in the search path
-nmap <silent> <leader>ff  :echo globpath(&path, expand('<cfile>'))<CR>
-
-"--------------------------------------------------------------------------------
-" Configure CTRL-P
-"--------------------------------------------------------------------------------
-let g:ctrlp_extensions = ['tag', 'dir']
-let g:ctrlp_match_window_bottom = 0
-let g:ctrlp_match_window_reversed = 0
-let g:ctrlp_max_height = 30
-let g:ctrlp_dotfiles = 0
-let g:ctrlp_custom_ignore = {
-    \ 'dir':  '\.git$\|\.hg$\|\.svn\|modules\/include$',
-    \ 'file': '\.exe$\|\.so$\|\.dll$|\.os|\.o|\.a',
-    \ 'link': 'some$\|bad$\|symbolic$\|links$',
-    \ }
-
-
-
-"--------------------------------------------------------------------------------
-" Configure NERDTree
-"--------------------------------------------------------------------------------
-"
-" Open NERDTree if no other file is open
-"autocmd vimenter * if !argc() | NERDTree | endif
-nmap <silent> <Leader>fe :NERDTreeToggle<CR>
-
-"~~~~~~~~~~~~~~~~~~~
-" Configure Tagbar
-"~~~~~~~~~~~~~~~~~~~
-
-let g:tagbar_width=50
-let g:tagbar_ctags_bin = "/usr/local/bin/ctags"
-let g:tagbar_autofocus = 1
-let g:tagbar_expand =0
-let g:tagbar_singleclick = 0
-let g:tagbar_foldlevel = 2
-let g:tagbar_autoshowtag = 1
-
-nmap <silent> <leader>t :TagbarToggle<CR>
-nmap <silent> _tt :TagbarToggle<CR>
 
 " Search for files called 'tags', up to four directory levels above the
 " current directory
@@ -524,6 +520,12 @@ set autowrite      " Writes file automatically when moving to another file, or u
 set nobackup
 set nowritebackup
 set backupdir=
+set undofile " Persistent undo !
+set undolevels=1000 "maximum number of changes that can be undone
+set undoreload=10000 "maximum number lines to save for undo on a buffer reload
+au BufWinLeave * silent! mkview  "make vim save view (state) (folds, cursor, etc)
+au BufWinEnter * silent! loadview "make vim load view (state) (folds, cursor, etc)
+
 set splitright " Open vertical-split to right of current pane
 set splitbelow " Open horiontal-split below current pane
 
@@ -579,36 +581,40 @@ set statusline+=%{&fileformat}] " file format
 set statusline+=%= " right align
 set statusline+=%2*0x%-8B\ " current char
 set statusline+=%-14.(%l,%c%V%)\ %<%P " offset
-
-" special statusbar for special windows
-au FileType qf
-            \ if &buftype == "quickfix" |
-            \ setlocal statusline=%2*%-3.3n%0* |
-            \ setlocal statusline+=\ \[Compiler\ Messages\] |
-            \ setlocal statusline+=%=%2*\ %<%P |
-            \ endif
-
-
 set history=50      " keep 50 lines of command line history
 set ruler      " show the cursor position all the time
 set showcmd      " display incomplete commands
 set incsearch      " do incremental searching
 set ts=4      " tab stops = four spaces
 set vb        " Visual Bell rather than annoying beep
+set cursorline " Highlight current line
 
 set textwidth=0   " Limit width of text to 80
 set wrapmargin=0 " No wrapping
 set nowrap 
 
-" Use space on a fold to fold/unfold
-nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
-vnoremap <Space> zf
+set path+=./include,./include/ide
+set path+=./generated
+set path+=/usr/include/c++/4.1.2/**,/usr/local/include/**,/usr/lib/gcc/x86_64-redhat-linux/4.1.2/include/**,/usr/include/**,/opt/ats/Ice-3.4.2/include,/opt/ats/boost/boost_1_42_0/include
+
+" Use ack instead of grep
+set grepprg=ack\ --all-types\ --nogroup\ --column\ $*
+set grepformat=%f:%l:%c:%m
 
 " Auto load/save 'view' -- the set of folds in a current buffer
 let g:skipview_files = [
             \ '[EXAMPLE PLUGIN BUFFER]'
             \ ]
+" Abbreviations
+iabbrev //--- // ------------------------------------------------------------------------------------
+iabbrev //=== // ====================================================================================
+
+" --------------------------------------------------------------------------------
+" Functions
+" --------------------------------------------------------------------------------
+
 function! MakeViewCheck()
+    " {{
     if has('quickfix') && &buftype =~ 'nofile'
         " Buffer is marked as not a file
         return 0
@@ -631,67 +637,75 @@ function! MakeViewCheck()
     endif
     return 1
 endfunction
-augroup vimrcAutoView
-    autocmd!
-    " Autosave & Load Views.
-    autocmd BufWritePost,BufLeave,WinLeave ?* if MakeViewCheck() | mkview | endif
-    autocmd BufWinEnter ?* if MakeViewCheck() | silent loadview | endif
-augroup end
+" }}
 
-" Abbreviations
-
-iabbrev //--- // ------------------------------------------------------------------------------------
-iabbrev //=== // ====================================================================================
 
 " Use F2 to toggle recent files
-
-" move within long lines
-noremap j gj
-noremap k gk
-nnoremap <C-J> <C-W>j
-nnoremap <C-K> <C-W>k
- 
-"---------------------------
-" Tabs
-"---------------------------
- 
-" also, gt/gT...
-:nmap <A-PageUp>   :tabprevious<cr>
-:nmap <A-PageDown> :tabnext<cr>
-:map  <A-PageUp>   :tabprevious<cr>
-:map  <A-PageDown> :tabnext<cr>
-" note: requires XON/XOFF disabled! (`stty -ixon`)
-:nmap <C-q>        :tabclose<cr>
- 
-"---------------------------
-" Command-line mappings
-"---------------------------
-" Uncrustify
-function! Uncrustify()
-    exe ":silent! 1,$!/devtools/bin/uncrustify -q -c /devtools//etc/uncrustify.cfg"
-    "Correct a couple of stupid Uncrustify insertions
-    " Get rid of copious spaces after function argument ,
-    exe ":silent! %s/, \{5,}\([^\"]*\)$/\, \1/g"
-    " Get rid of copious spaces after close brace
-    exe ":silent! %s/\} \{5,}\(\/\/[^\"]*\)$/\} \1/g"
+function! ToggleHlSearch()
+    " {{
+    if (&hlsearch == 1)
+        set nohlsearch
+    else
+        set hlsearch
+    endif
 endfunc
+" }}
 
-:nmap <Leader>f :Uncrustify()
- 
 " Add highlighting for function definition in C++
 function! EnhanceCppSyntax()
+    " {{
   syn match cppFuncDef "::\~\?\zs\h\w*\ze([^)]*\()\s*\(const\)\?\)\?\s*{\?\s*$"
   hi cppFuncDef ctermfg=white cterm=bold,undercurl guifg=white gui=bold,undercurl
   set errorformat+=%-G%f\|%l\|\ %tarning:\ missing\ initializer\ for\ member
 endfunction
+" }}
 
 function! SourceVimPathsIfExist()
+    " {{
    if filereadable("vim.setpath")
        exe "runtime! vim.setpath"
    endif
 endfunction
+" }}
 
-autocmd  VimEnter  * :call SourceVimPathsIfExist()
+" Create directories needed by vim backups, swap, undo
+function! InitializeDirectories() 
+" {{
+  let separator = "."
+  let parent = $HOME 
+  let prefix = '.vim'
+  let dir_list = { 
+              \ 'backup': 'backupdir', 
+              \ 'views': 'viewdir', 
+              \ 'swap': 'directory', 
+              \ 'undo': 'undodir' }
+
+  for [dirname, settingname] in items(dir_list)
+      let directory = parent . '/' . prefix . dirname . "/"
+      if exists("*mkdir")
+          if !isdirectory(directory)
+              call mkdir(directory)
+          endif
+      endif
+      if !isdirectory(directory)
+          echo "Warning: Unable to create backup directory: " . directory
+          echo "Try: mkdir -p " . directory
+      else  
+          let directory = substitute(directory, " ", "\\\\ ", "")
+          exec "set " . settingname . "=" . directory
+      endif
+  endfor
+endfunction " }}
+
+" Show syntax element name under cursor
+function! <SID>SynStack()
+    " {{
+    if !exists("*synstack")
+        return
+    endif
+    echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
+" }}
 
 "---------------------------
 " Misc
@@ -728,12 +742,13 @@ set wildmenu
 set wildignore=.svn,CVS,*.o,*.a,*.class,*.mo,*.la,*.so,*.obj,*.swp,*.jpg,*.png,*.xpm,*.gif,*/.hg/*,*/.svn/*
 
  
-" [nvilc]noremap means no remapping of right hand side.
-" where nvilc is normal, visual, insert, ... 
- 
-"--------------------------
-" Tabs
-"--------------------------
+" --------------------------------------------------------------------------------
+" Key Maps
+" --------------------------------------------------------------------------------
+
+"clearing highlighted search
+nmap <silent> <leader>/ :call ToggleHlSearch()<CR>
+
 nmap <A-PageUp>   :tabprevious<cr>
 nmap <A-PageDown> :tabnext<cr>
 map  <A-PageUp>   :tabprevious<cr>
@@ -741,6 +756,26 @@ map  <A-PageDown> :tabnext<cr>
 imap <A-PageUp>   <ESC>:tabprevious<cr>i
 imap <A-PageDown> <ESC>:tabnext<cr>i
 
+" move within long lines
+noremap j gj
+noremap k gk
+nnoremap <C-J> <C-W>j
+nnoremap <C-K> <C-W>k
+ 
+" also, gt/gT...
+nmap <A-PageUp>   :tabprevious<cr>
+nmap <A-PageDown> :tabnext<cr>
+map  <A-PageUp>   :tabprevious<cr>
+map  <A-PageDown> :tabnext<cr>
+" note: requires XON/XOFF disabled! (`stty -ixon`)
+nmap <C-q>        :tabclose<cr>
+ 
+" Use space on a fold to fold/unfold
+nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
+vnoremap <Space> zf
+
+" Load a file into a clojure repl
+nmap silent <Leader>c :call Send_to_Tmux("\n\n\n(load-file \"./myfile.clj\")\n")<CR>
 
 " F7 - CP 
 nnoremap ,p :cprev<CR>
@@ -774,32 +809,11 @@ cnoremap <C-b> <Left>
 cnoremap <C-f> <Right>
 cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
-command CD cd %:p:h
-
-
-" Project Plugin
-let g:proj_window_width=50
-" c - close project window after selecting file
-let g:proj_flags="mstc"
-" \P to open project window
-nmap <silent> <Leader>P <Plug>ToggleProject
+command! CD cd %:p:h
 
 " Make p in Visual mode replace the selected text with the "" register.
 vnoremap p <Esc>:let current_reg = @"<CR>gvs<C-R>=current_reg<CR><Esc>
 
-
-
-" Filetype specific commands
-
-" For all text files set 'textwidth' to 78 characters.
-" Bold white comments (against all received wisdom)
-" autocmd FileType * hi comment guifg=White gui=Bold
-" autocmd FileType * hi Special gui=underline
-au BufNewFile,BufRead SCons* set filetype=scons
-au Syntax cpp call EnhanceCppSyntax()
-
-" Implement GNU Screen like keyboard shortcuts
-au TabLeave * let tab_lastvisited=tabpagenr()
 let tab_lastvisited=2
 map <silent> <C-a><C-a> :exe "tabn " tab_lastvisited<CR>
 imap <silent> <C-a><C-a> <ESC>:exe "tabn " tab_lastvisited<CR>
@@ -825,16 +839,21 @@ imap <silent> <C-a>6 <ESC>:tabn 6<CR>
 imap <silent> <C-a>7 <ESC>:tabn 7<CR>
 imap <silent> <C-a>8 <ESC>:tabn 8<CR>
 imap <silent> <C-a>9 <ESC>:tabn 9<CR>
+" Map \ff to 'Find File' -- when cursor is over a filename (e.g. include,
+" print which file it matches in the search path
+nmap <silent> <leader>ff  :echo globpath(&path, expand('<cfile>'))<CR>
+" <leader>s -- show syntax element and syntax file for cursor position
+nmap <leader>s :call <SID>SynStack()<CR>
+
+
+" --------------------------------------------------------------------------------
+" Auto Commands
+" --------------------------------------------------------------------------------
 
 " Always open QuickFix window at the bottom, spanning window width
 autocmd! FileType qf wincmd J
 autocmd QuickFixCmdPost [^l]* nested cwindow
 autocmd QuickFixCmdPost l* nested lwindow
-
-set path+=./include,./include/ide
-set path+=./generated
-set path+=/usr/include/c++/4.1.2/**,/usr/local/include/**,/usr/lib/gcc/x86_64-redhat-linux/4.1.2/include/**,/usr/include/**,/opt/ats/Ice-3.4.2/include,/opt/ats/boost/boost_1_42_0/include
-
 let s:default_path = escape(&path, '\ ') " store default value of 'path'
 
 " Always add the current file's directory to the path and tags list if not
@@ -847,39 +866,45 @@ autocmd BufRead *
       \ exec "set path^=".s:tempPath |
       \ exec "set path^=".s:default_path
 
+" special statusbar for special windows
+au FileType qf
+            \ if &buftype == "quickfix" |
+            \ setlocal statusline=%2*%-3.3n%0* |
+            \ setlocal statusline+=\ \[Compiler\ Messages\] |
+            \ setlocal statusline+=%=%2*\ %<%P |
+            \ endif
+
+" For all text files set 'textwidth' to 78 characters.
+" Bold white comments (against all received wisdom)
+" autocmd FileType * hi comment guifg=White gui=Bold
+" autocmd FileType * hi Special gui=underline
+au BufNewFile,BufRead SCons* set filetype=scons
+au Syntax cpp call EnhanceCppSyntax()
+
+" Implement GNU Screen like keyboard shortcuts
+au TabLeave * let tab_lastvisited=tabpagenr()
+autocmd  VimEnter  * :call SourceVimPathsIfExist()
+
+augroup vimrcAutoView
+    autocmd!
+    " Autosave & Load Views.
+    autocmd BufWritePost,BufLeave,WinLeave ?* if MakeViewCheck() | mkview | endif
+    autocmd BufWinEnter ?* if MakeViewCheck() | silent loadview | endif
+augroup end
+
+" Automatically source vimrc on save.
+autocmd! bufwritepost .vimrc source $MYVIMRC
 
 filetype plugin on
 filetype indent on
 
-" Use ack instead of grep
-set grepprg=ack\ --all-types\ --nogroup\ --column\ $*
-set grepformat=%f:%l:%c:%m
+" Create directories for vim backup, swap, undo, history
+call InitializeDirectories() 
 
 
-" ------------------------------------------------------------------
-" Solarized Colorscheme Config
-" ------------------------------------------------------------------
-" ------------------------------------------------------------------
-
-" The following items are available options, but do not need to be
-" included in your .vimrc as they are currently set to their defaults.
-
-" let g:solarized_termtrans=0
-" let g:solarized_degrade=0
-" let g:solarized_bold=1
-" let g:solarized_underline=1
-" let g:solarized_italic=1
-" let g:solarized_termcolors=16
-" let g:solarized_contrast="normal"
-" let g:solarized_visibility="normal"
-" let g:solarized_hitrail=0
-" let g:solarized_menu=1
-
-"  _____ _                  
-" |_   _| |_  ___ _ __  ___ 
-"   | | | ' \/ -_) '  \/ -_)
-"   |_| |_||_\___|_|_|_\___|
-"                           
+" --------------------------------------------------------------------------------
+" Theme
+" --------------------------------------------------------------------------------
 
 hi DiffText guibg=black
 
@@ -892,13 +917,9 @@ hi Normal guifg=#e0e0e0
 hi doxygenComment guifg=white gui=bold
 hi doxygenBrief guifg=white gui=bold
 hi doxygenPrev guifg=white gui=bold
-
-" Folding stuff
 hi Folded guibg=#404040 gui=bold
 hi FoldColumn guibg=#404040 guifg=cyan
-
 hi MyTagListFileName guibg=#404040 gui=bold
-
 hi Pmenu         ctermfg=0 ctermbg=2
 hi PmenuSel      ctermfg=0 ctermbg=7
 hi PmenuSbar     ctermfg=7 ctermbg=0
@@ -907,7 +928,6 @@ hi PmenuThumb    ctermfg=0 ctermbg=7
 
 
 if has("gui_running")
-    colorscheme solarized
     let g:solarized_diffmode="normal"    "default value is normal
 
     if !has("mac")
@@ -925,6 +945,7 @@ else
     hi comment ctermfg=green ctermbg=black cterm=none
     hi LineNr ctermbg=black ctermfg=black
 endif
+colorscheme solarized
 
 set background=dark
 syntax enable
