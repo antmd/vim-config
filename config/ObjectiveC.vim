@@ -45,10 +45,6 @@ call SingleCompile#SetCompilerTemplate('swift', 'SwiftScript', 'Swift Script',
 
 
 
-" Otherwise .m is used for 'MatLab'
-au BufEnter *.m set filetype=objc
-au BufEnter *.mm set filetype=objcpp
-
 function BufferIsApp()
     let l:isApp = 0
     if match( expand('%:p:h:t'), '.*App$' ) >=0 || match( expand('%:p:h:t'), '.*Gui$' ) >=0 
@@ -95,15 +91,25 @@ function SourceSkeletonForMainFile(extension)
     endif
 endfunction
 
+augroup objcObjc
+    autocmd!
+    " Otherwise .m is used for 'MatLab'
+    au BufEnter *.m set filetype=objc
+    au BufEnter *.mm set filetype=objcpp
+augroup END
+
 "-----------------------------------------------------------------------------------
 " TSkeleton
 "-----------------------------------------------------------------------------------
 "
 " WARNING: These rules should appear in decreasing order of 'specific-ness'
-autocmd BufNewFile main.mm  call SourceSkeletonForMainFile('mm')
-autocmd BufNewFile main.m   call SourceSkeletonForMainFile('m')
-autocmd FileType objc    call SetObjcCompilerForBuffer()
-autocmd FileType cpp    call SetObjcCompilerForBuffer()
+augroup tskeletonObjc
+    autocmd!
+    autocmd BufNewFile main.mm  call SourceSkeletonForMainFile('mm')
+    autocmd BufNewFile main.m   call SourceSkeletonForMainFile('m')
+    autocmd FileType objc    call SetObjcCompilerForBuffer()
+    autocmd FileType cpp    call SetObjcCompilerForBuffer()
+augroup END
 
 
 

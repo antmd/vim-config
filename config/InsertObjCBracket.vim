@@ -63,5 +63,5 @@ endfunction
 
 " Map Ctrl-] in insert mode to call surround plugin, with 'aO' as the text
 " object, and adding the square brackets
-imap <C-]> <esc>ysaO]%a
+inoremap <C-]> <esc>ysaO]%a
 

@@ -89,7 +89,6 @@ Bundle 'http://www.github.com/scrooloose/nerdcommenter'
 Bundle 'http://www.github.com/scrooloose/nerdtree'
 " Key: <F1> - toggle
 " {{
-"autocmd vimenter * if !argc() | NERDTree | endif
 nmap <silent> <Leader>nt :NERDTreeToggle<CR>
 " CTRL 1 opens tree
 map <F1> :NERDTreeTabsToggle<CR>
@@ -104,7 +103,11 @@ let g:NERDTreeWinSize=30
 " Diable arrows if there are rendering issues
 "let g:NERDTreeDirArrows=0
 " Close vim if it's the NERDTree is the only window left
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+augroup nerdTree
+    autocmd!
+    autocmd vimenter * if argc() | NERDTreeClose | endif
+    autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+augroup END
 " }}
 
 
@@ -212,10 +215,10 @@ let g:ycm_global_ycm_extra_conf = '/Users/ant/.ycm_extra_conf.py'
 let g:ycm_use_ultisnips_completer = 1
 let g:ycm_key_invoke_completion = '<C-Space>'
 " DEBUG
-"let g:ycm_server_log_level='debug'
-"if has("gui_running")
-"    let g:ycm_server_use_vim_stdout = 1
-"endif
+let g:ycm_server_log_level='debug'
+if has("gui_running")
+    let g:ycm_server_use_vim_stdout = 1
+endif
 
 " }}
 
@@ -258,9 +261,13 @@ let g:tskelMapHyperComplete = '<C-1>' " No hyper-complete shortcut (C-1 cannot b
 
 " I couldn't get TSkeleton to automatically find it's skeletons, so I use
 " $HOME to specify the full path to the skeleton
-autocmd BufNewFile *main*.cpp :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/main.cpp"
-autocmd BufNewFile *.cpp      :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/basic.cpp"
-autocmd BufNewFile *.sh       :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/shell.sh"
+augroup tskeleton
+    autocmd!
+    autocmd BufNewFile *main*.cpp :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/main.cpp"
+    autocmd BufNewFile *.cpp      :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/basic.cpp"
+    autocmd BufNewFile *.sh       :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/shell.sh"
+augroup END
+
 " Translate Sk<SPACE> into TSkeletonSetup
 cnoreabbrev Sk TSkeletonSetup
 cnoreabbrev Ske TSkeletonSetup
@@ -375,7 +382,10 @@ function! g:UltiSnips_Tab()
 endfunction
 
 " Install our custom TAB handler
-au BufEnter * exec "inoremap <silent> " . g:UltiSnipsJumpForwardTrigger . " <C-R>=g:UltiSnips_Tab()<cr>"
+augroup ultisnips
+    autocmd!
+    au BufEnter * exec "inoremap <silent> " . g:UltiSnipsJumpForwardTrigger . " <C-R>=g:UltiSnips_Tab()<cr>"
+augroup END
 " }}
 
 " VimShell
@@ -439,9 +449,12 @@ let g:clang_format#style_options = {
             \ "Standard" : "C++11",
             \ "BreakBeforeBraces" : "Stroustrup"}
 " Map '=' to clang-format
-au FileType objc* :map = <Plug>(operator-clang-format) 
-au FileType c :map = <Plug>(operator-clang-format) "{{
-au FileType cpp :map = <Plug>(operator-clang-format) "}}
+augroup clangFormat
+    au!
+    au FileType objc* :map = <Plug>(operator-clang-format) 
+    au FileType c :map = <Plug>(operator-clang-format) "{{
+    au FileType cpp :map = <Plug>(operator-clang-format) "}}
+augroup END
 " }}
 
 
@@ -469,6 +482,8 @@ nmap - <Plug>(choosewin)
 let g:choosewin_overlay_enable=1 " Cool large-letter overlays
 " }}
 
+" Enhanced C++ Highlighting
+Bundle 'https://github.com/antmd/vim-cpp-enhanced-highlight.git'
 
 " --------------------------------------------------------------------------------
 " Functions
@@ -593,6 +608,16 @@ function! NumberToggle()
   endif
 endfunc
 " }}
+
+" Do a 'ptag' to open the tag for the current word in a preview window
+function! GoToTagInPreviewWindow()
+    " {{
+    let l:CurrentWord = expand("<cword>")
+    exec "ptag ".l:CurrentWord
+endfunc
+" }}
+
+
 filetype plugin indent on     " required! 
 
 
@@ -708,10 +733,13 @@ iabbrev //=== // ===============================================================
 "---------------------------
  
 " When editing a file, always jump to the last cursor position
-autocmd BufReadPost *
-  \ if line("'\"") > 0 && line ("'\"") <= line("$") |
-  \   exe "normal g'\"" |
-  \ endif
+augroup cursor_restore
+    au!
+    autocmd BufReadPost *
+      \ if line("'\"") > 0 && line ("'\"") <= line("$") |
+      \   exe "normal g'\"" |
+      \ endif
+augroup END
  
 " keep 50 lines of command line/search/etc history
 set history=50
@@ -743,14 +771,7 @@ set wildignore=.svn,CVS,*.o,*.a,*.class,*.mo,*.la,*.so,*.obj,*.swp,*.jpg,*.png,*
 " --------------------------------------------------------------------------------
 
 "clearing highlighted search
-nmap <silent> <leader>/ :call ToggleHlSearch()<CR>
-
-nmap <A-PageUp>   :tabprevious<cr>
-nmap <A-PageDown> :tabnext<cr>
-map  <A-PageUp>   :tabprevious<cr>
-map  <A-PageDown> :tabnext<cr>
-imap <A-PageUp>   <ESC>:tabprevious<cr>i
-imap <A-PageDown> <ESC>:tabnext<cr>i
+nnoremap <silent> <leader>/ :call ToggleHlSearch()<CR>
 
 " move within long lines
 noremap j gj
@@ -758,20 +779,11 @@ noremap k gk
 nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
  
-" also, gt/gT...
-nmap <A-PageUp>   :tabprevious<cr>
-nmap <A-PageDown> :tabnext<cr>
-map  <A-PageUp>   :tabprevious<cr>
-map  <A-PageDown> :tabnext<cr>
-" note: requires XON/XOFF disabled! (`stty -ixon`)
-nmap <C-q>        :tabclose<cr>
+noremap <silent> <D-]> :call GoToTagInPreviewWindow()<CR>
  
 " <leader> space on a fold to fold/unfold
 nnoremap <silent> <leader><Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
-vnoremap <Space> zf
-
-" Load a file into a clojure repl
-nmap silent <Leader>c :call Send_to_Tmux("\n\n\n(load-file \"./myfile.clj\")\n")<CR>
+"vnoremap <Space> zf
 
 " F7 - CP 
 nnoremap ,p :cprev<CR>
@@ -791,11 +803,6 @@ nnoremap - <C-U>
 nnoremap Q gqap
 vnoremap Q gq
  
-" Don't use Ex mode, use Q for formatting
-map Q gq
-
-map mf :!tkdiff -conflict <cfile><CR>
-
 " Command mode emacs-like bindings
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
@@ -811,50 +818,52 @@ command! CD cd %:p:h
 vnoremap p <Esc>:let current_reg = @"<CR>gvs<C-R>=current_reg<CR><Esc>
 
 let tab_lastvisited=2
-map <silent> <C-a><C-a> :exe "tabn " tab_lastvisited<CR>
-imap <silent> <C-a><C-a> <ESC>:exe "tabn " tab_lastvisited<CR>
-map <silent> <C-a><SPACE> :exe "tabnext"<CR>
-imap <silent> <C-a><SPACE> <ESC>:exe "tabnext"<CR>
-map <silent> <C-a>c :exe "tabnew"<CR>
-imap <silent> <C-a>c <ESC>:exe "tabnew"<CR>
-map <silent> <C-a>1 :tabn 1<CR>
-map <silent> <C-a>2 :tabn 2<CR>
-map <silent> <C-a>3 :tabn 3<CR>
-map <silent> <C-a>4 :tabn 4<CR>
-map <silent> <C-a>5 :tabn 5<CR>
-map <silent> <C-a>6 :tabn 6<CR>
-map <silent> <C-a>7 :tabn 7<CR>
-map <silent> <C-a>8 :tabn 8<CR>
-map <silent> <C-a>9 :tabn 9<CR>
-imap <silent> <C-a>1 <ESC>:tabn 1<CR>
-imap <silent> <C-a>2 <ESC>:tabn 2<CR>
-imap <silent> <C-a>3 <ESC>:tabn 3<CR>
-imap <silent> <C-a>4 <ESC>:tabn 4<CR>
-imap <silent> <C-a>5 <ESC>:tabn 5<CR>
-imap <silent> <C-a>6 <ESC>:tabn 6<CR>
-imap <silent> <C-a>7 <ESC>:tabn 7<CR>
-imap <silent> <C-a>8 <ESC>:tabn 8<CR>
-imap <silent> <C-a>9 <ESC>:tabn 9<CR>
+noremap <silent> <C-a><C-a> :exe "tabn " tab_lastvisited<CR>
+inoremap <silent> <C-a><C-a> <ESC>:exe "tabn " tab_lastvisited<CR>
+noremap <silent> <C-a><SPACE> :exe "tabnext"<CR>
+inoremap <silent> <C-a><SPACE> <ESC>:exe "tabnext"<CR>
+noremap <silent> <C-a>c :exe "tabnew"<CR>
+inoremap <silent> <C-a>c <ESC>:exe "tabnew"<CR>
+noremap <silent> <C-a>1 :tabn 1<CR>
+noremap <silent> <C-a>2 :tabn 2<CR>
+noremap <silent> <C-a>3 :tabn 3<CR>
+noremap <silent> <C-a>4 :tabn 4<CR>
+noremap <silent> <C-a>5 :tabn 5<CR>
+noremap <silent> <C-a>6 :tabn 6<CR>
+noremap <silent> <C-a>7 :tabn 7<CR>
+noremap <silent> <C-a>8 :tabn 8<CR>
+noremap <silent> <C-a>9 :tabn 9<CR>
+inoremap <silent> <C-a>1 <ESC>:tabn 1<CR>
+inoremap <silent> <C-a>2 <ESC>:tabn 2<CR>
+inoremap <silent> <C-a>3 <ESC>:tabn 3<CR>
+inoremap <silent> <C-a>4 <ESC>:tabn 4<CR>
+inoremap <silent> <C-a>5 <ESC>:tabn 5<CR>
+inoremap <silent> <C-a>6 <ESC>:tabn 6<CR>
+inoremap <silent> <C-a>7 <ESC>:tabn 7<CR>
+inoremap <silent> <C-a>8 <ESC>:tabn 8<CR>
+inoremap <silent> <C-a>9 <ESC>:tabn 9<CR>
 " Map \ff to 'Find File' -- when cursor is over a filename (e.g. include,
 " print which file it matches in the search path
-nmap <silent> <leader>ff  :echo globpath(&path, expand('<cfile>'))<CR>
+nnoremap <silent> <leader>ff  :echo globpath(&path, expand('<cfile>'))<CR>
 " <leader>s -- show syntax element and syntax file for cursor position
-nmap <leader>s :call <SID>SynStack()<CR>
+nnoremap <leader>s :call <SID>SynStack()<CR>
 
 
 " --------------------------------------------------------------------------------
 " Auto Commands
 " --------------------------------------------------------------------------------
 
-" Always open QuickFix window at the bottom, spanning window width
-autocmd! FileType qf wincmd J
-autocmd QuickFixCmdPost [^l]* nested cwindow
-autocmd QuickFixCmdPost l* nested lwindow
-let s:default_path = escape(&path, '\ ') " store default value of 'path'
+augroup miscAutoCommands
+    autocmd!
+    " Always open QuickFix window at the bottom, spanning window width
+    autocmd FileType qf wincmd J
+    autocmd QuickFixCmdPost [^l]* nested cwindow
+    autocmd QuickFixCmdPost l* nested lwindow
+    let s:default_path = escape(&path, '\ ') " store default value of 'path'
 
-" Always add the current file's directory to the path and tags list if not
-" already there. Add it to the beginning to speed up searches.
-autocmd BufRead *
+    " Always add the current file's directory to the path and tags list if not
+    " already there. Add it to the beginning to speed up searches.
+    autocmd BufRead *
       \ let s:tempPath=escape(escape(expand("%:p:h"), ' '), '\ ') |
       \ exec "set path-=".s:tempPath |
       \ exec "set path-=".s:default_path |
@@ -862,24 +871,25 @@ autocmd BufRead *
       \ exec "set path^=".s:tempPath |
       \ exec "set path^=".s:default_path
 
-" special statusbar for special windows
-au FileType qf
+    " special statusbar for special windows
+    au FileType qf
             \ if &buftype == "quickfix" |
             \ setlocal statusline=%2*%-3.3n%0* |
             \ setlocal statusline+=\ \[Compiler\ Messages\] |
             \ setlocal statusline+=%=%2*\ %<%P |
             \ endif
 
-" For all text files set 'textwidth' to 78 characters.
-" Bold white comments (against all received wisdom)
-" autocmd FileType * hi comment guifg=White gui=Bold
-" autocmd FileType * hi Special gui=underline
-au BufNewFile,BufRead SCons* set filetype=scons
-au Syntax cpp call EnhanceCppSyntax()
+    " For all text files set 'textwidth' to 78 characters.
+    " Bold white comments (against all received wisdom)
+    " autocmd FileType * hi comment guifg=White gui=Bold
+    " autocmd FileType * hi Special gui=underline
+    au BufNewFile,BufRead SCons* set filetype=scons
+    au Syntax cpp call EnhanceCppSyntax()
 
-" Implement GNU Screen like keyboard shortcuts
-au TabLeave * let tab_lastvisited=tabpagenr()
-autocmd  VimEnter  * :call SourceVimPathsIfExist()
+    " Implement GNU Screen like keyboard shortcuts
+    au TabLeave * let tab_lastvisited=tabpagenr()
+    autocmd  VimEnter  * :call SourceVimPathsIfExist()
+augroup END
 
 " Autosave & Load Views (folds, cursor position, etc.)
 augroup vimrcAutoView
