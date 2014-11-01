@@ -219,6 +219,18 @@ let g:ycm_server_log_level='debug'
 if has("gui_running")
     let g:ycm_server_use_vim_stdout = 1
 endif
+" If the initial directory contains a .ycm_extra_conf.py, set this as the 'global'
+" ycm_extra_conf, accessible from any directory. This allows us to descend into
+" symlinked directories, and still keep our YCM config
+function! SetYcmGlobalConfig()
+    if filereadable(".ycm_extra_conf.py")
+        let g:ycm_global_ycm_extra_conf = getcwd() . '/' . '.ycm_extra_conf.py'
+    endif
+endfunc
+augroup VimrcYouCompleteMe
+    autocmd!
+    autocmd VimEnter * call SetYcmGlobalConfig()
+augroup END
 
 " }}
 
