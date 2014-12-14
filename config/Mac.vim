@@ -4,6 +4,10 @@
 "
 " Xcode like bindings
 if !exists('g:HasInitialisedMac')
+
+    if has("gui_running")
+        set lines=105 columns=340
+    endif
     let g:HasInitialisedMac = 1
     " Cmd-Return - 'only' window command
     noremap <D-Return> <C-w><C-o>
@@ -16,6 +20,15 @@ if !exists('g:HasInitialisedMac')
     noremap <unique> <D-b> :SingleCompile<cr>
     inoremap <unique> <D-b> <esc>:SingleCompile<cr>
 
+    " Insert mode cursor movement
+    " provide hjkl movements in Insert mode via the <Alt> modifier key
+    inoremap ˙ <C-o>h
+    inoremap ∆ <C-o>j
+    inoremap ˚ <C-o>k
+    inoremap ¬ <C-o>l
+    inoremap ∫ <C-o>b
+    inoremap ∑ <C-o>w
+    inoremap å <C-o>A
 
     set gfn=Sauce\ Code\ Powerline:h13
 

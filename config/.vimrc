@@ -302,7 +302,7 @@ Bundle 'https://github.com/tomtom/tmru_vim.git'
 " Key: <leader>ru toggle TMRU
 " Key: *<F2> toggle
 " {{
-noremap <leader>ru :TMRU<CR>
+noremap <leader>r :TMRU<CR>
 map <F2> :TMRU<CR>
 " }}
 
@@ -658,12 +658,9 @@ if has('conceal')
     set concealcursor=vin
 endif
 
-
-
 " Search for files called 'tags', up to four directory levels above the
 " current directory
 set tags=./tags;../../../../../../
-
 
 " Taglist highlights to match the dark Koehler color scheme
 
@@ -955,14 +952,6 @@ hi PmenuThumb    ctermfg=0 ctermbg=7
 
 if has("gui_running")
     let g:solarized_diffmode="normal"    "default value is normal
-
-    if !has("mac")
-        " Settings for crappy 15" monitors at work
-        set gfn=Source_Code_Pro:h10:cANSI
-        set lines=50 columns=200
-    else
-        set lines=105 columns=340
-    endif
 else
 " Do not interfere with the terminal colors -- they should already be set to Solarized
     hi Normal ctermbg=NONE
@@ -978,4 +967,6 @@ syntax enable
 
 if has("mac")
     runtime config/Mac.vim
+elseif has("win32")
+    runtime config/Windows.vim
 endif

@@ -22,7 +22,8 @@ set(  <+call:fnamemodify(bufname('%'),':p:h:t'):u+>_BASE_DIR ${CMAKE_CURRENT_SOU
 
 set( CMAKE_INCLUDE_CURRENT_DIR ON )
 
-
+# Globbing is not recommended -- CMake cannot tell when new files are added
+# But for a generic skeleton...
 file( GLOB_RECURSE 
     <+call:fnamemodify(bufname('%'),':p:h:t'):u+>_INCLUDE_FILES 
     ${<+call:fnamemodify(bufname('%'),':p:h:t'):u+>_BASE_DIR}/*.h
