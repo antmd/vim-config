@@ -1,0 +1,1 @@
+bundle/lushtags/plugin/tagbar-haskell.vim

@@ -50,7 +50,7 @@ xmap <F10> <Plug>(textmanip-toggle-mode)
 " nnoremap <silent> <F11> :YRShow<CR>
 
 " Swift language support
-Bundle 'https://github.com/Keithbsmiley/swift.vim'
+Bundle 'https://github.com/Keithbsmiley/swift.vim.git'
 
 " Restart vim with :Restart
 Bundle 'https://github.com/tyru/restart.vim.git'
@@ -76,6 +76,9 @@ Bundle 'https://github.com/kana/vim-operator-user.git'
 " Adds ':Grex', ':Gred' and ':Grey' for delete, delete-line and yank based on
 " the last successful search
 Bundle 'https://github.com/kana/vim-grex.git'
+
+" CMake
+Bundle 'jalcine/cmake.vim'
 
 " EASYMOTION PLUGIN
 " Provides <leader><leader>w to highlight the start of all words,
@@ -149,10 +152,16 @@ Bundle 'http://www.github.com/xaviershay/tslime.vim'
 " Git mirror of abudden's TagHighlight -- seems to be updated regularly
 Bundle 'https://github.com/qiulin/TagHighlight.git'
 Bundle 'https://www.github.com/scrooloose/syntastic'
-" Syntastic config {{
+" Syntastic config 
+" \e -- active mode
+" \s -- toggle syntastic mode
+" {{
 let g:syntastic_mode_map = { 'mode': 'passive',
                            \ 'active_filetypes': ['ruby', 'php', 'python'],
                            \ 'passive_filetypes': ['puppet'] }
+map <silent> <Leader>e :Errors<CR>
+map <silent> <Leader>s :SyntasticToggleMode<CR>
+let g:syntastic_auto_loc_list=1
 " }}
 
 Bundle 'http://www.github.com/vim-scripts/vcscommand.vim'
@@ -172,7 +181,7 @@ Bundle 'https://github.com/xolox/vim-misc.git'
 
 " BUFFER EXPLORER PLUGIN
 " <leader>be to show all buffers, and allow navigation
-Bundle 'http://www.github.com/vim-scripts/bufexplorer.zip'
+Bundle 'https://github.com/jlanzarotta/bufexplorer.git'
 Bundle 'https://www.github.com/mileszs/ack.vim'
 Bundle 'http://www.github.com/vim-scripts/a.vim'
 " * <C-S-a> to :A
@@ -216,9 +225,6 @@ let g:ycm_use_ultisnips_completer = 1
 let g:ycm_key_invoke_completion = '<C-Space>'
 " DEBUG
 let g:ycm_server_log_level='debug'
-if has("gui_running")
-    let g:ycm_server_use_vim_stdout = 1
-endif
 " If the initial directory contains a .ycm_extra_conf.py, set this as the 'global'
 " ycm_extra_conf, accessible from any directory. This allows us to descend into
 " symlinked directories, and still keep our YCM config
@@ -230,6 +236,7 @@ endfunc
 augroup VimrcYouCompleteMe
     autocmd!
     autocmd VimEnter * call SetYcmGlobalConfig()
+    autocmd FileType cpp nnoremap <silent> <C-]> :YcmCompleter GoToDeclaration<CR>
 augroup END
 
 " }}
@@ -278,6 +285,7 @@ augroup tskeleton
     autocmd BufNewFile *main*.cpp :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/main.cpp"
     autocmd BufNewFile *.cpp      :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/basic.cpp"
     autocmd BufNewFile *.sh       :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/shell.sh"
+    autocmd BufNewFile CMakeLists.txt      :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/CMakeLists.txt"
 augroup END
 
 " Translate Sk<SPACE> into TSkeletonSetup
@@ -300,6 +308,8 @@ map <F2> :TMRU<CR>
 
 " Haskell
 Bundle 'https://github.com/vim-scripts/Superior-Haskell-Interaction-Mode-SHIM.git'
+" Lushtags for haskell integration with tagbar
+Bundle 'https://github.com/bitc/lushtags.git'
 
 " SingleCompile
 Bundle 'https://github.com/xuhdev/SingleCompile.git'
