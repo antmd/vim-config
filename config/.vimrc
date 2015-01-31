@@ -5,15 +5,6 @@ if has('win32') || has('win64')
       set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,$HOME/.vim/after
 endif
 
-if has("win32unix")
-    " Do something only in Cygwin
-    " Mintty block cursor for vim
-    let &t_ti.="\e[1 q"
-    let &t_SI.="\e[5 q"
-    let &t_EI.="\e[1 q"
-    let &t_te.="\e[0 q"
-endif
-
 let g:alternateSearchPath = 'sfr:./src,sfr:./include,wdr:./src,wdr:./include,sfr:../source,sfr:../src,sfr:../include,sfr:../inc' 
 
 "--------------------------------------------------------------------------------
@@ -223,6 +214,7 @@ let g:gist_detect_filetype = 1
 let g:gist_show_privates = 1
 " }}
 
+if ! has("win32unix")
 " YouCompleteMe -- auto-completion
 Bundle 'https://github.com/Valloric/YouCompleteMe'
 " <C_Space> = complete 
@@ -249,6 +241,7 @@ augroup VimrcYouCompleteMe
 augroup END
 
 " }}
+endif
 
 
 " Local vimrc files (.lvimrc)
@@ -318,7 +311,9 @@ map <F2> :TMRU<CR>
 " Haskell
 Bundle 'https://github.com/vim-scripts/Superior-Haskell-Interaction-Mode-SHIM.git'
 " Lushtags for haskell integration with tagbar
-Bundle 'https://github.com/bitc/lushtags.git'
+if ! has("win32unix")
+    Bundle 'https://github.com/bitc/lushtags.git'
+endif
 Bundle 'https://github.com/raichoo/haskell-vim.git'
 " From https://github.com/raichoo/haskell-vim
 " {{
@@ -988,6 +983,16 @@ colorscheme solarized
 
 set background=dark
 syntax enable
+
+if has("win32unix")
+    " Do something only in Cygwin
+    " Mintty block cursor for vim
+    let &t_ti.="\e[1 q"
+    let &t_SI.="\e[5 q"
+    let &t_EI.="\e[1 q"
+    let &t_te.="\e[0 q"
+endif
+
 
 if has("mac")
     runtime config/Mac.vim
