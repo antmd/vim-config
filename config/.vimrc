@@ -77,8 +77,6 @@ Bundle 'https://github.com/kana/vim-operator-user.git'
 " the last successful search
 Bundle 'https://github.com/kana/vim-grex.git'
 
-" CMake
-Bundle 'jalcine/cmake.vim'
 
 " EASYMOTION PLUGIN
 " Provides <leader><leader>w to highlight the start of all words,
