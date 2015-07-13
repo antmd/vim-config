@@ -77,9 +77,6 @@ Bundle 'https://github.com/kana/vim-operator-user.git'
 " the last successful search
 Bundle 'https://github.com/kana/vim-grex.git'
 
-" CMake
-Bundle 'jalcine/cmake.vim'
-
 " EASYMOTION PLUGIN
 " Provides <leader><leader>w to highlight the start of all words,
 " or <leader><leader>f<letter> to highglight all occurrences of <letter>
@@ -285,6 +282,7 @@ augroup tskeleton
     autocmd BufNewFile *main*.cpp :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/main.cpp"
     autocmd BufNewFile *.cpp      :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/basic.cpp"
     autocmd BufNewFile *.sh       :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/shell.sh"
+    autocmd BufNewFile *.py       :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/main.py"
     autocmd BufNewFile CMakeLists.txt      :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/CMakeLists.txt"
 augroup END
 
