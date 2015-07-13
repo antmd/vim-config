@@ -77,6 +77,7 @@ Bundle 'https://github.com/kana/vim-operator-user.git'
 " the last successful search
 Bundle 'https://github.com/kana/vim-grex.git'
 
+
 " EASYMOTION PLUGIN
 " Provides <leader><leader>w to highlight the start of all words,
 " or <leader><leader>f<letter> to highglight all occurrences of <letter>
@@ -211,6 +212,7 @@ let g:gist_detect_filetype = 1
 let g:gist_show_privates = 1
 " }}
 
+if ! has("win32unix")
 " YouCompleteMe -- auto-completion
 Bundle 'https://github.com/Valloric/YouCompleteMe'
 " <C_Space> = complete 
@@ -237,6 +239,7 @@ augroup VimrcYouCompleteMe
 augroup END
 
 " }}
+endif
 
 
 " Local vimrc files (.lvimrc)
@@ -307,7 +310,9 @@ map <F2> :TMRU<CR>
 " Haskell
 Bundle 'https://github.com/vim-scripts/Superior-Haskell-Interaction-Mode-SHIM.git'
 " Lushtags for haskell integration with tagbar
-Bundle 'https://github.com/bitc/lushtags.git'
+if ! has("win32unix")
+    Bundle 'https://github.com/bitc/lushtags.git'
+endif
 Bundle 'https://github.com/raichoo/haskell-vim.git'
 " From https://github.com/raichoo/haskell-vim
 " {{
@@ -977,6 +982,16 @@ colorscheme solarized
 
 set background=dark
 syntax enable
+
+if has("win32unix")
+    " Do something only in Cygwin
+    " Mintty block cursor for vim
+    let &t_ti.="\e[1 q"
+    let &t_SI.="\e[5 q"
+    let &t_EI.="\e[1 q"
+    let &t_te.="\e[0 q"
+endif
+
 
 if has("mac")
     runtime config/Mac.vim
