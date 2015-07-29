@@ -27,11 +27,14 @@ set( CMAKE_INCLUDE_CURRENT_DIR ON )
 file( GLOB_RECURSE 
     <+call:fnamemodify(bufname('%'),':p:h:t'):u+>_INCLUDE_FILES 
     ${<+call:fnamemodify(bufname('%'),':p:h:t'):u+>_BASE_DIR}/*.h
+    ${<+call:fnamemodify(bufname('%'),':p:h:t'):u+>_BASE_DIR}/*.hpp
     )
 
 file( GLOB_RECURSE 
     <+call:fnamemodify(bufname('%'),':p:h:t'):u+>_SOURCE_FILES
     ${<+call:fnamemodify(bufname('%'),':p:h:t'):u+>_BASE_DIR}/*.cpp
+    ${<+call:fnamemodify(bufname('%'),':p:h:t'):u+>_BASE_DIR}/*.cc
+    ${<+call:fnamemodify(bufname('%'),':p:h:t'):u+>_BASE_DIR}/*.C
     ${<+call:fnamemodify(bufname('%'),':p:h:t'):u+>_BASE_DIR}/*.mm
     )
 
@@ -51,6 +54,7 @@ add_executable( <+call:fnamemodify(bufname('%'),':p:h:t'):u+> ${ALL_SOURCES} )
 
 install (
     TARGETS <+call:fnamemodify(bufname('%'),':p:h:t'):u+>
+    RUNTIME DESTINATION lib
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     )
