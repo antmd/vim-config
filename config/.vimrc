@@ -157,9 +157,12 @@ Bundle 'https://www.github.com/scrooloose/syntastic'
 let g:syntastic_mode_map = { 'mode': 'passive',
                            \ 'active_filetypes': ['ruby', 'php', 'python'],
                            \ 'passive_filetypes': ['puppet'] }
+" Turn off flake8 checking -- annoying
+let g:syntastic_python_checkers = ['python']
 map <silent> <Leader>e :Errors<CR>
 map <silent> <Leader>s :SyntasticToggleMode<CR>
 let g:syntastic_auto_loc_list=1
+let g:syntastic_check_on_open = 1
 " }}
 
 Bundle 'http://www.github.com/vim-scripts/vcscommand.vim'
