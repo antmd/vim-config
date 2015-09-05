@@ -79,14 +79,14 @@ snippet args "Parse command-line arguments"
 #===============================================================================
 function usage ()
 {
-	cat <<- EOT
+    cat <<- EOT
 
-	${1:Description}
+${1:Description}
 
-  Usage :  \$\{0##/*/} [options] [--] 
+    Usage: \$\{0##/*/} [options] [--]
 
-  Options: 
-	  -h	Display this message
+    Options: 
+        -h  Display this message
 
 EOT
 }
@@ -98,12 +98,9 @@ EOT
 while getopts ":hv" opt
 do
   case $opt in
-
     h )  usage; exit 0   ;;
-
     \? )  echo -e "\n  Option does not exist : $OPTARG\n"
           usage; exit 1   ;;
-
   esac
 done
 

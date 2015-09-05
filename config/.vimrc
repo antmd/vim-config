@@ -661,6 +661,22 @@ endfunc
 " }}
 
 
+" Command 'To' -- use Apparix bookmarks to jump to directory
+command! -complete=custom,BmCe -nargs=1 To :call BmTo('<args>')
+" {{ Apparix command 'To' related functions
+" From  http://www.64k-tec.de/2011/05/tt-console-navigation-the-easy-way-with-apparix/
+function! BmCe(A,L,P)
+    return system("awk 'BEGIN{FS=","}/j,/{print $2}' ~/.apparixrc")
+endfun
+function! BmLs(dir)
+    return system('apparix '.a:dir.' | tr -d "n"')
+endfun
+function! BmTo(dir)
+    execute ':cd '.BmLs(a:dir)
+endfun
+" }}
+
+
 filetype plugin indent on     " required! 
 
 
@@ -756,7 +772,7 @@ set path+=./generated
 set path+=/usr/include/c++/4.1.2/**,/usr/local/include/**,/usr/lib/gcc/x86_64-redhat-linux/4.1.2/include/**,/usr/include/**,/opt/ats/Ice-3.4.2/include,/opt/ats/boost/boost_1_42_0/include
 
 " Use ack instead of grep
-set grepprg=ack\ --all-types\ --nogroup\ --column\ $*
+set grepprg=ag\ --all-text\ --vimgrep\ $*
 set grepformat=%f:%l:%c:%m
 
 " Auto load/save 'view' -- the set of folds in a current buffer
