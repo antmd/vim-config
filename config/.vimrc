@@ -245,6 +245,10 @@ augroup END
 endif
 
 
+" Tern plugin for Javascript -- works with Tagbar
+" Pre-requisites: npm install -g git+https://github.com/ramitos/jsctags.git
+Bundle 'https://github.com/marijnh/tern_for_vim.git'
+
 " Local vimrc files (.lvimrc)
 " Add each project to the whitelist, below
 Bundle 'https://github.com/embear/vim-localvimrc.git'
