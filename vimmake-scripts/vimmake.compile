@@ -1,0 +1,28 @@
+#!/bin/bash
+set -o nounset
+
+compile_dir=$VIM_FILEDIR
+
+cd "$compile_dir"
+
+if [[ -e CMakeLists.txt ]]; then
+
+    # CMake handling
+    # --------------
+
+    if [[ ! -d build ]]; then
+        mkdir build
+    fi
+
+    cd build
+
+    cmake -DCMAKE_BUILD_TYPE=Debug .. && cmake --build  . --target install -- VERBOSE=1 -j4
+
+    exit 0
+    
+fi
+
+
+
+# vim:filetype=sh:
+

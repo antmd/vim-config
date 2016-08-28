@@ -4,9 +4,9 @@
 " See http://superuser.com/questions/319591/how-can-i-prevent-macvim-from-showing-os-x-find-replace-dialog-when-pressing-co
 "
 if has("gui_macvim")
-  nmenu Tools.Make :SCCompile<CR>
-  vmenu Tools.Make :SCCompile<CR>
-  imenu Tools.Make <ESC>:SCCompile<CR>
-  cmenu Tools.Make :SCCompile<CR>
-  omenu Tools.Make :SCCompile<CR>
+  nmenu Tools.Make :call Compile()<CR>
+  vmenu Tools.Make :call Compile()<CR>
+  imenu Tools.Make <ESC>:call Compile()<CR>
+  cmenu Tools.Make :call Compile()<CR>
+  omenu Tools.Make :call Compile()<CR>
 endif

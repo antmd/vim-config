@@ -77,6 +77,100 @@ Bundle 'https://github.com/kana/vim-operator-user.git'
 " the last successful search
 Bundle 'https://github.com/kana/vim-grex.git'
 
+" Vimmake plugin
+" Create a single shell script ~/.vim/vimmake.gcc in ~/.vim: 
+" {{
+" #! /bin/sh 
+" gcc "$VIM_FILEPATH" -o "$VIM_FILEDIR/$VIM_FILENOEXT" 
+" 
+" After changing file mode to 0755, you can launch it inside vim with the command ":VimTool gcc". 
+" 
+" Command ":VimTool {name}" will launch the script "vimmake.{name}" in the directory of "~/.vim" with the predefined environment variables: 
+" 
+" $VIM_FILEPATH    - File name of current buffer with full path 
+" $VIM_FILENAME    - File name of current buffer without path 
+" $VIM_FILEDIR     - Full path of current buffer without the file name 
+" $VIM_FILEEXT     - File extension of current buffer 
+" $VIM_FILENOEXT   - File name of current buffer without path and extension 
+" $VIM_CWD         - Current directory 
+" $VIM_RELDIR      - File path relativize to current directory 
+" $VIM_RELNAME     - File name relativize to current directory 
+" $VIM_CWORD       - Current word under cursor in the buffer 
+" $VIM_GUI         - Is running under gui ? 
+" $VIM_VERSION     - Value of v:version 
+" $VIM_MODE        - Execute via 0:!, 1:makeprg, 2:system() 
+" $VIM_SCRIPT      - Home path of tool scripts 
+" $VIM_TARGET      - Target given after name as ":VimTool {name} {target}" 
+" 
+" You can setup as many tools as you wish to build your project makefile, or compile/run a single source file directly, or compile your latex, or run grep in current directory, passing current word under cursor to external man help / dictionary / other external scripts, or just call svn diff with current file and redirect the output to the bottom panel. 
+" 
+" Command ":VimTool {name} {target}" will pass {target} in the system environment variable as $VIM_TARGET. Script can use this value as build target and pass as a parameter of gnumake. 
+" 
+" VimStop - stop the user tool in background 
+" 
+" This command will stop the current async building job. 
+" 
+" Configuration 
+" 
+" Edit your .vimrc to configurate vimmake in details: 
+" 
+" g:vimmake_mode (dictionary) - launch mode 
+" 
+" Setup launch mode to indicate how to execute the tools: 
+" 
+" let g:vimmake_mode = {} 
+" let g:vimmake_mode['gcc'] = 'async' 
+" let g:vimmake_mode['run'] = 'normal' 
+" 
+" Launch mode can be one of these: 
+" 
+" normal    - Default, launch the tool and return to vim after exit 
+" quickfix  - Launch and redirect output to quickfix window 
+" bg        - Launch in background and discard any output 
+" async     - Run in async mode and redirect output to quickfix in realtime 
+" 
+" Default value of g:vimmake_mode is {} which means all the tool will be launched in normal mode. Normal in windows version of gvim will launch the tool in a new cmd window by using !start. 
+" 
+" To open a new terminal window and execute your tool in ubuntu, you may invoke gnome-terminal in the tool script and launch the script in bg mode. In Mac OS X, open can be used to open a terminal window and run the given script. 
+" 
+" Vim 7.4.1829 is required for using async mode. 
+" 
+" Output can be viewed in quickfix window, to open the quickfix window, you can use :copen 8 or :botright copen 8 to open quickfix window in different position. See :help quickfix for detail. 
+" 
+" g:vimmake_path (string) - tool path 
+" 
+" This option allows you to change the home directory of tools rather than "~/.vim/". 
+" 
+" let g:vimmake_path = '/home/myname/github/config/tools' 
+" Now :VimTool {name} will launch vimmake.{name} from "/home/myname/github/config/tools". 
+" 
+" g:vimmake_save (int) - save before launch ? 
+" 
+" It can be set to 1 if you want to save current file before execute a tool. 
+" 
+" g:vimmake_build_scroll (int) - auto-scroll quickfix ? 
+" 
+" When it is set to 1 for async building, quickfix window will scroll to last line automaticly if there is a new output line added to quickfix. 
+" 
+" g:vimmake_build_post (string) - post vim commands 
+" 
+" When async building job is finished, script in g:vimmake_build_post will be executed. It can be used to invoke a external program: 
+" 
+" let g:vimmake_build_post = "silent !afplay ~/.vim/notify.wav" 
+" Now ~/.vim/notify.wav will be played to notify you the async job is finished now. 
+" 
+" Visit https://github.com/skywind3000/vimmake for more details.
+"  
+" }}
+Bundle "https://github.com/skywind3000/vimmake"
+" Cmd-b/r for Compile/Run
+let g:vimmake_mode = {} 
+let g:vimmake_mode['compile'] = 'quickfix'
+let g:vimmake_mode['compile-run'] = 'quickfix'
+let g:vimmake_path='~/.vim/vimmake-scripts'
+let g:vimmake_save=1 " Save buffer before running script
+let g:vimmake_build_scroll=1 " Auto-scroll quickfix output in async mode
+" }}
 
 " EASYMOTION PLUGIN
 " Provides <leader><leader>w to highlight the start of all words,
@@ -147,8 +241,6 @@ nmap <silent> _tt :TagbarToggle<CR>
 Bundle 'http://www.github.com/altercation/vim-colors-solarized'
 " Tmux integration
 Bundle 'http://www.github.com/xaviershay/tslime.vim'
-" Git mirror of abudden's TagHighlight -- seems to be updated regularly
-Bundle 'https://github.com/qiulin/TagHighlight.git'
 Bundle 'https://www.github.com/scrooloose/syntastic'
 " Syntastic config 
 " \e -- active mode
@@ -226,7 +318,7 @@ let g:ycm_global_ycm_extra_conf = '/Users/ant/.ycm_extra_conf.py'
 let g:ycm_use_ultisnips_completer = 1
 let g:ycm_key_invoke_completion = '<C-Space>'
 " DEBUG
-let g:ycm_server_log_level='debug'
+"let g:ycm_server_log_level='debug'
 " If the initial directory contains a .ycm_extra_conf.py, set this as the 'global'
 " ycm_extra_conf, accessible from any directory. This allows us to descend into
 " symlinked directories, and still keep our YCM config
@@ -238,7 +330,9 @@ endfunc
 augroup VimrcYouCompleteMe
     autocmd!
     autocmd VimEnter * call SetYcmGlobalConfig()
-    autocmd FileType cpp nnoremap <silent> <C-]> :YcmCompleter GoToDeclaration<CR>
+    autocmd FileType cpp nnoremap <silent> <C-]> :YcmCompleter GoTo<CR>
+    autocmd FileType objcpp nnoremap <silent> <C-]> :YcmCompleter GoTo<CR>
+    autocmd FileType objc nnoremap <silent> <C-]> :YcmCompleter GoTo<CR>
 augroup END
 
 " }}
@@ -316,10 +410,6 @@ map <F2> :TMRU<CR>
 
 " Haskell
 Bundle 'https://github.com/vim-scripts/Superior-Haskell-Interaction-Mode-SHIM.git'
-" Lushtags for haskell integration with tagbar
-if ! has("win32unix")
-    Bundle 'https://github.com/bitc/lushtags.git'
-endif
 Bundle 'https://github.com/raichoo/haskell-vim.git'
 " From https://github.com/raichoo/haskell-vim
 " {{
@@ -336,26 +426,6 @@ let g:haskell_indent_do = 3
 let g:haskell_indent_in = 1
 " }}
 
-" SingleCompile
-Bundle 'https://github.com/xuhdev/SingleCompile.git'
-" Setup clang {{
-call SingleCompile#SetCompilerTemplate('c', 'clang', 'Clang C Compiler',
-            \'clang', '-g -Wno-deprecated-declarations -o $(FILE_TITLE)$', g:SingleCompile_common_run_command)
-call SingleCompile#SetCompilerTemplateByDict('c', 'gcc', {
-            \ 'pre-do'  : function('SingleCompile#PredoGcc'),
-            \ 'priority' : 10,
-            \ 'out-file': g:SingleCompile_common_out_file
-            \})
-call SingleCompile#SetCompilerTemplate('cpp', 'clang++', 'Clang C++ Compiler',
-            \'clang++', '-g -std=c++11 -stdlib=libc++ -Wno-deprecated-declarations -o $(FILE_TITLE)$', g:SingleCompile_common_run_command)
-call SingleCompile#SetCompilerTemplateByDict('c', 'gcc', {
-            \ 'pre-do'  : function('SingleCompile#PredoGcc'),
-            \ 'priority' : 10,
-            \ 'out-file': g:SingleCompile_common_out_file
-            \})
-let g:SingleCompile_showquickfixiferror = 1
-let g:SingleCompile_silentcompileifshowquickfix = 1
-" }}
 
 " Ag -- ack replacement
 Bundle 'https://github.com/rking/ag.vim.git'
@@ -513,10 +583,6 @@ Bundle 'https://github.com/amix/vim-zenroom2.git'
 noremap <Leader>z :Goyo 120<CR>
 " }}
 
-" Tube plugin for mac
-if has("gui_macvim")
-    Bundle 'https://github.com/gcmt/tube.vim'
-endif
 
 " Smart auto-complete braces
 Bundle 'https://github.com/jiangmiao/auto-pairs.git'
@@ -535,6 +601,10 @@ Bundle 'https://github.com/antmd/vim-cpp-enhanced-highlight.git'
 " --------------------------------------------------------------------------------
 " Functions
 " --------------------------------------------------------------------------------
+
+function! Compile()
+    :execute("VimTool compile")
+endfunction
 
 function! MakeViewCheck()
     " {{
@@ -663,6 +733,22 @@ function! GoToTagInPreviewWindow()
     exec "ptag ".l:CurrentWord
 endfunc
 " }}
+
+" Toggle vim verbose logging
+function! ToggleVerbose()
+    " {{
+    if !&verbose
+        set verbosefile=/tmp/vim.log
+        echom("Logging to ".&verbosefile)
+        set verbose=13
+    else
+        set verbose=0
+        set verbosefile=
+        echom("Logging off")
+    endif
+endfunction
+" }}
+nnoremap <silent> <leader>vv :call ToggleVerbose()<CR>
 
 
 " Command 'To' -- use Apparix bookmarks to jump to directory
@@ -833,6 +919,8 @@ set wildignore=.svn,CVS,*.o,*.a,*.class,*.mo,*.la,*.so,*.obj,*.swp,*.jpg,*.png,*
 "clearing highlighted search
 nnoremap <silent> <leader>/ :call ToggleHlSearch()<CR>
 
+"Make
+nnoremap <silent> <leader>m :call Compile()<CR>
 " move within long lines
 noremap j gj
 noremap k gk

@@ -4,45 +4,6 @@ if !exists('g:HasInitialisedObjc')
     " Do Mac stuff here
     "
 
-"-----------------------------------------------------------------------------------
-" Single Compile
-"-----------------------------------------------------------------------------------
-call SingleCompile#SetCompilerTemplate('objc', 
-            \'ObjcCommandLineTool',
-            \'Clang (Command Line Tool)',
-            \'compileobjc', 
-            \'$(FILE_NAME)$',
-            \'runobjc')
-call SingleCompile#SetOutfile('objc', 'ObjcCommandLineTool', g:SingleCompile_common_out_file)
-
-call SingleCompile#SetCompilerTemplate('objc', 
-            \'ObjcApplication',
-            \'Clang (Application Bundle)',
-            \'compileobjcapp', 
-            \'$(FILE_NAME)$',
-            \'runobjcapp')
-call SingleCompile#SetOutfile('objc', 'ObjcApplication', g:SingleCompile_common_out_file)
-
-call SingleCompile#SetCompilerTemplate('cpp', 
-            \'CppExperiment',
-            \'Clang (C++)',
-            \'compileobjc', 
-            \'$(FILE_NAME)$',
-            \'runobjcapp')
-call SingleCompile#SetOutfile('cpp', 'CppExperiment', g:SingleCompile_common_out_file)
-
-call SingleCompile#SetCompilerTemplate('objcpp', 
-            \'ObjCppExperiment',
-            \'Clang (ObjC++)',
-            \'compileobjc', 
-            \'$(FILE_NAME)$',
-            \'runobjcapp')
-call SingleCompile#SetOutfile('objcpp', 'ObjCppExperiment', g:SingleCompile_common_out_file)
-
-
-call SingleCompile#SetCompilerTemplate('swift', 'SwiftScript', 'Swift Script',
-             \'bash', '%', '')
-
 
 
 function BufferIsApp()
@@ -59,27 +20,6 @@ function BufferIsCpp()
         let l:isCpp = 1
     endif
     return l:isCpp
-endfunction
-
-function SetObjcCompilerForBuffer()
-    if BufferIsApp()
-        call SingleCompile#SetPriority('objc', 'ObjcApplication',1 )
-        call SingleCompile#SetPriority('objc', 'ObjcCommandLineTool',2 )
-        call SingleCompile#ChooseCompiler('objc', 'ObjcApplication')
-    elseif BufferIsCpp()
-        call SingleCompile#SetPriority('cpp', 'CppExperiment',1 )
-        call SingleCompile#ChooseCompiler('cpp', 'CppExperiment')
-    else
-        call SingleCompile#SetPriority('objc', 'ObjcCommandLineTool',1 )
-        call SingleCompile#SetPriority('objc', 'ObjcApplication',2 )
-        call SingleCompile#ChooseCompiler('objc', 'ObjcCommandLineTool')
-    endif
-    " Add the 'Headers' directory to 'path'
-    let l:headersPath = shellescape(expand('%:p:h').'/Headers')
-    if isdirectory(l:headersPath)
-        :execute "set path-='".l:headersPath."'"
-        :execute "set path^='".l:headersPath."'"
-    endif
 endfunction
 
 
@@ -107,8 +47,6 @@ augroup tskeletonObjc
     autocmd!
     autocmd BufNewFile main.mm  call SourceSkeletonForMainFile('mm')
     autocmd BufNewFile main.m   call SourceSkeletonForMainFile('m')
-    autocmd FileType objc    call SetObjcCompilerForBuffer()
-    autocmd FileType cpp    call SetObjcCompilerForBuffer()
 augroup END
 
 

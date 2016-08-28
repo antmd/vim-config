@@ -14,11 +14,11 @@ if !exists('g:HasInitialisedMac')
     " Cmd-Alt-comma : split window
     noremap <D-≤> <C-w><C-v>
 
-    " Cmd-b/r for SingleCompile/Run
-    noremap <unique> <D-r> :SingleCompileRun<cr>
-    inoremap <unique> <D-r> <esc>:SingleCompileRun<cr>
-    noremap <unique> <D-b> :SingleCompile<cr>
-    inoremap <unique> <D-b> <esc>:SingleCompile<cr>
+    " Cmd-b/r for Vimmake Compile/Run
+    noremap <unique> <D-r> :VimTool compile-run<cr>
+    inoremap <unique> <D-r> <esc>:VimTool compile-run<cr>
+    noremap <unique> <D-b> :VimTool compile<cr>
+    inoremap <unique> <D-b> <esc>:VimTool compile<cr>
 
     " Insert mode cursor movement
     " provide hjkl movements in Insert mode via the <Alt> modifier key

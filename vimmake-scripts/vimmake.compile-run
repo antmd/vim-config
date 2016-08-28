@@ -1,0 +1,12 @@
+#!/bin/bash
+set -o nounset
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd -P )"
+
+compile_dir=$VIM_FILEDIR
+
+cd "$compile_dir"
+
+${script_dir}/vimmake.compile && ~/script/runobjc
+
+# vim:filetype=sh:
+
