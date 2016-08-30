@@ -79,6 +79,8 @@ Bundle 'https://github.com/kana/vim-grex.git'
 
 " Vimmake plugin
 " Create a single shell script ~/.vim/vimmake.gcc in ~/.vim: 
+Bundle "https://github.com/skywind3000/vimmake"
+" {{
 " {{
 " #! /bin/sh 
 " gcc "$VIM_FILEPATH" -o "$VIM_FILEDIR/$VIM_FILENOEXT" 
@@ -162,7 +164,6 @@ Bundle 'https://github.com/kana/vim-grex.git'
 " Visit https://github.com/skywind3000/vimmake for more details.
 "  
 " }}
-Bundle "https://github.com/skywind3000/vimmake"
 " Cmd-b/r for Compile/Run
 let g:vimmake_mode = {} 
 let g:vimmake_mode['compile'] = 'quickfix'
@@ -297,6 +298,9 @@ au FileType python set formatprg=~/script/pythontidy
 noremap <F11> gggqG
 " }}
 
+
+Bundle 'tomtom/stakeholders_vim'
+
 " Gist support
 " :Gist <blah>
 Bundle 'http://github.com/mattn/webapi-vim'
@@ -309,7 +313,8 @@ let g:gist_show_privates = 1
 
 if ! has("win32unix")
 " YouCompleteMe -- auto-completion
-Bundle 'https://github.com/Valloric/YouCompleteMe'
+Bundle "https://github.com/oblitum/YouCompleteMe"
+"Bundle 'https://github.com/Valloric/YouCompleteMe'
 " <C_Space> = complete 
 " YCM setup {{
 let g:ycm_confirm_extra_conf = 0 " Silently source the ycm_extra_conf.py
@@ -317,6 +322,11 @@ let g:ycm_global_ycm_extra_conf = '/Users/ant/.ycm_extra_conf.py'
 " Compatibility with UltiSnips
 let g:ycm_use_ultisnips_completer = 1
 let g:ycm_key_invoke_completion = '<C-Space>'
+" CTRL-] opens new vertical-split instead of using same window
+let g:ycm_goto_buffer_command = 'vertical-split'
+let g:ycm_enable_diagnostic_highlighting = 1
+let g:ycm_open_loclist_on_ycm_diags = 1
+let g:ycm_always_populate_location_list = 1
 " DEBUG
 "let g:ycm_server_log_level='debug'
 " If the initial directory contains a .ycm_extra_conf.py, set this as the 'global'
@@ -330,9 +340,25 @@ endfunc
 augroup VimrcYouCompleteMe
     autocmd!
     autocmd VimEnter * call SetYcmGlobalConfig()
-    autocmd FileType cpp nnoremap <silent> <C-]> :YcmCompleter GoTo<CR>
-    autocmd FileType objcpp nnoremap <silent> <C-]> :YcmCompleter GoTo<CR>
-    autocmd FileType objc nnoremap <silent> <C-]> :YcmCompleter GoTo<CR>
+    autocmd FileType cpp nnoremap <buffer> <silent> <C-]> :YcmCompleter GoTo<CR>
+    autocmd FileType objcpp nnoremap <buffer> <silent> <C-]> :YcmCompleter GoTo<CR>
+    autocmd FileType objc nnoremap <buffer> <silent> <C-]> :YcmCompleter GoTo<CR>
+
+    " Documentation with CTRL-K
+    autocmd FileType cpp    nnoremap <buffer> <silent> <C-k> :YcmCompleter GetDoc<CR>
+    autocmd FileType objcpp nnoremap <buffer> <silent> <C-k> :YcmCompleter GetDoc<CR>
+    autocmd FileType objc   nnoremap <buffer> <silent> <C-k> :YcmCompleter GetDoc<CR>
+    autocmd FileType cpp    inoremap <buffer> <silent> <C-k> <ESC>:YcmCompleter GetDoc<CR>i
+    autocmd FileType objcpp inoremap <buffer> <silent> <C-k> <ESC>:YcmCompleter GetDoc<CR>i
+    autocmd FileType objc   inoremap <buffer> <silent> <C-k> <ESC>:YcmCompleter GetDoc<CR>i
+
+    " Detailed diagnostics 
+    autocmd FileType cpp    nnoremap <buffer> <silent> <C-q> :YcmShowDetailedDiagnostic<CR>
+    autocmd FileType objcpp nnoremap <buffer> <silent> <C-q> :YcmShowDetailedDiagnostic<CR>
+    autocmd FileType objc   nnoremap <buffer> <silent> <C-q> :YcmShowDetailedDiagnostic<CR>
+    autocmd FileType cpp    inoremap <buffer> <silent> <C-q> <ESC>:YcmShowDetailedDiagnostic<CR>i
+    autocmd FileType objcpp inoremap <buffer> <silent> <C-q> <ESC>:YcmShowDetailedDiagnostic<CR>i
+    autocmd FileType objc   inoremap <buffer> <silent> <C-q> <ESC>:YcmShowDetailedDiagnostic<CR>i
 augroup END
 
 " }}
@@ -457,11 +483,11 @@ Bundle 'https://github.com/SirVer/ultisnips.git'
 " * YCM compatibility functions 
 " * Configure <tab> and <c-e>
 " {{
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsListSnippets="<c-e>"
-
 " Add our local snippets to the UltiSnips search path (which is runtimepath)
 set rtp+=~/.vim/snippets
+
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsListSnippets="<c-e>"
 
 " YCM <-> UltiSnips Compatibility Routines
 " Because YCM and UltiSnips both use TAB and Return, we need to be context-sensitive
@@ -605,6 +631,17 @@ Bundle 'https://github.com/antmd/vim-cpp-enhanced-highlight.git'
 function! Compile()
     :execute("VimTool compile")
 endfunction
+
+function! SearchFromLine(pat, start_line, max_lines)
+    " {{
+    let save_pos = getpos(".")
+    call setpos(".", [0, a:start_line, 1, 0])
+    let result = 0
+    let found_line = search(a:pat, 'n', a:max_lines)
+    call setpos(".", save_pos)
+    return found_line
+endfunction
+" }}
 
 function! MakeViewCheck()
     " {{
@@ -1033,6 +1070,10 @@ augroup miscAutoCommands
     " autocmd FileType * hi Special gui=underline
     au BufNewFile,BufRead SCons* set filetype=scons
     au Syntax cpp call EnhanceCppSyntax()
+
+    " Detect standard headers (which don't have .cpp extension)
+	au BufRead * if SearchFromLine('\M-*- C++ -*-', 1, 1) | setlocal ft=cpp | endif
+	au BufWinEnter * if SearchFromLine('\M-*- C++ -*-', 1, 1) | setlocal ft=cpp | endif
 
     " Implement GNU Screen like keyboard shortcuts
     au TabLeave * let tab_lastvisited=tabpagenr()
