@@ -1,0 +1,95 @@
+
+snippet exec "CMake Executable Target" b
+################################
+# ${1:target_name}
+################################
+
+# ------
+# SOURCE
+# ------
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(INCLUDE_FILES
+    )
+
+set(SOURCE_FILES
+	$0
+    )
+
+# ----------
+# EXECUTABLE
+# ----------
+
+add_executable($1 ${SOURCE_FILES} ${INCLUDE_FILES})
+
+set_target_properties(
+	$1
+    CXX_STANDARD 11
+    CXX_STANDARD_REQUIRED ON
+    )
+
+# -------
+# INSTALL
+# -------
+
+set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/installed)
+install (
+    TARGETS $1
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+    )
+endsnippet
+
+snippet link "Target Link Libraries" b
+target_link_libraries(
+    ${1:target} 
+	PRIVATE
+	$0
+    )
+endsnippet
+
+snippet include "Target include directories" b
+target_include_directories(
+    ${1:target} 
+	PRIVATE
+	$0
+    )
+endsnippet
+
+snippet options "Target compile options" b
+target_compile_options(
+    ${1:target} 
+	PRIVATE
+	$0
+    )
+endsnippet
+
+snippet set "Set" b
+set(${1:variable} $0)
+endsnippet
+
+snippet properties "Target properties" b
+set_target_properties(
+    ${1:target} 
+	PROPERTIES
+	${2:name} ${3:value}
+    )
+endsnippet
+
+snippet install "Install" b
+install (
+    TARGETS ${1:target}
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+    BUNDLE  DESTINATION bin
+    )
+endsnippet
+
+snippet xcode "Xcode clause" b
+if (${CMAKE_GENERATOR} STREQUAL "Xcode")
+	$0
+endif()
+endsnippet
