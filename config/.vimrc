@@ -241,6 +241,8 @@ nmap <silent> _tt :TagbarToggle<CR>
 
 Bundle 'http://www.github.com/altercation/vim-colors-solarized'
 " Tmux integration
+Bundle 'tmux-plugins/vim-tmux'
+Bundle 'tmux-plugins/vim-tmux-focus-events'
 Bundle 'http://www.github.com/xaviershay/tslime.vim'
 Bundle 'https://www.github.com/scrooloose/syntastic'
 " Syntastic config 
@@ -413,7 +415,6 @@ augroup tskeleton
     autocmd BufNewFile *.cpp      :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/basic.cpp"
     autocmd BufNewFile *.sh       :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/shell.sh"
     autocmd BufNewFile *.py       :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/main.py"
-    autocmd BufNewFile CMakeLists.txt      :execute "TSkeletonSetup ".$HOME."/.vim/skeletons/CMakeLists.txt"
 augroup END
 
 " Translate Sk<SPACE> into TSkeletonSetup
@@ -427,11 +428,11 @@ cnoreabbrev Skeleton TSkeletonSetup
 " MRU Files - Depends on tlib
 " To use :TRecentlyUsedFiles, etc.
 Bundle 'https://github.com/tomtom/tmru_vim.git'
-" Key: <leader>ru toggle TMRU
+" Key: <leader>ru toggle Tmru
 " Key: *<F2> toggle
 " {{
-noremap <leader>r :TMRU<CR>
-map <F2> :TMRU<CR>
+noremap <leader>r :Tmru<CR>
+map <F2> :Tmru<CR>
 " }}
 
 " Haskell
@@ -609,6 +610,10 @@ Bundle 'https://github.com/amix/vim-zenroom2.git'
 noremap <Leader>z :Goyo 120<CR>
 " }}
 
+" Toggle QuickFix/Location List
+Bundle "Valloric/ListToggle"
+let g:lt_location_list_toggle_map = '<leader>ll'
+let g:lt_quickfix_list_toggle_map = '<leader>qf'
 
 " Smart auto-complete braces
 Bundle 'https://github.com/jiangmiao/auto-pairs.git'
@@ -975,9 +980,9 @@ nnoremap ,p :cprev<CR>
 " F8 - CN 
 nnorema ,n :cnext<CR>
 " F10 - Open quickfix window
-noremap ,qo :bo cw<CR>
+noremap <leader>qf :bo copen<CR>
 " F11 - Close quickfix window
-noremap ,qc :ccl<CR>
+noremap <leader>qc :bo copen<CR>
  
 " scroll down half a page w/ space, up with -
 noremap <Space> <C-D>

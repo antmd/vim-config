@@ -1,4 +1,28 @@
 
+snippet project "CMake project" b
+cmake_minimum_required( VERSION 3.2 )
+
+project(${1:project} VERSION 0.1.0)
+
+$0
+endsnippet
+
+snippet message "CMake message" b
+message(STATUS "${1:message}")
+endsnippet
+
+snippet warn "CMake warning" b
+message(WARNING "${1:message}")
+endsnippet
+
+snippet error "CMake error" b
+message(SEND_ERROR "${1:message}")
+endsnippet
+
+snippet fatal "CMake error" b
+message(FATAL_ERROR "${1:message}")
+endsnippet
+
 snippet exec "CMake Executable Target" b
 ################################
 # ${1:target_name}
@@ -88,8 +112,12 @@ install (
     )
 endsnippet
 
-snippet xcode "Xcode clause" b
+snippet xcode_if "Xcode IF clause" b
 if (${CMAKE_GENERATOR} STREQUAL "Xcode")
 	$0
 endif()
+endsnippet
+
+snippet xcode_setting "Xcode specific setting" b
+set_target_properties(${1:target} PROPERTIES XCODE_ATTRIBUTE_${2:setting} "$0")
 endsnippet
