@@ -10,3 +10,6 @@ if has("gui_macvim")
   cmenu Tools.Make :call Compile()<CR>
   omenu Tools.Make :call Compile()<CR>
 endif
+
+
+set guifont=Source\ Code\ Pro\ Medium\ 11
