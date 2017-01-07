@@ -239,6 +239,9 @@ nmap <silent> <leader>t :TagbarToggle<CR>
 nmap <silent> _tt :TagbarToggle<CR>
 " }}
 
+" Saltstack editing
+Bundle 'saltstack/salt-vim'
+
 Bundle 'http://www.github.com/altercation/vim-colors-solarized'
 " Tmux integration
 Bundle 'tmux-plugins/vim-tmux'
@@ -262,6 +265,14 @@ let g:syntastic_check_on_open = 1
 
 Bundle 'http://www.github.com/vim-scripts/vcscommand.vim'
 Bundle 'http://www.github.com/vim-scripts/genutils'
+
+Plugin 'vhdirk/vim-cmake'
+" ,cm - cmake
+" ,cc - cmake clean
+" {{
+noremap <silent> ,cm :CMake<CR>
+noremap <silent> ,cc :CMakeClean<CR>
+" }}
 
 " Mustache template language
 Bundle 'https://github.com/mustache/vim-mustache-handlebars.git'
@@ -962,7 +973,10 @@ set wildignore=.svn,CVS,*.o,*.a,*.class,*.mo,*.la,*.so,*.obj,*.swp,*.jpg,*.png,*
 nnoremap <silent> <leader>/ :call ToggleHlSearch()<CR>
 
 "Make
-nnoremap <silent> <leader>m :call Compile()<CR>
+nnoremap <silent>,m :call Compile()<CR>
+" Cmd-b/r for Vimmake Compile/Run
+nnoremap <silent>,r :VimTool compile-run<cr>
+
 " move within long lines
 noremap j gj
 noremap k gk
@@ -1037,6 +1051,12 @@ inoremap <silent> <C-a>9 <ESC>:tabn 9<CR>
 nnoremap <silent> <leader>ff  :echo globpath(&path, expand('<cfile>'))<CR>
 " <leader>s -- show syntax element and syntax file for cursor position
 nnoremap <leader>s :call <SID>SynStack()<CR>
+
+" gf, in a vertical split
+nnoremap vgf <C-w>vgf
+" gf, in a horizontal split
+nnoremap sgf <C-w>sgf
+
 
 
 " --------------------------------------------------------------------------------

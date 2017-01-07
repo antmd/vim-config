@@ -6,7 +6,94 @@ compile_dir=$VIM_FILEDIR
 
 cd "$compile_dir"
 
-${script_dir}/vimmake.compile && ~/script/runobjc
+${script_dir}/vimmake.compile
+
+# Source utilities
+. $HOME/script/bash_utils.sh
+
+RunDir="${1:-.}"
+RunDir="$( cd "${RunDir}" && pwd -P )"
+echo $RunDir
+
+#===  FUNCTION  ================================================================
+#         NAME:  Name
+#  DESCRIPTION:  Description
+#===============================================================================
+
+function open_in_terminal ()
+{
+    binary="$(basename "$1")"
+    binary_dir="$(dirname "$1")"
+    if [[ $(platform) == 'darwin' ]]; then
+        osascript <<EOF
+tell application "Terminal"
+    set t to null
+    set w to null
+    set wtitle to "${binary}"
+    try
+        -- Filter expression usees 'whose <property> is'
+        set w to first window whose custom title is wtitle
+        set t to first tab of w
+    end try
+    if t is null then
+        set t to do script "" -- opens a new window tab!
+        tell t
+            set title displays custom title to true
+            set custom title to wtitle
+        end tell
+        set w to front window
+        set w's current settings to (settings set named "Run Program")
+        tell w
+            set title displays custom title to true
+            set custom title to wtitle
+            set bounds to {300, 200, 2000, 1200}
+        end tell
+    end if
+    tell w
+        set index to 1
+        set visible to false
+        set visible to true
+    end tell
+    do script "cd '${binary_dir}'; DYLD_FRAMEWORK_PATH='${binary_dir}/Frameworks'  ./'${binary}'" in t
+    
+    activate
+end tell
+EOF
+    else
+        cd "${binary_dir}"
+        ./${binary}
+    fi
+    
+}
+
+cd "$RunDir"
+SourceFilesDirName="$(basename "$RunDir")"
+
+# The binary name is the source file directory name with 'App' or 'Gui' suffix removed
+BinaryName=$(strip_first_matching_suffix "$SourceFilesDirName" App Gui Cpp)
+AppName="${BinaryName}.app"
+
+if [[ -d "$AppName" ]]; then
+    "${ScriptDir}/fkill" -q "$BinaryName" >/dev/null 2>&1
+    DYLD_FALLBACK_FRAMEWORK_PATH=$(pwd)/Frameworks "./$AppName/Contents/MacOS/$BinaryName" &
+        
+    sleep 1
+    osascript <<EOF
+    if application "$BinaryName" is running
+    tell application "$BinaryName" to activate
+    end if
+EOF
+
+    exit 0
+fi
+
+if [[ -x "$BinaryName" ]]; then
+    open_in_terminal "$RunDir/$BinaryName"
+    exit 0
+fi
+
+echo "No apps or binaries found in $SourceFilesDirName" >&2
+exit 1
 
 # vim:filetype=sh:
 
