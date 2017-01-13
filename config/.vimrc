@@ -354,6 +354,7 @@ augroup VimrcYouCompleteMe
     autocmd!
     autocmd VimEnter * call SetYcmGlobalConfig()
     autocmd FileType cpp nnoremap <buffer> <silent> <C-]> :YcmCompleter GoTo<CR>
+    autocmd FileType cpp nnoremap <buffer> <silent> ,fi :YcmCompleter FixIt<CR>
     autocmd FileType objcpp nnoremap <buffer> <silent> <C-]> :YcmCompleter GoTo<CR>
     autocmd FileType objc nnoremap <buffer> <silent> <C-]> :YcmCompleter GoTo<CR>
 
