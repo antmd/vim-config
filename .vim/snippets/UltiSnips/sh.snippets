@@ -1,0 +1,348 @@
+
+
+snippet head "Header"
+#!/bin/bash - 
+# vim: set filetype=sh:
+#===============================================================================
+#
+#          FILE: `!p snip.rv=fn`
+# 
+#   DESCRIPTION: ${1:Description}
+# 
+#       CREATED: `date +%d\ %b\ %Y`.
+#
+#        AUTHOR: Anthony Dervish
+#
+#===============================================================================
+
+set -euo pipefail # Bash 'strict' mode
+
+#===== MAIN SCRIPT ======
+
+
+#===== END SCRIPT ======
+# Silly last command prevents subtle bug with -e set option causing non-zero exit
+echo "Done."
+endsnippet
+
+snippet scriptdir "Get Script Directory"
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}"  )" && pwd -P )"
+
+$0
+endsnippet
+
+snippet secstart "Section Start" b
+#===============================================================================
+# ${1:SectionName}
+#===============================================================================
+
+${0}
+
+endsnippet
+
+snippet tmpfile "New tmpfile"
+${1:TmpFile}=`mktemp /tmp/$(basename $0).$$.XXXXXX` || exit 1
+endsnippet
+
+
+snippet tmpdir "New tempdir"
+${1:TempDir}=`mktemp -d /tmp/$(basename $0).$$.XXXXXX` || exit 1
+endsnippet
+
+
+snippet subsect "Sub-section" b
+#-${1/./-/g}
+# ${1:SectionName}
+#-${1/./-/g}
+endsnippet
+
+snippet fun "Function" b
+
+#===  FUNCTION  ================================================================
+#         NAME:  ${1:Name}
+#  DESCRIPTION:  ${2:Description}
+#===============================================================================
+
+function ${1} ()
+{
+	$0
+}
+
+endsnippet
+
+snippet args "Parse command-line arguments"
+
+#===  FUNCTION  ================================================================
+#         NAME:  usage
+#  DESCRIPTION:  Display usage information.
+#===============================================================================
+function usage ()
+{
+    cat <<- EOT
+
+${1:Description}
+
+    Usage: \$\{0##/*/} [options] [--]
+
+    Options: 
+        -h  Display this message
+
+EOT
+}
+
+#-----------------------------------------------------------------------
+#  Handle command line arguments
+#-----------------------------------------------------------------------
+
+while getopts ":hv" opt
+do
+  case $opt in
+    h )  usage; exit 0   ;;
+    \? )  echo -e "\n  Option does not exist : $OPTARG\n"
+          usage; exit 1   ;;
+  esac
+done
+
+shift $(($OPTIND-1))
+
+endsnippet
+
+snippet #!
+#!/bin/bash
+endsnippet
+
+
+
+snippet If
+[ ${1:condition} ] && ${0:command}
+endsnippet
+
+
+
+snippet Unless
+[ ${1:condition} ] || ${0:command}
+endsnippet
+
+
+
+snippet if
+if [ ${1:condition} ]; then
+    ${0:# TODO}
+fi
+endsnippet
+
+
+
+snippet ife
+if [ ${1:condition} ]; then
+    ${2:#code}
+else
+    ${0:#code}
+fi
+endsnippet
+
+
+
+snippet ifee
+if [ ${1:condition} ]; then
+    ${2:#code}
+elif [ ${3:condition} ]; then
+    ${4:#code}
+else
+    ${0:#code}
+fi
+endsnippet
+
+
+
+snippet unless
+if [ ! ${1:condition} ]; then
+    ${0:# TODO}
+fi
+endsnippet
+
+
+
+snippet unlesse
+if [ ! ${1:condition} ]; then
+    ${2:#code}
+else
+    ${0:#code}
+fi
+endsnippet
+
+
+
+snippet unlessee
+if [ ! ${1:condition} ]; then
+    ${2:#code}
+elif [ ${3:condition} ]; then
+    ${4:#code}
+else
+    ${0:#code}
+fi
+endsnippet
+
+
+
+
+snippet "\bfor(_?each)?" "for" r
+for ${1:i} in ${2:list}; do
+    ${0:# TODO}
+done
+endsnippet
+
+
+
+snippet while
+while [ ${1:condition} ]; do
+    ${0:# TODO}
+done
+endsnippet
+
+
+
+snippet f
+${1:function_name}() {
+    ${0:# TODO}
+}
+endsnippet
+
+
+
+snippet "\bswitch" "case" r
+case "${1:param}" in
+"${2:expression}")
+    ${3:# TODO}
+    ;;
+
+$0
+esac
+endsnippet
+
+
+
+snippet case
+"${1:expression}")
+    ${2:# TODO}
+    ;;
+
+$0
+endsnippet
+
+
+
+snippet readline
+${1:command} | while read ${2:items}; do
+    ${0:# TODO}
+done
+endsnippet
+
+
+
+snippet open
+cat "${1:file}" | while read ${2:items}; do
+    ${0:# TODO}
+done
+endsnippet
+
+
+
+snippet openr
+cat "${1:file}" | while read ${2:items}; do
+    ${0:# TODO}
+done
+endsnippet
+
+
+
+snippet die
+echo "ERR: ${1:text}" > /dev/stderr
+exit 1
+endsnippet
+
+
+
+snippet warn
+echo "WARN: ${1:text}" > /dev/stderr
+endsnippet
+
+
+
+snippet dieif
+if [ ${1:expression} ]; then
+    echo "ERR: ${2:text}" > /dev/stderr
+    exit 1
+fi
+endsnippet
+
+
+
+snippet dieunless
+if [ ! ${1:expression} ]; then
+    echo "ERR: ${2:text}" > /dev/stderr
+    exit 1
+fi
+endsnippet
+
+
+
+snippet warnif
+[ ${1:expression} ] && echo "WARN: ${2:text}" > /dev/stderr
+endsnippet
+
+
+
+snippet warnunless
+[ ${1:expression} ] || echo "WARN: ${2:text}" > /dev/stderr
+endsnippet
+
+
+
+snippet *=
+${1:variable1}=$(($$1 * ${2:$variable2}))
+endsnippet
+
+
+
+snippet +=
+${1:variable1}=$(($$1 + ${2:$variable2}))
+endsnippet
+
+
+
+snippet -=
+${1:variable1}=$(($$1 - ${2:$variable2}))
+endsnippet
+
+
+
+snippet /=
+${1:variable1}=$(($$1 / ${2:$variable2}))
+endsnippet
+
+
+
+snippet %=
+${1:variable1}=$(($$1 % ${2:$variable2}))
+endsnippet
+
+
+
+snippet .=
+${1:variable1}="${$1}${2:$variable2}"
+endsnippet
+
+
+
+snippet ++
+${1:variable}=$(($$1 + 1))
+endsnippet
+
+
+
+snippet --
+${1:variable}=$(($$1 - 1))
+endsnippet
+
+# vim:ft=snippets:

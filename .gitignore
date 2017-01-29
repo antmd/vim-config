@@ -3,3 +3,5 @@ view
 cache
 share
 .DS_Store
+.netrwhist
+.VimballRecord
