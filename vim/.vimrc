@@ -21,10 +21,10 @@ call vundle#rc()
 
 " let Vundle manage Vundle
 " required! 
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/vundle'
 
 " Text manipulation
-Bundle 'https://github.com/vim-scripts/textmanip.vim.git'
+Plugin 'https://github.com/vim-scripts/textmanip.vim.git'
 " Key: mj - move line down
 " Key: mk - move line up
 " Key: Mj - dup line down
@@ -46,40 +46,40 @@ xmap <F10> <Plug>(textmanip-toggle-mode)
 " }}
 
 " Yank Ring
-" Bundle 'https://github.com/vim-scripts/YankRing.vim.git'
+" Plugin 'https://github.com/vim-scripts/YankRing.vim.git'
 " nnoremap <silent> <F11> :YRShow<CR>
 
 " Swift language support
-Bundle 'https://github.com/Keithbsmiley/swift.vim.git'
+Plugin 'https://github.com/Keithbsmiley/swift.vim.git'
 
 " Restart vim with :Restart
-Bundle 'https://github.com/tyru/restart.vim.git'
+Plugin 'https://github.com/tyru/restart.vim.git'
 
-" 'Function' text object ('f')
-Bundle 'https://github.com/kana/vim-textobj-function.git'
-
-" 'argument' text object ('a')
-Bundle 'https://github.com/vim-scripts/argtextobj.vim.git'
+" New textobjs, and 'seek':
+" argument - "a"
+" Separators , . ; : + - = ~ _ * # / | \ & $
+" Seeking, [i|a|I|A]n<textobj>, e.g. din" -- delete inside NEXT quotes
+Plugin 'https://github.com/wellle/targets.vim.git'
 
 " Voom outliner
 " Use ':Voom markdown' for markdown
-Bundle 'https://github.com/vim-scripts/VOoM.git'
+Plugin 'https://github.com/vim-scripts/VOoM.git'
 
 " original repos on github
-Bundle 'http://www.github.com/sukima/xmledit'
+Plugin 'http://www.github.com/sukima/xmledit'
 
 " Add user-defined text objects
-Bundle 'https://github.com/kana/vim-textobj-user.git'
+Plugin 'https://github.com/kana/vim-textobj-user.git'
 
 " Add user-defined operators
-Bundle 'https://github.com/kana/vim-operator-user.git'
+Plugin 'https://github.com/kana/vim-operator-user.git'
 " Adds ':Grex', ':Gred' and ':Grey' for delete, delete-line and yank based on
 " the last successful search
-Bundle 'https://github.com/kana/vim-grex.git'
+Plugin 'https://github.com/kana/vim-grex.git'
 
 " Vimmake plugin
 " Create a single shell script ~/.vim/vimmake.gcc in ~/.vim: 
-Bundle "https://github.com/skywind3000/vimmake"
+Plugin 'https://github.com/skywind3000/vimmake'
 " {{
 " {{
 " #! /bin/sh 
@@ -177,12 +177,12 @@ let g:vimmake_build_scroll=1 " Auto-scroll quickfix output in async mode
 " Provides <leader><leader>w to highlight the start of all words,
 " or <leader><leader>f<letter> to highglight all occurrences of <letter>
 " then press the letter 'shortcut' to jump to the place you want.
-Bundle 'http://www.github.com/Lokaltog/vim-easymotion'
+Plugin 'http://www.github.com/Lokaltog/vim-easymotion'
 
-Bundle 'http://www.github.com/scrooloose/nerdcommenter'
+Plugin 'http://www.github.com/scrooloose/nerdcommenter'
 
 " NERDTree
-Bundle 'http://www.github.com/scrooloose/nerdtree'
+Plugin 'http://www.github.com/scrooloose/nerdtree'
 " Key: <F1> - toggle
 " {{
 nmap <silent> <Leader>nt :NERDTreeToggle<CR>
@@ -209,9 +209,9 @@ augroup END
 
 
 " NERDTree tabs
-Bundle 'https://github.com/jistr/vim-nerdtree-tabs.git'
+Plugin 'https://github.com/jistr/vim-nerdtree-tabs.git'
 
-Bundle 'https://www.github.com/kien/ctrlp.vim.git'
+Plugin 'https://www.github.com/kien/ctrlp.vim.git'
 " {{
 let g:ctrlp_extensions = ['tag', 'dir']
 let g:ctrlp_match_window_bottom = 0
@@ -225,7 +225,7 @@ let g:ctrlp_custom_ignore = {
     \ }
 " }}
 
-Bundle 'http://www.github.com/majutsushi/tagbar'
+Plugin 'http://www.github.com/majutsushi/tagbar'
 " <leader>t - toggle tagbar {{
 let g:tagbar_width=50
 let g:tagbar_ctags_bin = "/usr/local/bin/ctags"
@@ -240,14 +240,14 @@ nmap <silent> _tt :TagbarToggle<CR>
 " }}
 
 " Saltstack editing
-Bundle 'saltstack/salt-vim'
+Plugin 'saltstack/salt-vim'
 
-Bundle 'http://www.github.com/altercation/vim-colors-solarized'
+Plugin 'http://www.github.com/altercation/vim-colors-solarized'
 " Tmux integration
-Bundle 'tmux-plugins/vim-tmux'
-Bundle 'tmux-plugins/vim-tmux-focus-events'
-Bundle 'http://www.github.com/xaviershay/tslime.vim'
-Bundle 'https://www.github.com/scrooloose/syntastic'
+Plugin 'tmux-plugins/vim-tmux'
+Plugin 'tmux-plugins/vim-tmux-focus-events'
+Plugin 'http://www.github.com/xaviershay/tslime.vim'
+Plugin 'https://www.github.com/scrooloose/syntastic'
 " Syntastic config 
 " \e -- active mode
 " \s -- toggle syntastic mode
@@ -263,8 +263,8 @@ let g:syntastic_auto_loc_list=1
 let g:syntastic_check_on_open = 1
 " }}
 
-Bundle 'http://www.github.com/vim-scripts/vcscommand.vim'
-Bundle 'http://www.github.com/vim-scripts/genutils'
+Plugin 'http://www.github.com/vim-scripts/vcscommand.vim'
+Plugin 'http://www.github.com/vim-scripts/genutils'
 
 Plugin 'vhdirk/vim-cmake'
 " ,cm - cmake
@@ -275,22 +275,22 @@ noremap <silent> ,cc :CMakeClean<CR>
 " }}
 
 " Mustache template language
-Bundle 'https://github.com/mustache/vim-mustache-handlebars.git'
+Plugin 'https://github.com/mustache/vim-mustache-handlebars.git'
 
 " SESSION PLUGIN
 " Provide 'OpenSession' 'SaveSession' with tab completion. Saves sessions in
 " ~/.vim/session
-Bundle 'https://github.com/xolox/vim-session.git'
+Plugin 'https://github.com/xolox/vim-session.git'
 " Session config {{
 let g:session_autoload = 'no'
 " }}
-Bundle 'https://github.com/xolox/vim-misc.git'
+Plugin 'https://github.com/xolox/vim-misc.git'
 
 " BUFFER EXPLORER PLUGIN
 " <leader>be to show all buffers, and allow navigation
-Bundle 'https://github.com/jlanzarotta/bufexplorer.git'
-Bundle 'https://www.github.com/mileszs/ack.vim'
-Bundle 'http://www.github.com/vim-scripts/a.vim'
+Plugin 'https://github.com/jlanzarotta/bufexplorer.git'
+Plugin 'https://www.github.com/mileszs/ack.vim'
+Plugin 'http://www.github.com/vim-scripts/a.vim'
 " * <C-S-a> to :A
 " * Alternatives for '.m' and '.h'
 " Alternate-file config {{
@@ -303,21 +303,21 @@ noremap <silent> <C-S-a> :A<CR>
 
 " Python mode (indentation, doc, refactor, lints, code checking, motion and
 " operators, highlighting, run and ipdb breakpoints)
-Bundle 'https://www.github.com/fs111/pydoc.vim'
-Bundle 'https://github.com/hynek/vim-python-pep8-indent.git'
-Bundle 'https://github.com/suprsvn/vim-PythonTidy.git'
+Plugin 'https://www.github.com/fs111/pydoc.vim'
+Plugin 'https://github.com/hynek/vim-python-pep8-indent.git'
+Plugin 'https://github.com/suprsvn/vim-PythonTidy.git'
 " PythonTidy config {{
 au FileType python set formatprg=~/script/pythontidy
 noremap <F11> gggqG
 " }}
 
 
-Bundle 'tomtom/stakeholders_vim'
+Plugin 'tomtom/stakeholders_vim'
 
 " Gist support
 " :Gist <blah>
-Bundle 'http://github.com/mattn/webapi-vim'
-Bundle 'http://github.com/mattn/gist-vim'
+Plugin 'http://github.com/mattn/webapi-vim'
+Plugin 'http://github.com/mattn/gist-vim'
 " Gist config {{
 let g:gist_post_private = 1
 let g:gist_detect_filetype = 1
@@ -326,8 +326,8 @@ let g:gist_show_privates = 1
 
 if ! has("win32unix")
 " YouCompleteMe -- auto-completion
-Bundle "https://github.com/oblitum/YouCompleteMe"
-"Bundle 'https://github.com/Valloric/YouCompleteMe'
+Plugin 'https://github.com/oblitum/YouCompleteMe'
+"Plugin 'https://github.com/Valloric/YouCompleteMe'
 " <C_Space> = complete 
 " YCM setup {{
 let g:ycm_confirm_extra_conf = 0 " Silently source the ycm_extra_conf.py
@@ -381,20 +381,20 @@ endif
 
 " Tern plugin for Javascript -- works with Tagbar
 " Pre-requisites: npm install -g git+https://github.com/ramitos/jsctags.git
-Bundle 'https://github.com/marijnh/tern_for_vim.git'
+Plugin 'https://github.com/marijnh/tern_for_vim.git'
 
 " Local vimrc files (.lvimrc)
 " Add each project to the whitelist, below
-Bundle 'https://github.com/embear/vim-localvimrc.git'
+Plugin 'https://github.com/embear/vim-localvimrc.git'
 "let g:localvimrc_whitelist='/path/to/my/project/myproject'
 
 " Enum to case statement
 " To use :EnumToCase
-Bundle 'https://github.com/vim-scripts/EnumToCase.git'
+Plugin 'https://github.com/vim-scripts/EnumToCase.git'
 
 " Alignment in tabular format
 " To use :Tabularize /<pattern>/ 
-Bundle 'https://github.com/godlygeek/tabular.git'
+Plugin 'https://github.com/godlygeek/tabular.git'
 " <Leader>a ('a'lign) for tabularize shortcuts {{
 nmap <Leader>a= :Tabularize /=<CR>
 vmap <Leader>a= :Tabularize /=<CR>
@@ -409,8 +409,8 @@ vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
 " }}
 
 " File templates and snippets
-Bundle 'https://github.com/tomtom/tlib_vim.git'
-Bundle 'https://github.com/tomtom/tskeleton_vim.git'
+Plugin 'https://github.com/tomtom/tlib_vim.git'
+Plugin 'https://github.com/tomtom/tskeleton_vim.git'
 " Tskeleton variables (e.g. username), auto-source for *.cpp, *.sh
 " Abbreviate TSkeletonSetup to 'Sk', 'Ske', etc. {{
 let g:tskelUserName = 'Anthony Dervish'
@@ -439,7 +439,7 @@ cnoreabbrev Skeleton TSkeletonSetup
 
 " MRU Files - Depends on tlib
 " To use :TRecentlyUsedFiles, etc.
-Bundle 'https://github.com/tomtom/tmru_vim.git'
+Plugin 'https://github.com/tomtom/tmru_vim.git'
 " Key: <leader>ru toggle Tmru
 " Key: *<F2> toggle
 " {{
@@ -448,8 +448,8 @@ map <F2> :Tmru<CR>
 " }}
 
 " Haskell
-Bundle 'https://github.com/vim-scripts/Superior-Haskell-Interaction-Mode-SHIM.git'
-Bundle 'https://github.com/raichoo/haskell-vim.git'
+Plugin 'https://github.com/vim-scripts/Superior-Haskell-Interaction-Mode-SHIM.git'
+Plugin 'https://github.com/raichoo/haskell-vim.git'
 " From https://github.com/raichoo/haskell-vim
 " {{
 let g:haskell_enable_quantification = 1
@@ -467,32 +467,32 @@ let g:haskell_indent_in = 1
 
 
 " Ag -- ack replacement
-Bundle 'https://github.com/rking/ag.vim.git'
+Plugin 'https://github.com/rking/ag.vim.git'
 
 " DirDiff
-" Bundle 'https://github.com/zhaocai/DirDiff.vim.git'
+" Plugin 'https://github.com/zhaocai/DirDiff.vim.git'
 " let g:DirDiffExcludes = "CVS,*.class,*.exe,.*.swp,*.git,.DS_Store"
 
 " Add on actions
 " Requires tlib
-Bundle 'https://github.com/MarcWeber/vim-addon-mw-utils.git'
-Bundle 'https://github.com/MarcWeber/vim-addon-actions.git'
+Plugin 'https://github.com/MarcWeber/vim-addon-mw-utils.git'
+Plugin 'https://github.com/MarcWeber/vim-addon-actions.git'
 
 " Surround
-Bundle 'https://github.com/tpope/vim-surround.git'
+Plugin 'https://github.com/tpope/vim-surround.git'
 
 " Airline enhanced status line
-Bundle 'https://github.com/bling/vim-airline.git'
+Plugin 'https://github.com/bling/vim-airline.git'
 " If powerline-fonts is installed, auto-detect them with this setting... {{
 " Powerline-fonts: git clone https://github.com/Lokaltog/powerline-fonts.git
 let g:airline_powerline_fonts = 1
 " }}
 
 " Seek plugin, remaps 's' to do a 2-character version of 'f'
-Bundle 'https://github.com/goldfeld/vim-seek.git'
+Plugin 'https://github.com/goldfeld/vim-seek.git'
 
 " Ultisnips
-Bundle 'https://github.com/SirVer/ultisnips.git'
+Plugin 'https://github.com/SirVer/ultisnips.git'
 " * YCM compatibility functions 
 " * Configure <tab> and <c-e>
 " {{
@@ -545,15 +545,15 @@ augroup END
 " }}
 
 " VimShell
-Bundle 'http://github.com/Shougo/vimproc'
-Bundle 'https://github.com/Shougo/vimshell.vim.git'
+Plugin 'http://github.com/Shougo/vimproc'
+Plugin 'https://github.com/Shougo/vimshell.vim.git'
 
 " Fugitive -- git plugin
 " Adds 'Git...' commands
-Bundle 'https://github.com/tpope/vim-fugitive.git'
+Plugin 'https://github.com/tpope/vim-fugitive.git'
 
 " Undo Tree
-Bundle 'https://github.com/mbbill/undotree.git'
+Plugin 'https://github.com/mbbill/undotree.git'
 " Key: <leader>ut to toggle
 " Undo Tree config {{
 nnoremap <leader>ut :UndotreeToggle<cr>
@@ -570,11 +570,11 @@ endif
 " [x and ]x encode and decode XML (and HTML). [u and ]u encode and decode URLs. [y and ]y do C String style escaping.
 " yp or Yp enter append, or insert modes with 'set paste'. 
 " lots more, see 'help unimpaired' 
-Bundle 'https://github.com/tpope/vim-unimpaired.git'
+Plugin 'https://github.com/tpope/vim-unimpaired.git'
 
 " vim-expand-region
 " + to expand region, - to shrink 
-Bundle 'https://github.com/terryma/vim-expand-region.git'
+Plugin 'https://github.com/terryma/vim-expand-region.git'
 " Key: * + <Plug>(expand_region_expand)
 " {{
 map - <Plug>(expand_region_shrink)
@@ -585,13 +585,13 @@ map - <Plug>(expand_region_shrink)
 " cursor, Ctrl-p unhighlights the last instance. Then use a,s,I, etc. to make
 " a change. Ctrl-n in visual mode puts a cursor on every line of the visual
 " selection, and live updates the text
-Bundle 'https://github.com/terryma/vim-multiple-cursors.git'
+Plugin 'https://github.com/terryma/vim-multiple-cursors.git'
 
 " vim-startify
 " Better start screen
-Bundle 'https://github.com/mhinz/vim-startify.git'
+Plugin 'https://github.com/mhinz/vim-startify.git'
 
-Bundle 'https://github.com/rhysd/vim-clang-format.git'
+Plugin 'https://github.com/rhysd/vim-clang-format.git'
 " Personal clang-format style and mappings {{
 let g:clang_format#style_options = {
             \ "BasedOnStyle" : "llvm",
@@ -615,23 +615,23 @@ augroup END
 
 
 " ZenRoom distraction-less Writing
-Bundle 'https://github.com/junegunn/goyo.vim.git'
-Bundle 'https://github.com/amix/vim-zenroom2.git'
+Plugin 'https://github.com/junegunn/goyo.vim.git'
+Plugin 'https://github.com/amix/vim-zenroom2.git'
 " Key: <Leader>z enters 'zen' mode
 " ZenRoom config {{
 noremap <Leader>z :Goyo 120<CR>
 " }}
 
 " Toggle QuickFix/Location List
-Bundle "Valloric/ListToggle"
+Plugin 'Valloric/ListToggle'
 let g:lt_location_list_toggle_map = '<leader>ll'
 let g:lt_quickfix_list_toggle_map = '<leader>qf'
 
 " Smart auto-complete braces
-Bundle 'https://github.com/jiangmiao/auto-pairs.git'
+Plugin 'https://github.com/jiangmiao/auto-pairs.git'
 
 " Window identification
-Bundle 'https://github.com/t9md/vim-choosewin.git'
+Plugin 'https://github.com/t9md/vim-choosewin.git'
 " Key: '-' in normal mode to highlight window labels
 " {{
 nmap - <Plug>(choosewin)
@@ -639,7 +639,7 @@ let g:choosewin_overlay_enable=1 " Cool large-letter overlays
 " }}
 
 " Enhanced C++ Highlighting
-Bundle 'https://github.com/antmd/vim-cpp-enhanced-highlight.git'
+Plugin 'https://github.com/antmd/vim-cpp-enhanced-highlight.git'
 
 " --------------------------------------------------------------------------------
 " Functions
