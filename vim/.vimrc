@@ -61,10 +61,6 @@ Plugin 'https://github.com/tyru/restart.vim.git'
 " Seeking, [i|a|I|A]n<textobj>, e.g. din" -- delete inside NEXT quotes
 Plugin 'https://github.com/wellle/targets.vim.git'
 
-" Voom outliner
-" Use ':Voom markdown' for markdown
-Plugin 'https://github.com/vim-scripts/VOoM.git'
-
 " original repos on github
 Plugin 'http://www.github.com/sukima/xmledit'
 
@@ -166,11 +162,12 @@ Plugin 'https://github.com/skywind3000/vimmake'
 " }}
 " Cmd-b/r for Compile/Run
 let g:vimmake_mode = {} 
-let g:vimmake_mode['compile'] = 'quickfix'
-let g:vimmake_mode['compile-run'] = 'quickfix'
+let g:vimmake_mode['compile'] = 'async'
+let g:vimmake_mode['compile-run'] = 'async'
 let g:vimmake_path='~/.vim/vimmake-scripts'
 let g:vimmake_save=1 " Save buffer before running script
 let g:vimmake_build_scroll=1 " Auto-scroll quickfix output in async mode
+let g:vimmake_build_post=':call OpenQuickFixIfNotEmpty()'
 " }}
 
 " EASYMOTION PLUGIN
@@ -326,8 +323,7 @@ let g:gist_show_privates = 1
 
 if ! has("win32unix")
 " YouCompleteMe -- auto-completion
-Plugin 'https://github.com/oblitum/YouCompleteMe'
-"Plugin 'https://github.com/Valloric/YouCompleteMe'
+Plugin 'https://github.com/Valloric/YouCompleteMe'
 " <C_Space> = complete 
 " YCM setup {{
 let g:ycm_confirm_extra_conf = 0 " Silently source the ycm_extra_conf.py
@@ -378,6 +374,14 @@ augroup END
 " }}
 endif
 
+" color_coded -- Clang based highlighter for C/C++
+if has('lua')
+Plugin 'https://github.com/jeaye/color_coded'
+endif
+
+" YouCompleteMe and color_coded generator
+" Use :YcmGenerateConfig or :CCGenerateConfig
+Plugin 'https://github.com/rdnetto/YCM-Generator'
 
 " Tern plugin for Javascript -- works with Tagbar
 " Pre-requisites: npm install -g git+https://github.com/ramitos/jsctags.git
@@ -641,6 +645,7 @@ let g:choosewin_overlay_enable=1 " Cool large-letter overlays
 " Enhanced C++ Highlighting
 Plugin 'https://github.com/antmd/vim-cpp-enhanced-highlight.git'
 
+
 " --------------------------------------------------------------------------------
 " Functions
 " --------------------------------------------------------------------------------
@@ -648,6 +653,19 @@ Plugin 'https://github.com/antmd/vim-cpp-enhanced-highlight.git'
 function! Compile()
     :execute("VimTool compile")
 endfunction
+
+function! OpenQuickFixIfNotEmpty()
+  let numErrors = len(filter(getqflist(), 'v:val.valid'))
+  let numOthers = len(getqflist()) - numErrors
+  if numErrors > 0
+    "copen
+    cfirst
+  else
+    cclose
+  endif
+  redraw
+endfunction
+
 
 function! SearchFromLine(pat, start_line, max_lines)
     " {{
