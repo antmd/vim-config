@@ -329,7 +329,7 @@ Plugin 'https://github.com/Valloric/YouCompleteMe'
 let g:ycm_confirm_extra_conf = 0 " Silently source the ycm_extra_conf.py
 let g:ycm_global_ycm_extra_conf = '/Users/ant/.ycm_extra_conf.py'
 " Compatibility with UltiSnips
-let g:ycm_use_ultisnips_completer = 1
+"let g:ycm_use_ultisnips_completer = 1
 let g:ycm_key_invoke_completion = '<C-Space>'
 " CTRL-] opens new vertical-split instead of using same window
 let g:ycm_goto_buffer_command = 'vertical-split'
@@ -992,7 +992,7 @@ set wildignore=.svn,CVS,*.o,*.a,*.class,*.mo,*.la,*.so,*.obj,*.swp,*.jpg,*.png,*
 nnoremap <silent> <leader>/ :call ToggleHlSearch()<CR>
 
 "Make
-nnoremap <silent>,m :call Compile()<CR>
+nnoremap <silent>,m :make<CR>
 " Cmd-b/r for Vimmake Compile/Run
 nnoremap <silent>,r :VimTool compile-run<cr>
 
