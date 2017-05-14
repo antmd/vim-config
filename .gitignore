@@ -5,3 +5,4 @@ share
 .DS_Store
 .netrwhist
 .VimballRecord
+bundle/*
