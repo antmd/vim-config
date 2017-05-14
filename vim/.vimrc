@@ -495,6 +495,10 @@ let g:airline_powerline_fonts = 1
 " Seek plugin, remaps 's' to do a 2-character version of 'f'
 Plugin 'https://github.com/goldfeld/vim-seek.git'
 
+" tmux navigation
+" Use Ctrl-h/j/k/l to move between windows/panes. Ctrl \ toggles between last two panes/windows
+Plugin 'christoomey/vim-tmux-navigator'
+
 " Ultisnips
 Plugin 'https://github.com/SirVer/ultisnips.git'
 " * YCM compatibility functions 
