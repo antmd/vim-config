@@ -45,6 +45,7 @@ nmap <F10> <Plug>(textmanip-toggle-mode)
 xmap <F10> <Plug>(textmanip-toggle-mode)
 " }}
 
+Plugin 'farmergreg/vim-lastplace'
 " Yank Ring
 " Plugin 'https://github.com/vim-scripts/YankRing.vim.git'
 " nnoremap <silent> <F11> :YRShow<CR>
@@ -649,6 +650,9 @@ let g:choosewin_overlay_enable=1 " Cool large-letter overlays
 " Enhanced C++ Highlighting
 Plugin 'https://github.com/antmd/vim-cpp-enhanced-highlight.git'
 
+" Q/KDB highlighting
+Plugin 'katusk/vim-qkdb-syntax'
+
 
 " --------------------------------------------------------------------------------
 " Functions
@@ -953,15 +957,6 @@ iabbrev //=== // ===============================================================
 "---------------------------
 " Misc
 "---------------------------
- 
-" When editing a file, always jump to the last cursor position
-augroup cursor_restore
-    au!
-    autocmd BufReadPost *
-      \ if line("'\"") > 0 && line ("'\"") <= line("$") |
-      \   exe "normal g'\"" |
-      \ endif
-augroup END
  
 " keep 50 lines of command line/search/etc history
 set history=50
