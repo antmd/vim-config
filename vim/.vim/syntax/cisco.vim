@@ -1456,13 +1456,17 @@ synt region distribute_list_region start=/distribute\-list/ end=/$/ transparent 
 " first the global IP command for a few
 synt region ip_rt start=/ip route/ end=/$/ keepend transparent 
 
-synt match ip_KW /ip/ skipwhite contained containedin=ip_rt
+synt match ip_KW /ip/ skipwhite contained containedin=ip_rt,ip_mrt
 exe s:h . 'ip_KW' . s:keyword1
 
 synt match ip_route / route/ skipwhite contained containedin=ip_rt nextgroup=ip_route_vrf,ipaddress,subnetmask,wildcard
 exe s:h . "ip_route" . s:keyword2
 
-synt match ip_route_vrf /vrf/ skipwhite contained containedin=ip_route nextgroup=ip_route_vrf_name skipwhite
+synt region ip_mrt start=/ip mroute/ end=/$/ keepend transparent 
+synt match ip_mroute / mroute/ skipwhite contained containedin=ip_mrt nextgroup=ip_route_vrf,ipaddress,subnetmask,wildcard
+exe s:h . "ip_mroute" . s:keyword2
+
+synt match ip_route_vrf /vrf/ skipwhite contained containedin=ip_route,ip_mroute nextgroup=ip_route_vrf_name skipwhite
 exe s:h . "ip_route_vrf" . s:bold . s:fgred
 
 synt match ip_route_vrf_name / [^ ]\+/ms=s+1 contained containedin=ip_route_vrf skipwhite
@@ -1470,13 +1474,13 @@ exe s:h . "ip_route_vrf_name" . s:none . s:parameter1
 
 synt cluster follows_ip_route contains=ipaddr,ip_route_vrf
 
-synt match route_name_kw /name / skipwhite contained containedin=ip_rt nextgroup=route_name_text
+synt match route_name_kw /name / skipwhite contained containedin=ip_rt,ip_mrt nextgroup=route_name_text
 exe s:h . "route_name_kw" . s:fgbrown
 
 synt match route_name_text /.*/ skipwhite contained 
 exe s:h . "route_name_text" . s:parameter3
 
-synt match ip_rt_address /address/ skipwhite contained containedin=ip_rt
+synt match ip_rt_address /address/ skipwhite contained containedin=ip_rt,ip_mrt
 exe s:h . "ip_rt_address" . s:parameter2
 
 " }}}
@@ -2299,4 +2303,6 @@ synt region config_prompt_reg keepend start=/^[a-zA-Z0-9]\{-1,63}([a-zA-Z\-]\+)/
 "}}}
 
 let b:current_syntax = "cisco"
+setlocal sw=1
+setlocal foldmethod=indent
 

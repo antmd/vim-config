@@ -653,6 +653,9 @@ Plugin 'https://github.com/antmd/vim-cpp-enhanced-highlight.git'
 " Q/KDB highlighting
 Plugin 'katusk/vim-qkdb-syntax'
 
+" needed by cisco syntax file
+let g:cisco_background=''
+
 
 " --------------------------------------------------------------------------------
 " Functions
