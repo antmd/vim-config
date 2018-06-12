@@ -1124,11 +1124,11 @@ augroup miscAutoCommands
 augroup END
 
 " Autosave & Load Views (folds, cursor position, etc.)
-augroup vimrcAutoView
-    autocmd!
-    autocmd BufWritePost,BufLeave,WinLeave ?* if MakeViewCheck() | mkview | endif
-    autocmd BufWinEnter ?* if MakeViewCheck() | silent loadview | endif
-augroup end
+" augroup vimrcAutoView
+"     autocmd!
+"     autocmd BufWritePost,BufLeave,WinLeave ?* if MakeViewCheck() | mkview | endif
+"     autocmd BufWinEnter ?* if MakeViewCheck() | silent loadview | endif
+" augroup end
 
 " Automatically source vimrc on save.
 autocmd! bufwritepost .vimrc source $MYVIMRC
@@ -1172,6 +1172,7 @@ else
     hi todo ctermbg=NONE
     hi comment ctermfg=green ctermbg=black cterm=none
     hi LineNr ctermbg=black ctermfg=black
+    let g:solarized_termtrans=1
 endif
 colorscheme solarized
 
@@ -1192,4 +1193,9 @@ if has("mac")
     runtime config/Mac.vim
 elseif has("win32")
     runtime config/Windows.vim
+endif
+
+if has("nvim")
+    tnoremap <Esc> <C-\><C-n>
+    tnoremap <C-v><Esc> <Esc>
 endif
