@@ -16,6 +16,7 @@ filetype off                   " required!
 " Note, need to create .vim on Windows, as well.
 " See https://github.com/gmarik/vundle/wiki/Vundle-for-Windows for setup on windows
 set rtp+=~/.vim/bundle/vundle/,~/.vim
+set encoding=utf-8
 call vundle#rc()
 
 
@@ -226,7 +227,7 @@ let g:ctrlp_custom_ignore = {
 Plugin 'http://www.github.com/majutsushi/tagbar'
 " <leader>t - toggle tagbar {{
 let g:tagbar_width=50
-let g:tagbar_ctags_bin = "/usr/local/bin/ctags"
+let g:tagbar_ctags_bin = "/usr/bin/ctags"
 let g:tagbar_autofocus = 1
 let g:tagbar_expand =0
 let g:tagbar_singleclick = 0
@@ -511,6 +512,17 @@ set rtp+=~/.vim/snippets
 let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsListSnippets="<c-e>"
 
+let g:ulti_expand_or_jump_res = 0
+function! <SID>ExpandOrClosePopup()
+	let snippet = UltiSnips#ExpandSnippetOrJump()
+	if g:ulti_expand_or_jump_res > 0
+		return snippet
+	else
+		let close_popup = deoplete#close_popup()
+		return close_popup
+	endif
+endfunction
+
 " YCM <-> UltiSnips Compatibility Routines
 " Because YCM and UltiSnips both use TAB and Return, we need to be context-sensitive
 " and do different things depending if:
@@ -533,6 +545,7 @@ inoremap <silent> <Return> <C-R>=g:UltiSnips_Complete()<CR>
 
 function! g:UltiSnips_Tab()
     " First try UltiSnips jump forwards
+    let g:ulti_jump_forwards_res = 0
     call UltiSnips#JumpForwards()
     if g:ulti_jump_forwards_res == 0
         " Not in an UltiSnips completion context
@@ -550,6 +563,9 @@ endfunction
 augroup ultisnips
     autocmd!
     au BufEnter * exec "inoremap <silent> " . g:UltiSnipsJumpForwardTrigger . " <C-R>=g:UltiSnips_Tab()<cr>"
+    inoremap <silent><expr><CR> pumvisible() ? "<C-R>=<SID>ExpandOrClosePopup()<CR>" : "\<Cr>"
+    snoremap <silent><Tab>      <Esc>:call UltiSnips#JumpForwards()<CR>
+    inoremap <silent><S-Tab>    <C-R>=SmartSTab()<CR>
 augroup END
 " }}
 
@@ -672,7 +688,10 @@ function! OpenQuickFixIfNotEmpty()
     "copen
     cfirst
   else
-    cclose
+    copen
+    if getbufvar('%', '&buftype') == 'quickfix'
+        normal G
+    endif
   endif
   redraw
 endfunction

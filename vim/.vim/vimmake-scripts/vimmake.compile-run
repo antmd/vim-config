@@ -9,7 +9,7 @@ cd "$compile_dir"
 ${script_dir}/vimmake.compile
 
 # Source utilities
-. $HOME/script/bash_utils.sh
+. $HOME/profile.d/Utilities/bash_utils.sh
 
 RunDir="${1:-.}"
 RunDir="$( cd "${RunDir}" && pwd -P )"
@@ -70,7 +70,8 @@ cd "$RunDir"
 SourceFilesDirName="$(basename "$RunDir")"
 
 # The binary name is the source file directory name with 'App' or 'Gui' suffix removed
-BinaryName=$(strip_first_matching_suffix "$SourceFilesDirName" App Gui Cpp)
+BinaryName=
+[[ -e "$SourceFilesDirName" ]] && BinaryName="$SourceFilesDirName"
 AppName="${BinaryName}.app"
 
 if [[ -d "$AppName" ]]; then
